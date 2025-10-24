@@ -3,7 +3,7 @@ using UnityEngine;
 [System.Serializable]
 public class SpawnConfig
 {
-    public GameObject prefab;
+    public ObjectType objectType;
     public FloatRange spawnIntervalRange = new FloatRange(5f, 10f);
 
     private float spawnInterval = 0f;

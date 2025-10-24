@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class ObjectSpawner : MonoBehaviour
 {
-    public SpawnConfig heartSpawnConfig;
-    public SpawnConfig carrotSpawnConfig;
     public FloatRange spawnRangeX = new FloatRange(-8.5f, 8.5f);
     public FloatRange spawnRangeY = new FloatRange(6f, 10f);
+
+    public SpawnConfig heartSpawnConfig;
+    public SpawnConfig carrotSpawnConfig;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,12 +30,14 @@ public class ObjectSpawner : MonoBehaviour
         }
         else
         {
-            Instantiate
-            (
-                sc.prefab,
-                new Vector3(spawnRangeX.RandomValue(), spawnRangeY.RandomValue(), transform.position.z),
-                transform.rotation
-            );
+            GameObject obj = ObjectPool.instance.getPooledObject(sc.objectType);
+
+            if (obj != null)
+            {
+                obj.transform.position = new Vector3(spawnRangeX.RandomValue(), spawnRangeY.RandomValue(), transform.position.z);
+                obj.SetActive(true);
+            }
+
             sc.resetTimer();
             sc.renewSpawnInterval();
         }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2978407592032851717
+--- !u!1 &619347654981870758
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,55 +8,43 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5044028815577343951}
-  - component: {fileID: 4605572201303406211}
+  - component: {fileID: 7094651069280467566}
+  - component: {fileID: 4573337987580698295}
   m_Layer: 0
-  m_Name: ObjectSpawner
+  m_Name: ObjectPool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5044028815577343951
+--- !u!4 &7094651069280467566
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2978407592032851717}
+  m_GameObject: {fileID: 619347654981870758}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 6, z: 0}
+  m_LocalPosition: {x: 3.86651, y: 0.60154, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4605572201303406211
+--- !u!114 &4573337987580698295
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2978407592032851717}
+  m_GameObject: {fileID: 619347654981870758}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce0921aebca126f489d3fb214e31ce95, type: 3}
+  m_Script: {fileID: 11500000, guid: f0633f33f4063b8499579737672d6751, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ObjectSpawner
-  spawnRangeX:
-    min: -8.5
-    max: 8.5
-  spawnRangeY:
-    min: 6
-    max: 10
-  heartSpawnConfig:
-    objectType: 0
-    spawnIntervalRange:
-      min: 4
-      max: 6
-  carrotSpawnConfig:
-    objectType: 1
-    spawnIntervalRange:
-      min: 0.6
-      max: 1
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
+  heartPrefab: {fileID: 2618928919507613750, guid: e3e96d6091b08fb47b15b2dc3d190df5, type: 3}
+  carrotPrefab: {fileID: 177678366596337072, guid: 1f46b35f5e917c344a11971e0f08b96b, type: 3}
+  heartPoolSize: 4
+  carrotPoolSize: 10
