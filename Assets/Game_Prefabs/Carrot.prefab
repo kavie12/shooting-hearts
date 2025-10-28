@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 2681050121301131454}
   - component: {fileID: 5912359270117223954}
   - component: {fileID: 3978025649433585432}
+  - component: {fileID: 3329126236035666901}
   - component: {fileID: 5745708065303421336}
   m_Layer: 0
   m_Name: Carrot
-  m_TagString: CarrotObject
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 177678366596337072}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: -4.9375, y: 1.5675, z: 0}
-  m_LocalScale: {x: 0.19437781, y: 0.19437781, z: 0.19437781}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!212 &5912359270117223954
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -78,15 +79,15 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 619879793
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 2950869812727453837, guid: 2d5e699a3dff50048ad8d4522dfc1dff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 5.12, y: 5.12}
+  m_Size: {x: 0.32, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -119,6 +120,71 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 5
+--- !u!60 &3329126236035666901
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 177678366596337072}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 0.32, y: 0.32}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.247803, y: 0.14377806}
+      - {x: -0.25588933, y: -0.05121353}
+      - {x: -0.5132104, y: -0.20967071}
+      - {x: -0.51296294, y: -0.3896696}
+      - {x: -0.44660854, y: -0.42504883}
+      - {x: -0.40224808, y: -0.3708549}
+      - {x: -0.38185146, y: -0.3811518}
+      - {x: -0.37561214, y: -0.4381346}
+      - {x: -0.31074274, y: -0.51108503}
+      - {x: -0.24972716, y: -0.50374913}
+      - {x: -0.12609392, y: -0.37290925}
+      - {x: -0.10098476, y: -0.31836915}
+      - {x: -0.08330972, y: -0.22802459}
+      - {x: 0.019192714, y: -0.22998434}
+      - {x: 0.31063724, y: 0.054625608}
+      - {x: 0.5148417, y: 0.44442788}
+      - {x: 0.51023483, y: 0.5072968}
+      - {x: 0.4644944, y: 0.5152989}
+  m_UseDelaunayMesh: 0
 --- !u!114 &5745708065303421336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,5 +198,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   rb: {fileID: 3978025649433585432}
-  fallingSpeed: 3
+  fallingSpeed: 4
   deadZone: -8

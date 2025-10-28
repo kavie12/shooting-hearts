@@ -50,13 +50,12 @@ MonoBehaviour:
   spawnRangeY:
     min: 6
     max: 10
-  heartSpawnConfig:
-    objectType: 0
+  spawnConfigs:
+  - objectType: 0
     spawnIntervalRange:
       min: 4
       max: 6
-  carrotSpawnConfig:
-    objectType: 1
+  - objectType: 1
     spawnIntervalRange:
       min: 0.6
       max: 1

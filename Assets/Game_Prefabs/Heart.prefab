@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 2059429198242879466}
   - component: {fileID: 3387873120726861689}
   - component: {fileID: -5875477058422350364}
+  - component: {fileID: 7403448923607835097}
   - component: {fileID: 8499720123141329299}
   m_Layer: 0
   m_Name: Heart
-  m_TagString: HeartObject
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.7122, y: 1.4576, z: 0}
-  m_LocalScale: {x: 0.2333, y: 0.2333, z: 0.2333}
+  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -78,15 +79,15 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 619879793
+  m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -205270267638800340, guid: 764b7eb72e3e47e44bded3089f2d9dfe, type: 3}
+  m_Sprite: {fileID: 7611919021688551150, guid: b36d9f9f83c7aa644ad02935858a51ff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 4.44, y: 3.96}
+  m_Size: {x: 2.54, y: 2.54}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -119,6 +120,67 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 5
+--- !u!60 &7403448923607835097
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2618928919507613750}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 2.54, y: 2.54}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.117569625, y: 0.53387374}
+      - {x: 0.048056483, y: 0.47619432}
+      - {x: 0.00019832794, y: 0.4120534}
+      - {x: -0.045125164, y: 0.4728031}
+      - {x: -0.10658878, y: 0.5317727}
+      - {x: -0.35871434, y: 0.5223007}
+      - {x: -0.532805, y: 0.35455316}
+      - {x: -0.5341433, y: -0.0020883437}
+      - {x: -0.067726076, y: -0.5206418}
+      - {x: 0.00038780272, y: -0.5420327}
+      - {x: 0.06586869, y: -0.51609814}
+      - {x: 0.52180105, y: -0.0024327757}
+      - {x: 0.52764165, y: 0.34463352}
+      - {x: 0.36219594, y: 0.5316323}
+  m_UseDelaunayMesh: 0
 --- !u!114 &8499720123141329299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,5 +194,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   rb: {fileID: -5875477058422350364}
-  fallingSpeed: 3
+  fallingSpeed: 4
   deadZone: -8

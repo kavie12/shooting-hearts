@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
+    // Singleton object
     public static ObjectPool instance;
 
     // List of hearts and carrots objects in the pool
@@ -10,15 +11,16 @@ public class ObjectPool : MonoBehaviour
     private List<GameObject> carrotPool = new List<GameObject>();
 
     // Prefabs
-    public GameObject heartPrefab;
-    public GameObject carrotPrefab;
+    [SerializeField] private GameObject heartPrefab;
+    [SerializeField] private GameObject carrotPrefab;
 
     // Pool sizes
-    public int heartPoolSize = 4;
-    public int carrotPoolSize = 10;
+    [SerializeField] private int heartPoolSize = 4;
+    [SerializeField] private int carrotPoolSize = 10;
 
     private void Awake()
     {
+        // Singleton init
         if (instance == null)
         {
             instance = this;
@@ -31,14 +33,14 @@ public class ObjectPool : MonoBehaviour
         // Add items to the pools
         for (int i = 0; i < heartPoolSize; i++)
         {
-            GameObject heart = Instantiate(heartPrefab);
+            GameObject heart = Instantiate(heartPrefab, transform);
             heart.SetActive(false);
             heartPool.Add(heart);
         }
 
         for (int i = 0; i < carrotPoolSize; i++)
         {
-            GameObject carrot = Instantiate(carrotPrefab);
+            GameObject carrot = Instantiate(carrotPrefab, transform);
             carrot.SetActive(false);
             carrotPool.Add(carrot);
         }

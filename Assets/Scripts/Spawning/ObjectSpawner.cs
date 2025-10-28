@@ -2,24 +2,27 @@ using UnityEngine;
 
 public class ObjectSpawner : MonoBehaviour
 {
-    public FloatRange spawnRangeX = new FloatRange(-8.5f, 8.5f);
-    public FloatRange spawnRangeY = new FloatRange(6f, 10f);
+    [SerializeField] private FloatRange spawnRangeX = new FloatRange(-8.5f, 8.5f);
+    [SerializeField] private FloatRange spawnRangeY = new FloatRange(6f, 10f);
 
-    public SpawnConfig heartSpawnConfig;
-    public SpawnConfig carrotSpawnConfig;
+    [SerializeField] private SpawnConfig[] spawnConfigs;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        spawnObject(heartSpawnConfig);
-        spawnObject(carrotSpawnConfig);
+        for (int i = 0; i < spawnConfigs.Length; i++)
+        {
+            spawnObject(spawnConfigs[i]);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        spawnObject(heartSpawnConfig);
-        spawnObject(carrotSpawnConfig);
+        for (int i = 0; i < spawnConfigs.Length; i++)
+        {
+            spawnObject(spawnConfigs[i]);
+        }
     }
 
     void spawnObject(SpawnConfig sc)
@@ -30,7 +33,7 @@ public class ObjectSpawner : MonoBehaviour
         }
         else
         {
-            GameObject obj = ObjectPool.instance.getPooledObject(sc.objectType);
+            GameObject obj = ObjectPool.instance.getPooledObject(sc.getObjectType());
 
             if (obj != null)
             {

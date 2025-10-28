@@ -3,8 +3,8 @@ using UnityEngine;
 [System.Serializable]
 public class SpawnConfig
 {
-    public ObjectType objectType;
-    public FloatRange spawnIntervalRange = new FloatRange(5f, 10f);
+    [SerializeField] private ObjectType objectType;
+    [SerializeField] private FloatRange spawnIntervalRange = new FloatRange(5f, 10f);
 
     private float spawnInterval = 0f;
     private float timer = 0f;
@@ -36,5 +36,10 @@ public class SpawnConfig
     public void resetTimer()
     {
         timer = 0f;
+    }
+
+    public ObjectType getObjectType()
+    {
+        return objectType;
     }
 }
