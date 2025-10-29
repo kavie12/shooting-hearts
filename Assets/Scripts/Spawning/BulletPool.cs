@@ -4,40 +4,44 @@ using UnityEngine;
 public class BulletPool : MonoBehaviour
 {
     // Singleton object
-    public static BulletPool instance;
+    public static BulletPool Instance;
 
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private int poolSize = 5;
+    [SerializeField] private GameObject _bulletPrefab;
+    [SerializeField] private int _poolSize = 5;
 
-    private List<GameObject> bulletPool = new List<GameObject>();
+    private List<GameObject> _bulletPool = new List<GameObject>();
 
     private void Awake()
     {
         // Singleton init
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        for (int i = 0; i < poolSize; i++)
+        for (int i = 0; i < _poolSize; i++)
         {
-            GameObject obj = Instantiate(bulletPrefab, transform);
+            GameObject obj = Instantiate(_bulletPrefab, transform);
             obj.SetActive(false);
-            bulletPool.Add(obj);
+            _bulletPool.Add(obj);
         }
     }
 
-    public GameObject getPooledBullet()
+    public GameObject GetPooledBullet()
     {
-        for (int i = 0;i < bulletPool.Count; i++)
+        for (int i = 0;i < _bulletPool.Count; i++)
         {
-            if (!bulletPool[i].activeInHierarchy)
+            if (!_bulletPool[i].activeInHierarchy)
             {
-                return bulletPool[i];
+                return _bulletPool[i];
             }
         }
 

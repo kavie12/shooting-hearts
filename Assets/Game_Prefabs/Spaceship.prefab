@@ -226,11 +226,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d190ab02eb89f19469d9f8d63cc8883d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  bulletPrefab: {fileID: 3193610819490372800, guid: b5338bdf2287ad74598d2195ec392f7a, type: 3}
-  rb: {fileID: 5960852777390669989}
-  playerMovement: {fileID: 1951585563202047570, guid: fa5ba51b0996f1f4da22744f2d84fecf, type: 3}
-  playerFire: {fileID: 5700803819597750724, guid: fa5ba51b0996f1f4da22744f2d84fecf, type: 3}
-  moveSpeed: 8
+  _rb: {fileID: 5960852777390669989}
+  _playerMovement: {fileID: 1951585563202047570, guid: fa5ba51b0996f1f4da22744f2d84fecf, type: 3}
+  _playerFire: {fileID: 5700803819597750724, guid: fa5ba51b0996f1f4da22744f2d84fecf, type: 3}
+  _moveSpeed: 8
+  _healthPoints: 500
 --- !u!1 &4944289227682678838
 GameObject:
   m_ObjectHideFlags: 0

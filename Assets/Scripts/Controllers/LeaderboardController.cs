@@ -3,19 +3,19 @@ using UnityEngine;
 
 public class LeaderboardController : MonoBehaviour
 {
-    [SerializeField] private GameObject leaderboardRecordPrefab;
+    [SerializeField] private GameObject _leaderboardRecordPrefab;
 
-    private List<LeaderboardRecord> leaderboardRecordList = new List<LeaderboardRecord>();
+    private List<LeaderboardRecord> _leaderboardRecordList = new List<LeaderboardRecord>();
 
     LeaderboardController()
     {
-        leaderboardRecordList.Add(new LeaderboardRecord("Adolf Hitlar", 10500));
-        leaderboardRecordList.Add(new LeaderboardRecord("Albert Einstein", 9800));
-        leaderboardRecordList.Add(new LeaderboardRecord("Isacc Newton", 6200));
-        leaderboardRecordList.Add(new LeaderboardRecord("Donald Trump", 4000));
-        leaderboardRecordList.Add(new LeaderboardRecord("Vladamir Putin", 3800));
-        leaderboardRecordList.Add(new LeaderboardRecord("Kim Jon Un", 2000));
-        leaderboardRecordList.Add(new LeaderboardRecord("Kaveesha Dissanayake", 900));
+        _leaderboardRecordList.Add(new LeaderboardRecord("Adolf Hitlar", 10500));
+        _leaderboardRecordList.Add(new LeaderboardRecord("Albert Einstein", 9800));
+        _leaderboardRecordList.Add(new LeaderboardRecord("Isacc Newton", 6200));
+        _leaderboardRecordList.Add(new LeaderboardRecord("Donald Trump", 4000));
+        _leaderboardRecordList.Add(new LeaderboardRecord("Vladamir Putin", 3800));
+        _leaderboardRecordList.Add(new LeaderboardRecord("Kim Jon Un", 2000));
+        _leaderboardRecordList.Add(new LeaderboardRecord("Kaveesha Dissanayake", 900));
 
     }
 
@@ -23,15 +23,15 @@ public class LeaderboardController : MonoBehaviour
     void Start()
     {
         // Display all the leaderboard records
-        for (int i = 0; i < leaderboardRecordList.Count; i++)
+        for (int i = 0; i < _leaderboardRecordList.Count; i++)
         {
-            displayRecord(leaderboardRecordList[i]);
+            DisplayRecord(_leaderboardRecordList[i]);
         }
     }
 
-    void displayRecord(LeaderboardRecord record)
+    void DisplayRecord(LeaderboardRecord record)
     {
-        GameObject obj = Instantiate(leaderboardRecordPrefab, transform);
+        GameObject obj = Instantiate(_leaderboardRecordPrefab, transform);
         LeaderboardRecordController lrc = obj.GetComponent<LeaderboardRecordController>();
         lrc.leaderboardRecord = record;
     }

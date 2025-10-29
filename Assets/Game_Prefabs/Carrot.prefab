@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2681050121301131454}
   - component: {fileID: 5912359270117223954}
   - component: {fileID: 3978025649433585432}
-  - component: {fileID: 3329126236035666901}
+  - component: {fileID: 6597131337422092769}
   - component: {fileID: 5745708065303421336}
   m_Layer: 0
   m_Name: Carrot
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 177678366596337072}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: -4.9375, y: 1.5675, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -120,7 +120,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 5
---- !u!60 &3329126236035666901
+--- !u!60 &6597131337422092769
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,24 +166,20 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.247803, y: 0.14377806}
-      - {x: -0.25588933, y: -0.05121353}
-      - {x: -0.5132104, y: -0.20967071}
-      - {x: -0.51296294, y: -0.3896696}
-      - {x: -0.44660854, y: -0.42504883}
-      - {x: -0.40224808, y: -0.3708549}
-      - {x: -0.38185146, y: -0.3811518}
-      - {x: -0.37561214, y: -0.4381346}
-      - {x: -0.31074274, y: -0.51108503}
-      - {x: -0.24972716, y: -0.50374913}
-      - {x: -0.12609392, y: -0.37290925}
-      - {x: -0.10098476, y: -0.31836915}
-      - {x: -0.08330972, y: -0.22802459}
-      - {x: 0.019192714, y: -0.22998434}
-      - {x: 0.31063724, y: 0.054625608}
-      - {x: 0.5148417, y: 0.44442788}
-      - {x: 0.51023483, y: 0.5072968}
-      - {x: 0.4644944, y: 0.5152989}
+    - - {x: -0.19276945, y: 0.092505686}
+      - {x: -0.2090569, y: -0.12978423}
+      - {x: -0.32490447, y: -0.14567561}
+      - {x: -0.4812645, y: -0.23104517}
+      - {x: -0.46224132, y: -0.34825915}
+      - {x: -0.40277168, y: -0.30821988}
+      - {x: -0.36004993, y: -0.3322564}
+      - {x: -0.33606544, y: -0.40163934}
+      - {x: -0.28498256, y: -0.47423893}
+      - {x: -0.15970533, y: -0.32585216}
+      - {x: -0.11060524, y: -0.17031778}
+      - {x: 0.010619782, y: -0.17588775}
+      - {x: 0.25409833, y: 0.07501463}
+      - {x: 0.49297425, y: 0.4695549}
   m_UseDelaunayMesh: 0
 --- !u!114 &5745708065303421336
 MonoBehaviour:
@@ -197,6 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b28d378f9dcc3e40906915fb8510a67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  rb: {fileID: 3978025649433585432}
-  fallingSpeed: 4
-  deadZone: -8
+  _rb: {fileID: 3978025649433585432}
+  _fallingSpeed: 6
+  _deadZone: -8
+  _points: 100

@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 313128869039922715}
   - component: {fileID: 2193500247302093447}
   - component: {fileID: 5324994863228952855}
-  - component: {fileID: 2890135015144471269}
   - component: {fileID: -6509856567580193056}
+  - component: {fileID: 2890135015144471269}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Bullet
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 3193610819490372800}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.01, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.4, y: 1.4, z: 1.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -158,21 +158,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0.0034150695, y: 0.060649898}
   m_Size: {x: 0.22592856, y: 0.29249558}
   m_Direction: 0
---- !u!114 &2890135015144471269
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3193610819490372800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5bd74338ebc1db4ab989df0e8b279dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  rb: {fileID: 2193500247302093447}
-  bulletSpeed: 12
-  deadZone: 6
 --- !u!95 &-6509856567580193056
 Animator:
   serializedVersion: 7
@@ -195,3 +180,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2890135015144471269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3193610819490372800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5bd74338ebc1db4ab989df0e8b279dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  _rb: {fileID: 2193500247302093447}
+  _bulletSpeed: 12
+  _deadZone: 6

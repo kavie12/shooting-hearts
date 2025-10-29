@@ -253,10 +253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968f4f7566d419745a2ceedc312bc336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  playerNameObject: {fileID: 7290040354647148770}
-  playerScoreObject: {fileID: 7092966807254275070}
-  playerName: ska
-  playerScore: 1209
+  _playerNameObject: {fileID: 7290040354647148770}
+  _playerScoreObject: {fileID: 7092966807254275070}
 --- !u!1 &8394597151567627024
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5044028815577343951}
-  - component: {fileID: 4605572201303406211}
+  - component: {fileID: -8043604338965957215}
   m_Layer: 0
-  m_Name: ObjectSpawner
+  m_Name: EnemyObjectSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4605572201303406211
+--- !u!114 &-8043604338965957215
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,18 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0921aebca126f489d3fb214e31ce95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectSpawner
-  spawnRangeX:
+  _spawnRangeX:
     min: -8.5
     max: 8.5
-  spawnRangeY:
+  _spawnRangeY:
     min: 6
     max: 10
-  spawnConfigs:
-  - objectType: 0
-    spawnIntervalRange:
-      min: 4
-      max: 6
-  - objectType: 1
-    spawnIntervalRange:
-      min: 0.6
-      max: 1
+  _heartSpawnInterval: 4
+  _carrotSpawnInterval: 0.8

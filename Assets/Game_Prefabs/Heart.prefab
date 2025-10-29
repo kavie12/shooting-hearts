@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2059429198242879466}
   - component: {fileID: 3387873120726861689}
   - component: {fileID: -5875477058422350364}
-  - component: {fileID: 7403448923607835097}
+  - component: {fileID: 7233980308261888853}
   - component: {fileID: 8499720123141329299}
   m_Layer: 0
   m_Name: Heart
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 2618928919507613750}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.7122, y: 1.4576, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -120,7 +120,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 5
---- !u!60 &7403448923607835097
+--- !u!60 &7233980308261888853
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,20 +166,22 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.117569625, y: 0.53387374}
-      - {x: 0.048056483, y: 0.47619432}
-      - {x: 0.00019832794, y: 0.4120534}
-      - {x: -0.045125164, y: 0.4728031}
-      - {x: -0.10658878, y: 0.5317727}
-      - {x: -0.35871434, y: 0.5223007}
-      - {x: -0.532805, y: 0.35455316}
-      - {x: -0.5341433, y: -0.0020883437}
-      - {x: -0.067726076, y: -0.5206418}
-      - {x: 0.00038780272, y: -0.5420327}
-      - {x: 0.06586869, y: -0.51609814}
-      - {x: 0.52180105, y: -0.0024327757}
-      - {x: 0.52764165, y: 0.34463352}
-      - {x: 0.36219594, y: 0.5316323}
+    - - {x: 0.30784598, y: 0.41701013}
+      - {x: 0.1490799, y: 0.41634974}
+      - {x: 0.011016639, y: 0.22957793}
+      - {x: -0.1477941, y: 0.39329877}
+      - {x: -0.32070976, y: 0.39922664}
+      - {x: -0.40219054, y: 0.2839463}
+      - {x: -0.40609848, y: 0.12853773}
+      - {x: -0.49292997, y: 0.07207219}
+      - {x: -0.32262093, y: 0.004572004}
+      - {x: -0.06502764, y: -0.2925254}
+      - {x: 0.013623182, y: -0.345876}
+      - {x: 0.07023111, y: -0.27754638}
+      - {x: 0.378231, y: 0.025780875}
+      - {x: 0.49703613, y: 0.113101125}
+      - {x: 0.39068726, y: 0.12908581}
+      - {x: 0.39662, y: 0.27474186}
   m_UseDelaunayMesh: 0
 --- !u!114 &8499720123141329299
 MonoBehaviour:
@@ -193,6 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b28d378f9dcc3e40906915fb8510a67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  rb: {fileID: -5875477058422350364}
-  fallingSpeed: 4
-  deadZone: -8
+  _rb: {fileID: -5875477058422350364}
+  _fallingSpeed: 6
+  _deadZone: -8
+  _points: 500
