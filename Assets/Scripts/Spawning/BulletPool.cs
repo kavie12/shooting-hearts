@@ -4,7 +4,7 @@ using UnityEngine;
 public class BulletPool : MonoBehaviour
 {
     // Singleton object
-    public static BulletPool Instance;
+    public static BulletPool instance;
 
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private int _poolSize = 5;
@@ -14,9 +14,9 @@ public class BulletPool : MonoBehaviour
     private void Awake()
     {
         // Singleton init
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
         }
         else
         {

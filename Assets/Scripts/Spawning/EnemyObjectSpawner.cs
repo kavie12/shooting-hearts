@@ -14,13 +14,24 @@ public class EnemyObjectSpawner : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        InvokeRepeating("SpawnHeart", _heartSpawnInterval, _heartSpawnInterval);
-        InvokeRepeating("SpawnCarrot", 0, _carrotSpawnInterval);
+        StartSpawning();
+    }
+
+    private void OnEnable()
+    {
+        SpaceshipController.OnDestroyed += StopSpawning;
+        BonusChancePanelController.OnAnswerCorrect += StartSpawning;
+    }
+
+    private void OnDisable()
+    {
+        SpaceshipController.OnDestroyed -= StopSpawning;
+        BonusChancePanelController.OnAnswerCorrect -= StartSpawning;
     }
 
     void SpawnHeart()
     {
-        GameObject obj = EnemyObjectPool.Instance.GetPooledHeart();
+        GameObject obj = EnemyObjectPool.instance.GetPooledHeart();
 
         if (obj != null)
         {
@@ -31,12 +42,24 @@ public class EnemyObjectSpawner : MonoBehaviour
 
     void SpawnCarrot()
     {
-        GameObject obj = EnemyObjectPool.Instance.GetPooledCarrot();
+        GameObject obj = EnemyObjectPool.instance.GetPooledCarrot();
 
         if (obj != null)
         {
             obj.transform.position = new Vector3(_spawnRangeX.RandomValue(), _spawnRangeY.RandomValue(), transform.position.z);
             obj.SetActive(true);
         }
+    }
+
+    void StartSpawning()
+    {
+        InvokeRepeating("SpawnHeart", _heartSpawnInterval * 2, _heartSpawnInterval);
+        InvokeRepeating("SpawnCarrot", _carrotSpawnInterval, _carrotSpawnInterval);
+    }
+
+    void StopSpawning()
+    {
+        CancelInvoke("SpawnHeart");
+        CancelInvoke("SpawnCarrot");
     }
 }

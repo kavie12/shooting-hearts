@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class SpaceshipController : MonoBehaviour
 {
+    public static event Action OnDestroyed;
+
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private InputActionReference _playerMovement;
     [SerializeField] private InputActionReference _playerFire;
@@ -11,6 +14,7 @@ public class SpaceshipController : MonoBehaviour
     private Vector2 _moveDirection;
     private Animator _animator;
     private bool _isPowering = false;
+    private int _health = 500;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -40,20 +44,42 @@ public class SpaceshipController : MonoBehaviour
     private void OnEnable()
     {
         _playerFire.action.started += Fire;
+        EnemyObjectController.OnCrashed += TakeDamage;
     }
     private void OnDisable()
     {
         _playerFire.action.started -= Fire;
+        EnemyObjectController.OnCrashed -= TakeDamage;
     }
 
     private void Fire(InputAction.CallbackContext context)
     {
-        GameObject bullet = BulletPool.Instance.GetPooledBullet();
+        GameObject bullet = BulletPool.instance.GetPooledBullet();
 
         if (bullet != null)
         {
             bullet.transform.position = new Vector3(transform.position.x, transform.position.y, 2);
             bullet.SetActive(true);
         }
+    }
+
+    private void TakeDamage(int amount)
+    {
+        _health -= amount;
+
+        if (_health <= 0)
+        {
+            DestroySpaceship();
+        }
+    }
+
+    private void DestroySpaceship()
+    {
+        Destroy(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        OnDestroyed?.Invoke();
     }
 }

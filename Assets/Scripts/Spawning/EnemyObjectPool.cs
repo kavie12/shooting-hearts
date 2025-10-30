@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemyObjectPool : MonoBehaviour
 {
     // Singleton object
-    public static EnemyObjectPool Instance;
+    public static EnemyObjectPool instance;
 
     [Header("Heart Pool")]
     [SerializeField] private GameObject _heartPrefab;
@@ -19,9 +19,9 @@ public class EnemyObjectPool : MonoBehaviour
     private void Awake()
     {
         // Singleton init
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
         }
         else
         {

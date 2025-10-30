@@ -51,4 +51,4 @@ MonoBehaviour:
     min: 6
     max: 10
   _heartSpawnInterval: 4
-  _carrotSpawnInterval: 0.8
+  _carrotSpawnInterval: 0.6
