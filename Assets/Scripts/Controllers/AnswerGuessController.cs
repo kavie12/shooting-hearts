@@ -7,22 +7,22 @@ public class AnswerGuessController : MonoBehaviour
 {
     public static event Action<int> OnAnswerGuessed;
 
-    private Button button;
+    private Button _button;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        button = GetComponent<Button>();
-        button.onClick.AddListener(InvokeClick);
+        _button = GetComponent<Button>();
+        _button.onClick.AddListener(InvokeClick);
     }
 
     private void OnDestroy()
     {
-        button.onClick.RemoveListener(InvokeClick);
+        _button.onClick.RemoveListener(InvokeClick);
     }
 
     void InvokeClick()
     {
-        OnAnswerGuessed?.Invoke(int.Parse(button.GetComponentInChildren<TextMeshProUGUI>().text));
+        OnAnswerGuessed?.Invoke(int.Parse(_button.GetComponentInChildren<TextMeshProUGUI>().text));
     }
 }

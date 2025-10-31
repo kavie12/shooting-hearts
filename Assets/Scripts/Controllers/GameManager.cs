@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,12 +6,13 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _scoreTextMeshProObject;
-    [SerializeField] private GameObject spaceshipPrefab;
+    [SerializeField] private GameObject _spaceshipPrefab;
 
     private int _score = 0;
 
-    private void Start()
+    private void Start()    
     {
+        SpawnSpaceship();
         _scoreTextMeshProObject.text = _score.ToString();
     }
 
@@ -33,6 +35,6 @@ public class GameManager : MonoBehaviour
 
     private void SpawnSpaceship()
     {
-        Instantiate(spaceshipPrefab);
+        Instantiate(_spaceshipPrefab);
     }
 }

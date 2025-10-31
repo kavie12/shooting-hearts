@@ -27,15 +27,28 @@ public class EnemyObjectController : MonoBehaviour
     {
         if (collision.CompareTag("Bullet"))
         {
-            gameObject.SetActive(false);
+            DestroyObject();
+
+            // Make bullet inactive
             collision.gameObject.SetActive(false);
+
             OnDestroyed?.Invoke(_points);
         }
 
         if (collision.CompareTag("Player"))
         {
-            gameObject.SetActive(false);
+            DestroyObject();
             OnCrashed?.Invoke(_points);
         }
+    }
+
+    void DestroyObject()
+    {
+        gameObject.SetActive(false);
+
+        // Initiate destroy effect
+        GameObject effect = EnemyObjectDestroyEffectPool.instance.GetPooledEffect();
+        effect.transform.position = transform.position;
+        effect.SetActive(true);
     }
 }

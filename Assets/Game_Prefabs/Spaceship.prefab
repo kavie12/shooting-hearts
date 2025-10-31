@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2846910732765900878}
   - component: {fileID: 3186845929450001050}
   - component: {fileID: 7009361143676806391}
+  - component: {fileID: 3895764081055413834}
   m_Layer: 0
   m_Name: Spaceship
   m_TagString: Player
@@ -230,7 +231,24 @@ MonoBehaviour:
   _playerMovement: {fileID: 1951585563202047570, guid: fa5ba51b0996f1f4da22744f2d84fecf, type: 3}
   _playerFire: {fileID: 5700803819597750724, guid: fa5ba51b0996f1f4da22744f2d84fecf, type: 3}
   _moveSpeed: 8
-  _healthPoints: 500
+  _destroyEffectPrefab: {fileID: 6222580953970544132, guid: 1cfe14da324516245acbf92b2d4947c6, type: 3}
+--- !u!111 &3895764081055413834
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359493418186241500}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 7400000, guid: 605671b9c7673b6459d0c8e5a24594b2, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 605671b9c7673b6459d0c8e5a24594b2, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
 --- !u!1 &4944289227682678838
 GameObject:
   m_ObjectHideFlags: 0

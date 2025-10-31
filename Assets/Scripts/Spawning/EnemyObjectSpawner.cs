@@ -6,9 +6,13 @@ public class EnemyObjectSpawner : MonoBehaviour
     [SerializeField] private FloatRange _spawnRangeX = new FloatRange(-8.5f, 8.5f);
     [SerializeField] private FloatRange _spawnRangeY = new FloatRange(6f, 10f);
 
-    [Header("Spawn Intervals")]
+    [Header("Heart Spawn Config")]
     [SerializeField] private float _heartSpawnInterval = 5f;
+    [SerializeField] private float _heartSpawnDelay = 100f;
+
+    [Header("Carrot Spawn Config")]
     [SerializeField] private float _carrotSpawnInterval = 1f;
+    [SerializeField] private float _carrotSpawnDelay = 100f;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -53,8 +57,8 @@ public class EnemyObjectSpawner : MonoBehaviour
 
     void StartSpawning()
     {
-        InvokeRepeating("SpawnHeart", _heartSpawnInterval * 2, _heartSpawnInterval);
-        InvokeRepeating("SpawnCarrot", _carrotSpawnInterval, _carrotSpawnInterval);
+        InvokeRepeating("SpawnHeart", _heartSpawnDelay, _heartSpawnInterval);
+        InvokeRepeating("SpawnCarrot", _carrotSpawnDelay, _carrotSpawnInterval);
     }
 
     void StopSpawning()

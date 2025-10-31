@@ -7,12 +7,14 @@ public class BonusChancePanelController : MonoBehaviour
 {
     public static event Action OnAnswerCorrect;
 
-    private Transform content;
-    private HeartGameQuestion question;
+    private Transform _content;
+    private HeartGameQuestion _question;
+
+    private bool _bonusChanceUsed = false;
 
     private void Start()
     {
-        content = transform.GetChild(0);
+        _content = transform.GetChild(0);
     }
 
     private void OnEnable()
@@ -31,16 +33,21 @@ public class BonusChancePanelController : MonoBehaviour
 
     private void FetchBonusRoundQuestion()
     {
-        content.gameObject.SetActive(true);
+        if (_bonusChanceUsed)
+        {
+            return;
+        }
+
         HeartGameAPIClient.Instance.FetchQuestion();
+        _bonusChanceUsed = true;
     }
 
     void DisplayBonusQuestion(HeartGameQuestion question)
     {
-        this.question = question;
+        _question = question;
 
-        Transform imageLayers = content.GetChild(1);
-        Transform answerGuessButtons = content.GetChild(2).transform.GetChild(1);
+        Transform imageLayers = _content.GetChild(1);
+        Transform answerGuessButtons = _content.GetChild(2).transform.GetChild(1);
 
         // Set image and background active
         imageLayers.GetChild(0).gameObject.SetActive(true);
@@ -71,21 +78,25 @@ public class BonusChancePanelController : MonoBehaviour
             unshuffledLength--;
         }
 
+        // Set the answers
         for (i = 0; i < answerGuesses.Length; i++)
         {
             TextMeshProUGUI textObj = answerGuessButtons.GetChild(i).GetComponentInChildren<TextMeshProUGUI>();
             textObj.text = answerGuesses[i].ToString();
         }
+
+        // Display the panel
+        _content.gameObject.SetActive(true);
     }
 
     void HandleAnswerGuess(int guessedAnswer)
     {
-        bool isCorrect = guessedAnswer == question.heartsCount;
+        bool isCorrect = guessedAnswer == _question.heartsCount;
 
         if (isCorrect)
         {
             OnAnswerCorrect?.Invoke();
-            content.gameObject.SetActive(false);
+            _content.gameObject.SetActive(false);
         }
     }
 }
