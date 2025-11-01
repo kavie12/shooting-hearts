@@ -5,10 +5,9 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public static event Action OnUseBonusChance;
-
     [SerializeField] private TextMeshProUGUI _scoreTextMeshProObject;
     [SerializeField] private GameObject _spaceshipPrefab;
+    [SerializeField] private GameObject _bonusChancePanel;
 
     private int _score = 0;
 
@@ -23,15 +22,19 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         EnemyObjectController.OnDestroyed += IncreaseScore;
-        BonusChancePanelController.OnAnswerCorrect += SpawnSpaceship;
         SpaceshipController.OnDestroyed += HandleSpaceshipDestroyed;
+
+        BonusChancePanelController.OnAnswerCorrect += SpawnSpaceship;
+        BonusChancePanelController.OnAnswerIncorrect += QuitGame;
     }
 
     private void OnDisable()
     {
         EnemyObjectController.OnDestroyed -= IncreaseScore;
-        BonusChancePanelController.OnAnswerCorrect += SpawnSpaceship;
         SpaceshipController.OnDestroyed -= HandleSpaceshipDestroyed;
+
+        BonusChancePanelController.OnAnswerCorrect -= SpawnSpaceship;
+        BonusChancePanelController.OnAnswerIncorrect -= QuitGame;
     }
 
     private void IncreaseScore(int score)
@@ -49,17 +52,21 @@ public class GameManager : MonoBehaviour
     {
         if (!_bonusChanceUsed)
         {
-            OnUseBonusChance?.Invoke();
+            Invoke("ShowBonusChanceQuestionPanel", 2f);
             _bonusChanceUsed = true;
         }
         else
         {
-            Invoke("QuiteGame", 3f);
-            
+            Invoke("QuitGame", 3f);
         }
     }
 
-    private void QuiteGame()
+    private void ShowBonusChanceQuestionPanel()
+    {
+        _bonusChancePanel.SetActive(true);
+    }
+
+    private void QuitGame()
     {
         Application.Quit();
     }

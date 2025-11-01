@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class HeartGameAPIClient : MonoBehaviour
 {
-    public static HeartGameAPIClient Instance;
+    public static HeartGameAPIClient instance;
 
     public static event Action<HeartGameQuestion> OnQuestionFetched;
     public static event Action<string> OnQuestionFetchFailed;
@@ -15,9 +15,9 @@ public class HeartGameAPIClient : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
         }
         else
         {
@@ -64,10 +64,5 @@ public class HeartGameAPIClient : MonoBehaviour
                 OnQuestionFetchFailed?.Invoke($"Error: {request.error}");
             }
         }
-    }
-
-    private void OnDestroy()
-    {
-        StopAllCoroutines();
     }
 }

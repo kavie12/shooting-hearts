@@ -10,13 +10,13 @@ public class AnswerGuessController : MonoBehaviour
     private Button _button;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         _button = GetComponent<Button>();
         _button.onClick.AddListener(InvokeClick);
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
         _button.onClick.RemoveListener(InvokeClick);
     }
