@@ -10,8 +10,6 @@ public class BonusChancePanelController : MonoBehaviour
     private Transform _content;
     private HeartGameQuestion _question;
 
-    private bool _bonusChanceUsed = false;
-
     private void Start()
     {
         _content = transform.GetChild(0);
@@ -19,27 +17,21 @@ public class BonusChancePanelController : MonoBehaviour
 
     private void OnEnable()
     {
-        SpaceshipController.OnDestroyed += FetchBonusRoundQuestion;
+        GameManager.OnUseBonusChance += FetchBonusRoundQuestion;
         HeartGameAPIClient.OnQuestionFetched += DisplayBonusQuestion;
         AnswerGuessController.OnAnswerGuessed += HandleAnswerGuess;
     }
 
     private void OnDisable()
     {
-        SpaceshipController.OnDestroyed -= FetchBonusRoundQuestion;
+        GameManager.OnUseBonusChance -= FetchBonusRoundQuestion;
         HeartGameAPIClient.OnQuestionFetched -= DisplayBonusQuestion;
         AnswerGuessController.OnAnswerGuessed -= HandleAnswerGuess;
     }
 
     private void FetchBonusRoundQuestion()
     {
-        if (_bonusChanceUsed)
-        {
-            return;
-        }
-
         HeartGameAPIClient.Instance.FetchQuestion();
-        _bonusChanceUsed = true;
     }
 
     void DisplayBonusQuestion(HeartGameQuestion question)
@@ -91,9 +83,7 @@ public class BonusChancePanelController : MonoBehaviour
 
     void HandleAnswerGuess(int guessedAnswer)
     {
-        bool isCorrect = guessedAnswer == _question.heartsCount;
-
-        if (isCorrect)
+        if (guessedAnswer == _question.heartsCount)
         {
             OnAnswerCorrect?.Invoke();
             _content.gameObject.SetActive(false);

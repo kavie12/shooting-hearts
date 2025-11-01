@@ -6,15 +6,10 @@ public class EnemyObjectPool : MonoBehaviour
     // Singleton object
     public static EnemyObjectPool instance;
 
-    [Header("Heart Pool")]
-    [SerializeField] private GameObject _heartPrefab;
-    [SerializeField] private int _heartPoolSize = 5;
-    private List<GameObject> _heartPool = new List<GameObject>();
+    [Header("Pool Configs")]
+    [SerializeField] private EnemyObjectPoolConfig[] _poolConfigs;
 
-    [Header("Carrot Pool")]
-    [SerializeField] private GameObject _carrotPrefab;
-    [SerializeField] private int _carrotPoolSize = 10;
-    private List<GameObject> _carrotPool = new List<GameObject>();
+    private Dictionary<EnemyObject, List<GameObject>> _pools;
 
     private void Awake()
     {
@@ -22,6 +17,21 @@ public class EnemyObjectPool : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+
+            _pools = new Dictionary<EnemyObject, List<GameObject>>();
+
+            // Init pools
+            foreach (EnemyObjectPoolConfig poolConfig in _poolConfigs)
+            {
+                List<GameObject> pool = new List<GameObject>();
+                for (int i = 0; i < poolConfig.poolSize; i++)
+                {
+                    GameObject obj = Instantiate(poolConfig.prefab, transform);
+                    obj.SetActive(false);
+                    pool.Add(obj);
+                }
+                _pools.Add(poolConfig.enemyObject, pool);
+            }
         }
         else
         {
@@ -29,44 +39,13 @@ public class EnemyObjectPool : MonoBehaviour
         }
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public GameObject GetPooledObject(EnemyObject enemyObject)
     {
-        // Add items to the pools
-        for (int i = 0; i < _heartPoolSize; i++)
+        foreach (GameObject obj in _pools[enemyObject])
         {
-            GameObject heart = Instantiate(_heartPrefab, transform);
-            heart.SetActive(false);
-            _heartPool.Add(heart);
-        }
-
-        for (int i = 0; i < _carrotPoolSize; i++)
-        {
-            GameObject carrot = Instantiate(_carrotPrefab, transform);
-            carrot.SetActive(false);
-            _carrotPool.Add(carrot);
-        }
-    }
-
-    public GameObject GetPooledHeart()
-    {
-        for (int i = 0; i < _heartPool.Count; i++)
-        {
-            if (!_heartPool[i].activeInHierarchy)
+            if (!obj.activeInHierarchy)
             {
-                return _heartPool[i];
-            }
-        }
-        return null;
-    }
-
-    public GameObject GetPooledCarrot()
-    {
-        for (int i = 0; i < _carrotPool.Count; i++)
-        {
-            if (!_carrotPool[i].activeInHierarchy)
-            {
-                return _carrotPool[i];
+                return obj;
             }
         }
         return null;

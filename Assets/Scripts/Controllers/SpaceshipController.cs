@@ -12,16 +12,16 @@ public class SpaceshipController : MonoBehaviour
     [SerializeField] private InputActionReference _playerMovement;
     [SerializeField] private InputActionReference _playerFire;
     [SerializeField] private float _moveSpeed = 8f;
+
+    [Header("Effects")]
     [SerializeField] private GameObject _destroyEffectPrefab;
+    [SerializeField] private GameObject _damageEffectPrefab;
 
     private Vector2 _moveDirection;
-    private Animator _animator;
-    private bool _isPowering = false;
     private int _health = 500;
 
     void Awake()
     {
-        _animator = transform.GetChild(0).GetComponent<Animator>();
         OnHealthUpdated?.Invoke(_health);
     }
 
@@ -40,14 +40,6 @@ public class SpaceshipController : MonoBehaviour
     void Update()
     {
         _moveDirection = _playerMovement.action.ReadValue<Vector2>();
-
-        // Apply Powering state when moving
-        bool shouldPower = _moveDirection != Vector2.zero;
-        if (shouldPower != _isPowering)
-        {
-            _animator.SetBool("isPowering", shouldPower);
-            _isPowering = shouldPower;
-        }
     }
 
     private void FixedUpdate()
@@ -74,6 +66,11 @@ public class SpaceshipController : MonoBehaviour
         if (_health <= 0)
         {
             DestroySpaceship();
+        }
+        else
+        {
+            // Play damage effect
+            Instantiate(_damageEffectPrefab, transform.position, transform.rotation);
         }
     }
 

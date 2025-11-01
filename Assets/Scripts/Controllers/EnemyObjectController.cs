@@ -6,6 +6,7 @@ public class EnemyObjectController : MonoBehaviour
     public static event Action<int> OnDestroyed;
     public static event Action<int> OnCrashed;
 
+    [SerializeField] private EnemyObject enemyObject;
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private float _fallingSpeed = 6f;
     [SerializeField] private float _deadZone = -8;
@@ -47,7 +48,7 @@ public class EnemyObjectController : MonoBehaviour
         gameObject.SetActive(false);
 
         // Initiate destroy effect
-        GameObject effect = EnemyObjectDestroyEffectPool.instance.GetPooledEffect();
+        GameObject effect = EnemyObjectDestroyEffectPool.instance.GetPooledEffect(enemyObject);
         effect.transform.position = transform.position;
         effect.SetActive(true);
     }

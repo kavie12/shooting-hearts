@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class EnemyObjectSpawner : MonoBehaviour
@@ -6,16 +8,16 @@ public class EnemyObjectSpawner : MonoBehaviour
     [SerializeField] private FloatRange _spawnRangeX = new FloatRange(-8.5f, 8.5f);
     [SerializeField] private FloatRange _spawnRangeY = new FloatRange(6f, 10f);
 
-    [Header("Heart Spawn Config")]
-    [SerializeField] private float _heartSpawnInterval = 5f;
-    [SerializeField] private float _heartSpawnDelay = 100f;
+    [Header("Spawn Configs")]
+    [SerializeField] private EnemyObjectSpawnConfig[] _spawnConfigs;
 
-    [Header("Carrot Spawn Config")]
-    [SerializeField] private float _carrotSpawnInterval = 1f;
-    [SerializeField] private float _carrotSpawnDelay = 100f;
+    private Coroutine[] _spawnCoroutines;
 
+    private void Awake()
+    {
+        _spawnCoroutines = new Coroutine[_spawnConfigs.Length];
+    }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         StartSpawning();
@@ -33,37 +35,37 @@ public class EnemyObjectSpawner : MonoBehaviour
         BonusChancePanelController.OnAnswerCorrect -= StartSpawning;
     }
 
-    void SpawnHeart()
+    IEnumerator SpawnObjects(EnemyObjectSpawnConfig spawnConfig)
     {
-        GameObject obj = EnemyObjectPool.instance.GetPooledHeart();
-
-        if (obj != null)
+        yield return new WaitForSeconds(spawnConfig.spawnDelay);
+        while (true)
         {
-            obj.transform.position = new Vector3(_spawnRangeX.RandomValue(), _spawnRangeY.RandomValue(), transform.position.z);
-            obj.SetActive(true);
-        }
-    }
-
-    void SpawnCarrot()
-    {
-        GameObject obj = EnemyObjectPool.instance.GetPooledCarrot();
-
-        if (obj != null)
-        {
-            obj.transform.position = new Vector3(_spawnRangeX.RandomValue(), _spawnRangeY.RandomValue(), transform.position.z);
-            obj.SetActive(true);
+            GameObject obj = EnemyObjectPool.instance.GetPooledObject(spawnConfig.enemyObject);
+            if (obj != null)
+            {
+                obj.transform.position = new Vector3(_spawnRangeX.RandomValue(), _spawnRangeY.RandomValue(), transform.position.z);
+                obj.SetActive(true);
+            }
+            yield return new WaitForSeconds(spawnConfig.spawnOverTime);
         }
     }
 
     void StartSpawning()
     {
-        InvokeRepeating("SpawnHeart", _heartSpawnDelay, _heartSpawnInterval);
-        InvokeRepeating("SpawnCarrot", _carrotSpawnDelay, _carrotSpawnInterval);
+        for (int i = 0; i < _spawnConfigs.Length; i++)
+        {
+            _spawnCoroutines[i] = StartCoroutine(SpawnObjects(_spawnConfigs[i]));
+        }
     }
 
     void StopSpawning()
     {
-        CancelInvoke("SpawnHeart");
-        CancelInvoke("SpawnCarrot");
+        for (int i = 0; i < _spawnConfigs.Length; i++)
+        {
+            if (_spawnCoroutines[i] != null)
+            {
+                StopCoroutine(_spawnCoroutines[i]);
+            }
+        }
     }
 }

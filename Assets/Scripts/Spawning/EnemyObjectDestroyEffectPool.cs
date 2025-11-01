@@ -6,10 +6,10 @@ public class EnemyObjectDestroyEffectPool : MonoBehaviour
     // Singleton object
     public static EnemyObjectDestroyEffectPool instance;
 
-    [SerializeField] private GameObject _effectPrefab;
-    [SerializeField] private int _poolSize = 3;
+    [Header("Pool Configs")]
+    [SerializeField] private EnemyObjectDestroyEffectPoolConfig[] _poolConfigs;
 
-    private List<GameObject> _effectPool = new List<GameObject>();
+    private Dictionary<EnemyObject, List<GameObject>> _pools;
 
     private void Awake()
     {
@@ -17,6 +17,21 @@ public class EnemyObjectDestroyEffectPool : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+
+            _pools = new Dictionary<EnemyObject, List<GameObject>>();
+
+            // Init pools
+            foreach (EnemyObjectDestroyEffectPoolConfig poolConfig in _poolConfigs)
+            {
+                List<GameObject> pool = new List<GameObject>();
+                for (int i = 0; i < poolConfig.poolSize; i++)
+                {
+                    GameObject obj = Instantiate(poolConfig.prefab, transform);
+                    obj.SetActive(false);
+                    pool.Add(obj);
+                }
+                _pools.Add(poolConfig.enemyObject, pool);
+            }
         }
         else
         {
@@ -24,27 +39,15 @@ public class EnemyObjectDestroyEffectPool : MonoBehaviour
         }
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public GameObject GetPooledEffect(EnemyObject enemyObject)
     {
-        for (int i = 0; i < _poolSize; i++)
+        foreach (GameObject obj in _pools[enemyObject])
         {
-            GameObject obj = Instantiate(_effectPrefab, transform);
-            obj.SetActive(false);
-            _effectPool.Add(obj);
-        }
-    }
-
-    public GameObject GetPooledEffect()
-    {
-        for (int i = 0; i < _effectPool.Count; i++)
-        {
-            if (!_effectPool[i].activeInHierarchy)
+            if (!obj.activeInHierarchy)
             {
-                return _effectPool[i];
+                return obj;
             }
         }
-
         return null;
     }
 }

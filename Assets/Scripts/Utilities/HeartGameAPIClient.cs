@@ -65,4 +65,9 @@ public class HeartGameAPIClient : MonoBehaviour
             }
         }
     }
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
 }

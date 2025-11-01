@@ -28,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 177678366596337072}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5912359270117223954
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -87,7 +87,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.32, y: 0.32}
+  m_Size: {x: 0.64, y: 0.64}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -159,27 +159,22 @@ PolygonCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1, y: 1}
-    newSize: {x: 0.32, y: 0.32}
+    newSize: {x: 0.64, y: 0.64}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.19276945, y: 0.092505686}
-      - {x: -0.2090569, y: -0.12978423}
-      - {x: -0.32490447, y: -0.14567561}
-      - {x: -0.4812645, y: -0.23104517}
-      - {x: -0.46224132, y: -0.34825915}
-      - {x: -0.40277168, y: -0.30821988}
-      - {x: -0.36004993, y: -0.3322564}
-      - {x: -0.33606544, y: -0.40163934}
-      - {x: -0.28498256, y: -0.47423893}
-      - {x: -0.15970533, y: -0.32585216}
-      - {x: -0.11060524, y: -0.17031778}
-      - {x: 0.010619782, y: -0.17588775}
-      - {x: 0.25409833, y: 0.07501463}
-      - {x: 0.49297425, y: 0.4695549}
+    - - {x: 0.0514595, y: 0.3133154}
+      - {x: -0.13210802, y: 0.12448156}
+      - {x: -0.34409478, y: -0.18755236}
+      - {x: -0.48327196, y: -0.47189698}
+      - {x: 0.12467088, y: -0.12511604}
+      - {x: 0.3009039, y: 0.047146365}
+      - {x: 0.30168724, y: 0.1653637}
+      - {x: 0.45818007, y: 0.21552995}
+      - {x: 0.22198048, y: 0.2688188}
   m_UseDelaunayMesh: 0
 --- !u!114 &5745708065303421336
 MonoBehaviour:
@@ -193,7 +188,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b28d378f9dcc3e40906915fb8510a67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  enemyObject: 1
   _rb: {fileID: 3978025649433585432}
-  _fallingSpeed: 5
+  _fallingSpeed: 4
   _deadZone: -8
   _points: 100

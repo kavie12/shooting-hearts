@@ -44,5 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e19d9f279bad3d47bcdce4886b4d26c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _effectPrefab: {fileID: 6651409593692128141, guid: 7ce8152abcf5f7d41b1ce83129a58200, type: 3}
-  _poolSize: 4
+  _poolConfigs:
+  - enemyObject: 0
+    prefab: {fileID: 6651409593692128141, guid: f47aa4b6d7bfb534bad00b7a8d690d19, type: 3}
+    poolSize: 2
+  - enemyObject: 1
+    prefab: {fileID: 6651409593692128141, guid: 7ce8152abcf5f7d41b1ce83129a58200, type: 3}
+    poolSize: 4
