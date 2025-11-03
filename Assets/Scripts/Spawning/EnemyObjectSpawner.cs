@@ -1,5 +1,5 @@
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyObjectSpawner : MonoBehaviour
@@ -8,64 +8,54 @@ public class EnemyObjectSpawner : MonoBehaviour
     [SerializeField] private FloatRange _spawnRangeX = new FloatRange(-8.5f, 8.5f);
     [SerializeField] private FloatRange _spawnRangeY = new FloatRange(6f, 10f);
 
-    [Header("Spawn Configs")]
-    [SerializeField] private EnemyObjectSpawnConfig[] _spawnConfigs;
-
-    private Coroutine[] _spawnCoroutines;
-
-    private void Awake()
-    {
-        _spawnCoroutines = new Coroutine[_spawnConfigs.Length];
-    }
-
-    void Start()
-    {
-        StartSpawning();
-    }
+    private EnemyObjectConfig[] _enemyObjectConfigs;
 
     private void OnEnable()
     {
         SpaceshipController.OnDestroyed += StopSpawning;
-        BonusChancePanelController.OnAnswerCorrect += StartSpawning;
+        GameManager.OnLevelChanged += HandleLevelChange;
+        GameManager.OnGameOver += StopSpawning;
     }
 
     private void OnDisable()
     {
         SpaceshipController.OnDestroyed -= StopSpawning;
-        BonusChancePanelController.OnAnswerCorrect -= StartSpawning;
+        GameManager.OnLevelChanged -= HandleLevelChange;
+        GameManager.OnGameOver -= StopSpawning;
     }
 
-    IEnumerator SpawnObjects(EnemyObjectSpawnConfig spawnConfig)
+    IEnumerator SpawnObjects(EnemyObjectConfig config)
     {
-        yield return new WaitForSeconds(spawnConfig.spawnDelay);
+        yield return new WaitForSeconds(config.spawnDelay);
         while (true)
         {
-            GameObject obj = EnemyObjectPool.instance.GetPooledObject(spawnConfig.enemyObject);
+            GameObject obj = EnemyObjectPool.instance.GetPooledObject(config.enemyObject);
             if (obj != null)
             {
                 obj.transform.position = new Vector3(_spawnRangeX.RandomValue(), _spawnRangeY.RandomValue(), transform.position.z);
                 obj.SetActive(true);
             }
-            yield return new WaitForSeconds(spawnConfig.spawnOverTime);
+            yield return new WaitForSeconds(config.spawnOverTime);
         }
     }
 
     void StartSpawning()
     {
-        for (int i = 0; i < _spawnConfigs.Length; i++)
+        for (int i = 0; i < _enemyObjectConfigs.Length; i++)
         {
-            _spawnCoroutines[i] = StartCoroutine(SpawnObjects(_spawnConfigs[i]));
+            StartCoroutine(SpawnObjects(_enemyObjectConfigs[i]));
         }
     }
 
     void StopSpawning()
     {
-        for (int i = 0; i < _spawnConfigs.Length; i++)
-        {
-            if (_spawnCoroutines[i] != null)
-            {
-                StopCoroutine(_spawnCoroutines[i]);
-            }
-        }
+        StopAllCoroutines();
+    }
+
+    void HandleLevelChange(LevelConfig level)
+    {
+        StopSpawning();
+        _enemyObjectConfigs = level.enemyObjectConfigs;
+        StartSpawning();
     }
 }

@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class SpaceshipController : MonoBehaviour
 {
     public static event Action OnDestroyed;
-    public static event Action<int> OnHealthUpdated;
 
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private InputActionReference _playerMovement;
@@ -17,12 +16,17 @@ public class SpaceshipController : MonoBehaviour
     [SerializeField] private GameObject _destroyEffectPrefab;
     [SerializeField] private GameObject _damageEffectPrefab;
 
+    [Header("SFX")]
+    [SerializeField] private AudioSource _shootSxf;
+
+    private Slider _healthBar;
     private Vector2 _moveDirection;
     private int _health = 500;
 
     void Awake()
     {
-        OnHealthUpdated?.Invoke(_health);
+        _healthBar = GameObject.FindWithTag("HealthBar").GetComponent<Slider>();
+        _healthBar.value = _health;
     }
 
     void OnEnable()
@@ -44,7 +48,7 @@ public class SpaceshipController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rb.MovePosition(_rb.position + _moveDirection * _moveSpeed * Time.fixedDeltaTime);
+        _rb.MovePosition(_rb.position + _moveSpeed * Time.fixedDeltaTime * _moveDirection);
     }
 
     private void Fire(InputAction.CallbackContext context)
@@ -53,15 +57,16 @@ public class SpaceshipController : MonoBehaviour
 
         if (bullet != null)
         {
-            bullet.transform.position = new Vector3(transform.position.x, transform.position.y, 2);
+            bullet.transform.position = transform.position;
             bullet.SetActive(true);
+            _shootSxf.Play();
         }
     }
 
     private void TakeDamage(int amount)
     {
         _health -= amount;
-        OnHealthUpdated?.Invoke(_health);
+        _healthBar.value = _health;
 
         if (_health <= 0)
         {
@@ -70,15 +75,17 @@ public class SpaceshipController : MonoBehaviour
         else
         {
             // Play damage effect
-            Instantiate(_damageEffectPrefab, transform.position, transform.rotation);
+            GameObject fx = Instantiate(_damageEffectPrefab, transform.position, transform.rotation);
+            Destroy(fx, 5f);
         }
     }
 
     private void DestroySpaceship()
     {
-        // Play destroy effect
-        Instantiate(_destroyEffectPrefab, transform.position, transform.rotation);
-        
+        // Play destroy FX
+        GameObject fx = Instantiate(_destroyEffectPrefab, transform.position, transform.rotation);
+        Destroy(fx, 5f);
+
         // Destroy the instance
         Destroy(gameObject);
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,16 +8,44 @@ public class BonusChancePanelController : MonoBehaviour
 {
     public static event Action OnAnswerCorrect;
     public static event Action OnAnswerIncorrect;
+    public static event Action OnTimeout;
+
+    [SerializeField] private RawImage _image;
+    [SerializeField] private GameObject _imageBackground;
+    [SerializeField] private GameObject _loadingSpinner;
+    [SerializeField] private GameObject answerGuessButtons;
+    [SerializeField] private TextMeshProUGUI _timerText;
+    [SerializeField] private Slider _timerSlider;
 
     private HeartGameQuestion _question;
-    private Button _btnCancel;
+    private float _timer = 5f;
+    private bool _isTimeOut = false;
 
-    private void Awake()
+    private void Start()
     {
-        _btnCancel = transform.GetChild(0).GetComponentInChildren<Button>();
-        _btnCancel.onClick.AddListener(CancelBonusChance);
-
         FetchBonusRoundQuestion();
+
+        // Display alert
+        AlertController.instance.ShowAlert("Bonus Chance Challenge");
+    }
+
+    private void Update()
+    {
+        // Update timer
+        if (_question != null && !_isTimeOut)
+        {
+            if (_timer >= 0f)
+            {
+                _timer -= Time.deltaTime;
+                _timerSlider.value = _timer;
+                _timerText.text = Math.Ceiling(_timer).ToString() + "s";
+            }
+            else
+            {
+                OnTimeout?.Invoke();
+                _isTimeOut = true;
+            }
+        }
     }
 
     private void OnEnable()
@@ -35,11 +64,6 @@ public class BonusChancePanelController : MonoBehaviour
         AnswerGuessController.OnAnswerGuessed -= HandleAnswerGuess;
     }
 
-    private void OnDestroy()
-    {
-        _btnCancel.onClick.RemoveListener(CancelBonusChance);
-    }
-
     private void FetchBonusRoundQuestion()
     {
         HeartGameAPIClient.instance.FetchQuestion();
@@ -49,18 +73,15 @@ public class BonusChancePanelController : MonoBehaviour
     {
         _question = question;
 
-        Transform imageLayers = transform.GetChild(1);
-        Transform answerGuessButtons = transform.GetChild(2).GetChild(1);
-
         // Set image
-        imageLayers.GetChild(1).GetComponent<RawImage>().texture = question.texture;
+        _image.texture = question.texture;
 
         // Set image and background active
-        imageLayers.GetChild(0).gameObject.SetActive(true);
-        imageLayers.GetChild(1).gameObject.SetActive(true);
+        _image.gameObject.SetActive(true);
+        _imageBackground.SetActive(true);
 
         // Disable loading spinner
-        imageLayers.GetChild(2).gameObject.SetActive(false);
+        _loadingSpinner.SetActive(false);
 
         // Init answer guesses
         int[] answerGuesses = new int[3];
@@ -69,17 +90,17 @@ public class BonusChancePanelController : MonoBehaviour
         answerGuesses[2] = UnityEngine.Random.Range(0, 9);
 
         // Shuffle answer guesses in the array
-        ShuffleAnswers(ref answerGuesses);
+        ShuffleAnswers(answerGuesses);
 
         // Set the answers in the GUI buttons
         for (int i = 0; i < answerGuesses.Length; i++)
         {
-            TextMeshProUGUI textObj = answerGuessButtons.GetChild(i).GetComponentInChildren<TextMeshProUGUI>();
+            TextMeshProUGUI textObj = answerGuessButtons.transform.GetChild(i).GetComponentInChildren<TextMeshProUGUI>();
             textObj.text = answerGuesses[i].ToString();
         }
     }
 
-    void ShuffleAnswers(ref int[] answerGuesses)
+    void ShuffleAnswers(int[] answerGuesses)
     {
         // Shuffle answers (Modern Fisher-Yates algorithm)
         int unshuffledLength = answerGuesses.Length - 1;
@@ -107,14 +128,9 @@ public class BonusChancePanelController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    void CancelBonusChance()
-    {
-        gameObject.SetActive(false);
-        Application.Quit();
-    }
-
     void HandleQuestionFetchError(string error)
     {
         Debug.Log(error);
+        Application.Quit();
     }
 }

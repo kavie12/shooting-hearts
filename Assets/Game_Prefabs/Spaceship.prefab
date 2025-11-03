@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2846910732765900878}
   - component: {fileID: 3186845929450001050}
   - component: {fileID: 47451250502600791}
+  - component: {fileID: 8484037069207875530}
   - component: {fileID: 7009361143676806391}
   m_Layer: 0
   m_Name: Spaceship
@@ -83,7 +84,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 619879793
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 8587340271344757162, guid: c1ef1a3b9e6549b488498ee074aee28a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -168,20 +169,20 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.0110607, y: 0.24289691}
-      - {x: -0.13389583, y: 0.048065603}
-      - {x: -0.28216186, y: -0.118524276}
-      - {x: -0.28565082, y: -0.19630164}
-      - {x: -0.10386506, y: -0.1177448}
-      - {x: -0.03791023, y: -0.12212527}
-      - {x: -0.036140084, y: -0.21616793}
-      - {x: 0.037252035, y: -0.22292507}
-      - {x: 0.040304206, y: -0.11515844}
-      - {x: 0.12760071, y: -0.11289096}
-      - {x: 0.28948474, y: -0.19708478}
-      - {x: 0.28681383, y: -0.11489254}
-      - {x: 0.12299387, y: 0.07122612}
-      - {x: 0.010204326, y: 0.24165338}
+    - - {x: -0.10588301, y: 0.25367224}
+      - {x: -0.14898115, y: 0.19245404}
+      - {x: -0.68515664, y: -0.090508424}
+      - {x: -0.48607072, y: -0.4225821}
+      - {x: -0.21808288, y: -0.34833562}
+      - {x: -0.14135283, y: -0.46908867}
+      - {x: 0.13626409, y: -0.4661541}
+      - {x: 0.21396634, y: -0.34360802}
+      - {x: 0.4648495, y: -0.41686594}
+      - {x: 0.6857593, y: -0.09134054}
+      - {x: 0.19466244, y: 0.15849888}
+      - {x: 0.110099524, y: 0.23853606}
+      - {x: 0.026016518, y: 0.47637606}
+      - {x: -0.028586615, y: 0.47439903}
   m_UseDelaunayMesh: 0
 --- !u!114 &3186845929450001050
 MonoBehaviour:
@@ -230,6 +231,103 @@ Animation:
   m_AnimatePhysics: 0
   m_UpdateMode: 0
   m_CullingType: 0
+--- !u!82 &8484037069207875530
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359493418186241500}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: fe3111e2240710a4c86fa4ccc6e1f7ae, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &7009361143676806391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,6 +343,7 @@ MonoBehaviour:
   _rb: {fileID: 5960852777390669989}
   _playerMovement: {fileID: 1951585563202047570, guid: fa5ba51b0996f1f4da22744f2d84fecf, type: 3}
   _playerFire: {fileID: 5700803819597750724, guid: fa5ba51b0996f1f4da22744f2d84fecf, type: 3}
-  _moveSpeed: 7
+  _moveSpeed: 6
   _destroyEffectPrefab: {fileID: 6222580953970544132, guid: 1cfe14da324516245acbf92b2d4947c6, type: 3}
   _damageEffectPrefab: {fileID: 8392349952044290375, guid: 90f3919bbb236d54d9f192ba7b6142fc, type: 3}
+  _shootSxf: {fileID: 8484037069207875530}

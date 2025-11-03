@@ -9,10 +9,18 @@ public class BulletController : MonoBehaviour
     private void FixedUpdate()
     {
         // Fire the bullet upwards
-        _rb.MovePosition(_rb.position + Vector2.up * _bulletSpeed * Time.fixedDeltaTime);
+        _rb.MovePosition(_rb.position + _bulletSpeed * Time.fixedDeltaTime * Vector2.up);
 
         // Make inactive when reaching deadzone
         if (transform.position.y > _deadZone)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("EnemyObject"))
         {
             gameObject.SetActive(false);
         }

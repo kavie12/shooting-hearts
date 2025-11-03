@@ -52,8 +52,8 @@ MonoBehaviour:
     max: 10
   _spawnConfigs:
   - enemyObject: 0
-    spawnOverTime: 4
+    spawnOverTime: []
     spawnDelay: 4
   - enemyObject: 1
-    spawnOverTime: 0.6
+    spawnOverTime: []
     spawnDelay: 2

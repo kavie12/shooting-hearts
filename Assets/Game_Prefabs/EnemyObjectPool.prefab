@@ -44,10 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0633f33f4063b8499579737672d6751, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
-  _poolConfigs:
+  _enemyObjectPrefabs:
   - enemyObject: 0
-    prefab: {fileID: 2618928919507613750, guid: e3e96d6091b08fb47b15b2dc3d190df5, type: 3}
-    poolSize: 4
+    objectPrefab: {fileID: 2618928919507613750, guid: e3e96d6091b08fb47b15b2dc3d190df5, type: 3}
+    objectDestroyFXPrefab: {fileID: 6651409593692128141, guid: f47aa4b6d7bfb534bad00b7a8d690d19, type: 3}
   - enemyObject: 1
-    prefab: {fileID: 177678366596337072, guid: 1f46b35f5e917c344a11971e0f08b96b, type: 3}
-    poolSize: 10
+    objectPrefab: {fileID: 177678366596337072, guid: 1f46b35f5e917c344a11971e0f08b96b, type: 3}
+    objectDestroyFXPrefab: {fileID: 6651409593692128141, guid: 7ce8152abcf5f7d41b1ce83129a58200, type: 3}
