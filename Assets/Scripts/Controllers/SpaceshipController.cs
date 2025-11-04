@@ -25,6 +25,7 @@ public class SpaceshipController : MonoBehaviour
 
     void Awake()
     {
+        // Init health bar GUI
         _healthBar = GameObject.FindWithTag("HealthBar").GetComponent<Slider>();
         _healthBar.value = _health;
     }
@@ -54,13 +55,9 @@ public class SpaceshipController : MonoBehaviour
     private void Fire(InputAction.CallbackContext context)
     {
         GameObject bullet = BulletPool.instance.GetPooledBullet();
-
-        if (bullet != null)
-        {
-            bullet.transform.position = transform.position;
-            bullet.SetActive(true);
-            _shootSxf.Play();
-        }
+        bullet.transform.position = transform.position;
+        bullet.SetActive(true);
+        _shootSxf.Play();
     }
 
     private void TakeDamage(int amount)

@@ -1,3 +1,4 @@
+[System.Serializable]
 public class HeartGameAPIResponse
 {
     public string question;

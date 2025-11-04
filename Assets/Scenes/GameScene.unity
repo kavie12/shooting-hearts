@@ -176,10 +176,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Background
       objectReference: {fileID: 0}
-    - target: {fileID: 7508158951408275774, guid: 3b30c6d52a3ad674f9c1b3b47c321350, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -611,7 +607,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1658542667
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1580,6 +1576,8 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1455834594}
+  - {fileID: 817019108}
+  - {fileID: 1884312311}
   - {fileID: 756640687}
   - {fileID: 3654049748161109993}
   - {fileID: 1713189349}
@@ -1587,5 +1585,3 @@ SceneRoots:
   - {fileID: 5473534208255395239}
   - {fileID: 3632514823547204340}
   - {fileID: 5686982328740504159}
-  - {fileID: 1884312311}
-  - {fileID: 817019108}

@@ -9,7 +9,7 @@ public class BulletPool : MonoBehaviour
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private int _poolSize = 5;
 
-    private List<GameObject> _bulletPool = new List<GameObject>();
+    private readonly List<GameObject> _bulletPool = new();
 
     private void Awake()
     {
