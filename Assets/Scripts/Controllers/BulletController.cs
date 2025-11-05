@@ -14,7 +14,7 @@ public class BulletController : MonoBehaviour
         // Make inactive when reaching deadzone
         if (transform.position.y > _deadZone)
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 
@@ -22,7 +22,7 @@ public class BulletController : MonoBehaviour
     {
         if (collision.CompareTag("EnemyObject"))
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 }

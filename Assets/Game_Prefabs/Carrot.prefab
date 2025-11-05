@@ -188,8 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b28d378f9dcc3e40906915fb8510a67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  enemyObject: 1
-  _rb: {fileID: 3978025649433585432}
   _fallingSpeed: 4
   _deadZone: -8
   _points: 100
+  _destroyFX: {fileID: 6651409593692128141, guid: 7ce8152abcf5f7d41b1ce83129a58200, type: 3}

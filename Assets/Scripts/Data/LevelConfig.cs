@@ -1,8 +1,9 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "LevelConfig", menuName = "Game/LevelConfig")]
+[CreateAssetMenu(fileName = "LevelConfig" ,menuName = "ScriptableObjects/LevelConfig")]
 public class LevelConfig : ScriptableObject
 {
     public string levelName;
-    public EnemyObjectConfig[] enemyObjectConfigs;
+    public float duration;
+    public EnemyObjectSpawnConfig[] enemyObjectSpawnConfig;
 }

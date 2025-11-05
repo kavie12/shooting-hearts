@@ -13,16 +13,7 @@ MonoBehaviour:
   m_Name: Level_1
   m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
   levelName: Level 1
-  enemyObjectConfigs:
-  - enemyObject: 1
-    spawnOverTime: 0.6
-    spawnDelay: 4
-    fallingSpeed: 3
-    enemyObjectPoolSize: 8
-    enemyObjectDestroyFXPoolSize: 4
-  - enemyObject: 0
-    spawnOverTime: 4
-    spawnDelay: 8
-    fallingSpeed: 3
-    enemyObjectPoolSize: 2
-    enemyObjectDestroyFXPoolSize: 1
+  duration: 20
+  enemyObjectSpawnConfig:
+  - Prefab: {fileID: 177678366596337072, guid: 1f46b35f5e917c344a11971e0f08b96b, type: 3}
+    SpawnOverTime: 0.4

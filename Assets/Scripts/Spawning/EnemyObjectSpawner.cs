@@ -1,61 +1,55 @@
+using NUnit.Framework;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyObjectSpawner : MonoBehaviour
 {
     [Header("Spawn Ranges")]
-    [SerializeField] private FloatRange _spawnRangeX = new FloatRange(-8.5f, 8.5f);
-    [SerializeField] private FloatRange _spawnRangeY = new FloatRange(6f, 10f);
+    [SerializeField] private FloatRange _spawnRangeX = new(-8.5f, 8.5f);
+    [SerializeField] private FloatRange _spawnRangeY = new(6f, 10f);
 
-    private EnemyObjectConfig[] _enemyObjectConfigs;
+    [Header("Spawn Config")]
+    [SerializeField] private float _spawnDelay = 4f;
+
+    private EnemyObjectSpawnConfig[] _spawnConfigs;
 
     private void OnEnable()
     {
-        SpaceshipController.OnDestroyed += StopSpawning;
-        GameManager.OnLevelChanged += HandleLevelChange;
-        GameManager.OnGameOver += StopSpawning;
+        LevelManager.OnLevelStarted += StartSpawning;
+        LevelManager.OnLevelEnded += StopSpawning;
+        GameManager.StopLevelProgression += StopSpawning;
     }
 
     private void OnDisable()
     {
-        SpaceshipController.OnDestroyed -= StopSpawning;
-        GameManager.OnLevelChanged -= HandleLevelChange;
-        GameManager.OnGameOver -= StopSpawning;
+        LevelManager.OnLevelStarted -= StartSpawning;
+        LevelManager.OnLevelEnded -= StopSpawning;
+        GameManager.StopLevelProgression -= StopSpawning;
     }
 
-    IEnumerator SpawnObjects(EnemyObjectConfig config)
+    void StartSpawning(LevelConfig levelConfig)
     {
-        yield return new WaitForSeconds(config.spawnDelay);
-        while (true)
+        // Update configs
+        _spawnConfigs = levelConfig.enemyObjectSpawnConfig;
+
+        for (int i = 0; i < _spawnConfigs.Length; i++)
         {
-            GameObject obj = EnemyObjectPool.instance.GetPooledObject(config.enemyObject);
-            if (obj != null)
-            {
-                obj.transform.position = new Vector3(_spawnRangeX.RandomValue(), _spawnRangeY.RandomValue(), transform.position.z);
-                obj.SetActive(true);
-            }
-            yield return new WaitForSeconds(config.spawnOverTime);
+            StartCoroutine(SpawnObjects(_spawnConfigs[i]));
         }
     }
 
-    void StartSpawning()
+    IEnumerator SpawnObjects(EnemyObjectSpawnConfig config)
     {
-        for (int i = 0; i < _enemyObjectConfigs.Length; i++)
+        yield return new WaitForSeconds(_spawnDelay);
+        while (true)
         {
-            StartCoroutine(SpawnObjects(_enemyObjectConfigs[i]));
+            GameObject obj = Instantiate(config.Prefab, new Vector3(_spawnRangeX.RandomValue(), _spawnRangeY.RandomValue(), transform.position.z), transform.rotation);
+            yield return new WaitForSeconds(config.SpawnOverTime);
         }
     }
 
     void StopSpawning()
     {
         StopAllCoroutines();
-    }
-
-    void HandleLevelChange(LevelConfig level)
-    {
-        StopSpawning();
-        _enemyObjectConfigs = level.enemyObjectConfigs;
-        StartSpawning();
     }
 }

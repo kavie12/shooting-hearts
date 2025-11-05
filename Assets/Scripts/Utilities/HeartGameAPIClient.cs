@@ -2,27 +2,22 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 
 public class HeartGameAPIClient : MonoBehaviour
 {
-    public static HeartGameAPIClient instance;
-
     public static event Action<HeartGameQuestion> OnQuestionFetched;
     public static event Action<string> OnQuestionFetchFailed;
 
     private string url = "https://marcconrad.com/uob/heart/api.php";
 
-    private void Awake()
+    private void OnEnable()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        BonusChancePanel.OnBonusChanceQuestionRequest += FetchQuestion;
+    }
+
+    private void OnDisable()
+    {
+        BonusChancePanel.OnBonusChanceQuestionRequest -= FetchQuestion;
     }
 
     public void FetchQuestion()
@@ -65,4 +60,12 @@ public class HeartGameAPIClient : MonoBehaviour
             }
         }
     }
+}
+
+[Serializable]
+public class HeartGameAPIResponse
+{
+    public string question;
+    public int solution;
+    public int carrots;
 }

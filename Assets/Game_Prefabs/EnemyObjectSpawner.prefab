@@ -50,10 +50,4 @@ MonoBehaviour:
   _spawnRangeY:
     min: 6
     max: 10
-  _spawnConfigs:
-  - enemyObject: 0
-    spawnOverTime: []
-    spawnDelay: 4
-  - enemyObject: 1
-    spawnOverTime: []
-    spawnDelay: 2
+  _spawnDelay: 4

@@ -6,15 +6,16 @@ public class EnemyObjectController : MonoBehaviour
     public static event Action<int> OnDestroyed;
     public static event Action<int> OnCrashed;
 
-    [SerializeField] private EnemyObject enemyObject;
-    [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private float _fallingSpeed = 6f;
     [SerializeField] private float _deadZone = -8;
     [SerializeField] private int _points = 100;
+    [SerializeField] private GameObject _destroyFX;
 
-    private void OnEnable()
+    private Rigidbody2D _rb;
+
+    void Awake()
     {
-        UpdateFallingSpeed(GameManager.instance.GetCurrentLevelConfig());
+        _rb = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
@@ -25,7 +26,7 @@ public class EnemyObjectController : MonoBehaviour
         // Make inactive when reaching deadzone
         if (transform.position.y < _deadZone)
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 
@@ -33,38 +34,23 @@ public class EnemyObjectController : MonoBehaviour
     {
         if (collision.CompareTag("Bullet"))
         {
-            DestroyObject();
             OnDestroyed?.Invoke(_points);
+            DestroyObject();
         }
 
         if (collision.CompareTag("Player"))
         {
-            DestroyObject();
             OnCrashed?.Invoke(_points);
+            DestroyObject();
         }
     }
 
     void DestroyObject()
     {
-        gameObject.SetActive(false);
-
         // Initiate destroy effect
-        GameObject effect = EnemyObjectPool.instance.GetPooledFX(enemyObject);
-        if (effect != null)
-        {
-            effect.transform.position = transform.position;
-            effect.SetActive(true);
-        }
-    }
+        GameObject fx = Instantiate(_destroyFX, transform.position, transform.rotation);
+        Destroy(fx, 4f);
 
-    void UpdateFallingSpeed(LevelConfig level)
-    {
-        foreach (EnemyObjectConfig config in level.enemyObjectConfigs)
-        {
-            if (enemyObject == config.enemyObject)
-            {
-                _fallingSpeed = config.fallingSpeed;
-            }
-        }
+        Destroy(gameObject);
     }
 }

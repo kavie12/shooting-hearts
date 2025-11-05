@@ -1,27 +1,35 @@
 using System;
 using System.Collections;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class AuthManager : MonoBehaviour
 {
-    public static event Action OnSignUpSuccess;
-    public static event Action OnLoginSuccess;
+    public static event Action<string> OnSignUpSuccess;
+    public static event Action<string> OnSignUpFailed;
+    public static event Action<string> OnLoginSuccess;
+    public static event Action<string> OnLoginFailed;
 
     private readonly string _baseUrl = "http://localhost:3000/api/auth";
-    private string _token;
+    private string _token = null;
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
 
     private void OnEnable()
     {
-        MenuController.OnLoginRequest += HandleLoginRequest;
-        MenuController.OnSignUpRequest += HandleSignUpRequest;
+        LoginForm.OnLoginRequest += HandleLoginRequest;
+        SignUpForm.OnSignUpRequest += HandleSignUpRequest;
+        MainMenu.OnLogoutClicked += HandleLogoutRequest;
     }
 
     private void OnDisable()
     {
-        MenuController.OnLoginRequest -= HandleLoginRequest;
-        MenuController.OnSignUpRequest -= HandleSignUpRequest;
+        LoginForm.OnLoginRequest -= HandleLoginRequest;
+        SignUpForm.OnSignUpRequest -= HandleSignUpRequest;
+        MainMenu.OnLogoutClicked -= HandleLogoutRequest;
     }
 
     public void HandleLoginRequest(LoginRequest loginRequest)
@@ -32,6 +40,11 @@ public class AuthManager : MonoBehaviour
     public void HandleSignUpRequest(SignUpRequest signUpRequest)
     {
         StartCoroutine(SignUp(signUpRequest));
+    }
+
+    public void HandleLogoutRequest()
+    {
+        _token = null;
     }
 
     public IEnumerator Login(LoginRequest loginRequest)
@@ -45,11 +58,13 @@ public class AuthManager : MonoBehaviour
             if (req.result == UnityWebRequest.Result.Success)
             {
                 AuthResponse authResponse = JsonUtility.FromJson<AuthResponse>(req.downloadHandler.text);
-                OnLoginSuccess?.Invoke();
+                _token = authResponse.data;
+                OnLoginSuccess?.Invoke("Login Successful.");
             }
             else
             {
-                Debug.LogError(req.downloadHandler.text);
+                AuthResponse authResponse = JsonUtility.FromJson<AuthResponse>(req.downloadHandler.text);
+                OnLoginFailed?.Invoke(authResponse.data);
             }
         }
     }
@@ -65,12 +80,20 @@ public class AuthManager : MonoBehaviour
             if (req.result == UnityWebRequest.Result.Success)
             {
                 AuthResponse authResponse = JsonUtility.FromJson<AuthResponse>(req.downloadHandler.text);
-                OnSignUpSuccess?.Invoke();
+                _token = authResponse.data;
+                OnSignUpSuccess?.Invoke("Sign Up Successful.");
             }
             else
             {
-                Debug.LogError(req.downloadHandler.text);
+                AuthResponse authResponse = JsonUtility.FromJson<AuthResponse>(req.downloadHandler.text);
+                OnSignUpFailed?.Invoke(authResponse.data);
             }
         }
     }
+}
+
+[Serializable]
+public class AuthResponse
+{
+    public string data;
 }

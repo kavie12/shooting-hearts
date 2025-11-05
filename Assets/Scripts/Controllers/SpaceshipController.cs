@@ -1,13 +1,12 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class SpaceshipController : MonoBehaviour
 {
+    public static event Action<int> OnHealthUpdated;
     public static event Action OnDestroyed;
 
-    [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private InputActionReference _playerMovement;
     [SerializeField] private InputActionReference _playerFire;
     [SerializeField] private float _moveSpeed = 8f;
@@ -16,18 +15,18 @@ public class SpaceshipController : MonoBehaviour
     [SerializeField] private GameObject _destroyEffectPrefab;
     [SerializeField] private GameObject _damageEffectPrefab;
 
-    [Header("SFX")]
+    [Header("Bullet")]
+    [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private AudioSource _shootSxf;
 
-    private Slider _healthBar;
+    private Rigidbody2D _rb;
     private Vector2 _moveDirection;
     private int _health = 500;
 
     void Awake()
     {
-        // Init health bar GUI
-        _healthBar = GameObject.FindWithTag("HealthBar").GetComponent<Slider>();
-        _healthBar.value = _health;
+        _rb = GetComponent<Rigidbody2D>();
+        OnHealthUpdated?.Invoke(_health);
     }
 
     void OnEnable()
@@ -54,16 +53,14 @@ public class SpaceshipController : MonoBehaviour
 
     private void Fire(InputAction.CallbackContext context)
     {
-        GameObject bullet = BulletPool.instance.GetPooledBullet();
-        bullet.transform.position = transform.position;
-        bullet.SetActive(true);
+        Instantiate(_bulletPrefab, transform.position, transform.rotation);
         _shootSxf.Play();
     }
 
     private void TakeDamage(int amount)
     {
         _health -= amount;
-        _healthBar.value = _health;
+        OnHealthUpdated?.Invoke(_health);
 
         if (_health <= 0)
         {
