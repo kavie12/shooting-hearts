@@ -10,6 +10,7 @@ public class PooledBulletFactory : MonoBehaviour, IBulletFactory
 
     private void Start()
     {
+        _pool = new Queue<GameObject>();
         for (int i = 0; i < _poolSize; i++)
         {
             GameObject bullet = Instantiate(_prefab, transform);
@@ -20,12 +21,13 @@ public class PooledBulletFactory : MonoBehaviour, IBulletFactory
 
     public GameObject CreateBullet()
     {
-        GameObject bullet = _pool.Dequeue();
-        
-        if (bullet == null) return null;
-
-        bullet.SetActive(true);
-        return bullet;
+        if (_pool.TryDequeue(out var bullet))
+        {
+            bullet.SetActive(true);
+            return bullet;
+        }
+        Debug.LogWarning("Bullet pool is empty. Please increase the size of the pool");
+        return null;
     }
 
     public void ReleaseBullet(GameObject bullet)

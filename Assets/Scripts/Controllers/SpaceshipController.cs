@@ -19,7 +19,7 @@ public class SpaceshipController : MonoBehaviour
     {
         _playerFire.action.started += Fire;
 
-        EventBus.Subscribe<PlayerDiedEvent>(DestroySpaceship);
+        EventBus.Subscribe<PlayerHealthOverEvent>(DestroySpaceship);
 
     }
 
@@ -27,7 +27,7 @@ public class SpaceshipController : MonoBehaviour
     {
         _playerFire.action.started -= Fire;
 
-        EventBus.Unsubscribe<PlayerDiedEvent>(DestroySpaceship);
+        EventBus.Unsubscribe<PlayerHealthOverEvent>(DestroySpaceship);
     }
 
     void Update()
@@ -47,14 +47,15 @@ public class SpaceshipController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<IEnemy>(out var damageDealer))
+        if (collision.TryGetComponent<IEnemy>(out var enemy))
         {
-            EventBus.Publish(new PlayerDamagedEvent(damageDealer.Damage));
+            EventBus.Publish(new PlayerDamagedEvent(transform.position, enemy.Damage));
         }
     }
 
-    private void DestroySpaceship(PlayerDiedEvent e)
+    private void DestroySpaceship(PlayerHealthOverEvent e)
     {
+        EventBus.Publish(new PlayerDestroyedEvent(transform.position));
         Destroy(gameObject);
     }
 }

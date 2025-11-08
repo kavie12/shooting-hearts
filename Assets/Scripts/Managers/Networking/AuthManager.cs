@@ -5,15 +5,17 @@ using UnityEngine.Networking;
 public class AuthManager : MonoBehaviour, IAuthTokenProvider
 {
     private readonly string _baseUrl = "http://localhost:3000/api/auth";
-    private string token;
+    private string _token;
 
     private void Awake()
     {
         DontDestroyOnLoad(this);
+        _token = PlayerPrefs.GetString("auth_token", string.Empty);
     }
 
     private void OnEnable()
     {
+        EventBus.Subscribe<MenuSceneLoaded>(VerifyToken);
         EventBus.Subscribe<LoginFormLoginButtonClickEvent>(HandleLoginRequest);
         EventBus.Subscribe<SignUpFormSignUpButtonClickEvent>(HandleSignUpRequest);
         EventBus.Subscribe<MainMenuLogoutButtonClickEvent>(HandleLogoutRequest);
@@ -21,32 +23,42 @@ public class AuthManager : MonoBehaviour, IAuthTokenProvider
 
     private void OnDisable()
     {
+        EventBus.Unsubscribe<MenuSceneLoaded>(VerifyToken);
         EventBus.Unsubscribe<LoginFormLoginButtonClickEvent>(HandleLoginRequest);
         EventBus.Unsubscribe<SignUpFormSignUpButtonClickEvent>(HandleSignUpRequest);
         EventBus.Unsubscribe<MainMenuLogoutButtonClickEvent>(HandleLogoutRequest);
     }
 
-    public string GetToken() {
-        return token;
-    }
+    public string GetToken() => _token;
 
-    public void HandleLoginRequest(LoginFormLoginButtonClickEvent e)
+    private void HandleLoginRequest(LoginFormLoginButtonClickEvent e)
     {
         StartCoroutine(SendLoginRequest(new LoginRequest { email = e.Email, password = e.Password }));
     }
 
-    public void HandleSignUpRequest(SignUpFormSignUpButtonClickEvent e)
+    private void HandleSignUpRequest(SignUpFormSignUpButtonClickEvent e)
     {
         StartCoroutine(SendSignUpRequest(new SignUpRequest { name = e.Name, email = e.Email, password = e.Password }));
     }
 
-    public void HandleLogoutRequest(MainMenuLogoutButtonClickEvent e)
+    private void VerifyToken(MenuSceneLoaded e)
     {
-        token = null;
+        if (_token == null || _token == string.Empty)
+        {
+            EventBus.Publish(new OnAuthMenuVerifyTokenFailedEvent());
+            return;
+        }
+        StartCoroutine(SendVerifyTokenRequest(new VerifyTokenRequest { token = _token }));
+    }
+
+    private void HandleLogoutRequest(MainMenuLogoutButtonClickEvent e)
+    {
+        _token = null;
+        PlayerPrefs.DeleteKey("auth_token");
         EventBus.Publish(new OnLogoutSuccessEvent("Logout Successful."));
     }
 
-    public IEnumerator SendLoginRequest(LoginRequest loginRequest)
+    private IEnumerator SendLoginRequest(LoginRequest loginRequest)
     {
         string jsonData = JsonUtility.ToJson(loginRequest);
 
@@ -57,7 +69,12 @@ public class AuthManager : MonoBehaviour, IAuthTokenProvider
         if (req.result == UnityWebRequest.Result.Success)
         {
             AuthSuccessResponse res = JsonUtility.FromJson<AuthSuccessResponse>(req.downloadHandler.text);
-            token = res.token;
+            
+            _token = res.token;
+
+            PlayerPrefs.SetString("auth_token", _token);
+            PlayerPrefs.Save();
+
             EventBus.Publish(new OnLoginSuccessEvent("Login Successful."));
         }
         else
@@ -66,7 +83,7 @@ public class AuthManager : MonoBehaviour, IAuthTokenProvider
         }
     }
 
-    public IEnumerator SendSignUpRequest(SignUpRequest signUpRequest)
+    private IEnumerator SendSignUpRequest(SignUpRequest signUpRequest)
     {
         string jsonData = JsonUtility.ToJson(signUpRequest);
 
@@ -78,13 +95,36 @@ public class AuthManager : MonoBehaviour, IAuthTokenProvider
             if (req.result == UnityWebRequest.Result.Success)
             {
                 AuthSuccessResponse authResponse = JsonUtility.FromJson<AuthSuccessResponse>(req.downloadHandler.text);
-                token = authResponse.token;
+
+                _token = authResponse.token;
+
+                PlayerPrefs.SetString("auth_token", _token);
+                PlayerPrefs.Save();
+
                 EventBus.Publish(new OnSignUpSuccessEvent("Sign Up Successful."));
             }
             else
             {
                 EventBus.Publish(new OnSignUpFailedEvent(ParseError(req)));
             }
+        }
+    }
+
+    private IEnumerator SendVerifyTokenRequest(VerifyTokenRequest verifyTokenRequest)
+    {
+        string jsonData = JsonUtility.ToJson(verifyTokenRequest);
+
+        using UnityWebRequest req = UnityWebRequest.Post($"{_baseUrl}/verify-token", jsonData, "application/json");
+        req.timeout = 10;
+        yield return req.SendWebRequest();
+
+        if (req.result == UnityWebRequest.Result.Success)
+        {
+            EventBus.Publish(new OnAuthMenuVerifyTokenSuccessEvent());
+        }
+        else
+        {
+            EventBus.Publish(new OnAuthMenuVerifyTokenFailedEvent());
         }
     }
 

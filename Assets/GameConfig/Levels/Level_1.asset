@@ -10,18 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e81920568cab9446aff46b3d5f96c06, type: 3}
-  m_Name: Level_3
+  m_Name: Level_1
   m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
-  LevelName: Level 3
+  LevelName: Level 1
   Duration: 20
+  Hint: 100 points for a carrot. Crashing 5 carrots will destroy the spaceship.
   EnemyConfigs:
-  - Type: 0
-    Prefab: {fileID: 2618928919507613750, guid: e3e96d6091b08fb47b15b2dc3d190df5, type: 3}
-    FallSpeed: 5
-    SpawnOverTime: 5
-    PoolSize: 5
-  - Type: 1
+  - EnemyType: 1
     Prefab: {fileID: 177678366596337072, guid: 1f46b35f5e917c344a11971e0f08b96b, type: 3}
-    FallSpeed: 5
-    SpawnOverTime: 2
-    PoolSize: 10
+    DestroyEffectPrefab: {fileID: 6651409593692128141, guid: 7ce8152abcf5f7d41b1ce83129a58200, type: 3}
+    FallSpeed: 4
+    SpawnOverTime: 0.4
+    SpawnDelay: 4
+    PoolSize: 16

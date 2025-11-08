@@ -12,8 +12,15 @@ public class MenuSceneUIManager : MonoBehaviour
     [SerializeField] private GameObject _signUpForm;
     [SerializeField] private GameObject _leaderboard;
 
+    private void Start()
+    {
+        EventBus.Publish(new MenuSceneLoaded());
+    }
+
     private void OnEnable()
     {
+        EventBus.Subscribe<OnAuthMenuVerifyTokenSuccessEvent>(HandleAuthMenuVerifyTokenSuccess);
+
         EventBus.Subscribe<AuthMenuLoginButtonClickEvent>(HandleAuthMenuLoginButtonClick);
         EventBus.Subscribe<AuthMenuSignUpButtonClickEvent>(HandleAuthMenuSignUpButtonClick);
 
@@ -32,6 +39,8 @@ public class MenuSceneUIManager : MonoBehaviour
 
     private void OnDisable()
     {
+        EventBus.Unsubscribe<OnAuthMenuVerifyTokenSuccessEvent>(HandleAuthMenuVerifyTokenSuccess);
+
         EventBus.Unsubscribe<AuthMenuLoginButtonClickEvent>(HandleAuthMenuLoginButtonClick);
         EventBus.Unsubscribe<AuthMenuSignUpButtonClickEvent>(HandleAuthMenuSignUpButtonClick);
 
@@ -46,6 +55,12 @@ public class MenuSceneUIManager : MonoBehaviour
         EventBus.Unsubscribe<OnLoginSuccessEvent>(HandleOnLoginSuccess);
         EventBus.Unsubscribe<OnSignUpSuccessEvent>(HandleOnSignUpSuccess);
         EventBus.Unsubscribe<OnLogoutSuccessEvent>(HandleOnLogoutSuccess);
+    }
+
+    private void HandleAuthMenuVerifyTokenSuccess(OnAuthMenuVerifyTokenSuccessEvent e)
+    {
+        _authMenu.SetActive(false);
+        _mainMenu.SetActive(true);
     }
 
     private void HandleAuthMenuLoginButtonClick(AuthMenuLoginButtonClickEvent e)

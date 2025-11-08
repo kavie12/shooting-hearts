@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
   LevelName: Level 2
   Duration: 20
+  Hint: 500 points for a heart. Crashing a heart will destroy the spaceship.
   EnemyConfigs:
-  - Type: 0
+  - EnemyType: 0
     Prefab: {fileID: 2618928919507613750, guid: e3e96d6091b08fb47b15b2dc3d190df5, type: 3}
-    FallSpeed: 5
-    SpawnOverTime: 5
-    PoolSize: 5
+    DestroyEffectPrefab: {fileID: 6651409593692128141, guid: f47aa4b6d7bfb534bad00b7a8d690d19, type: 3}
+    FallSpeed: 4
+    SpawnOverTime: 0.6
+    SpawnDelay: 4
+    PoolSize: 12

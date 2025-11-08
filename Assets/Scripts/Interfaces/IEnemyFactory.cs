@@ -2,6 +2,6 @@ using UnityEngine;
 
 public interface IEnemyFactory
 {
-    GameObject CreateEnemy(EnemyType type);
+    GameObject CreateEnemy(EnemyType enemyType);
     void ReleaseEnemy(GameObject enemy);
 }

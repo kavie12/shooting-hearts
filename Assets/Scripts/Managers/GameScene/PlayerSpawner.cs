@@ -6,15 +6,27 @@ public class PlayerSpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<GameStartEvent>(SpawnPlayer);
+        EventBus.Subscribe<GameStartEvent>(HandleGameStart);
+        EventBus.Subscribe<GameContinueEvent>(HandleGameContinue);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<GameStartEvent>(SpawnPlayer);
+        EventBus.Unsubscribe<GameStartEvent>(HandleGameStart);
+        EventBus.Unsubscribe<GameContinueEvent>(HandleGameContinue);
     }
 
-    private void SpawnPlayer(GameStartEvent e)
+    private void HandleGameStart(GameStartEvent e)
+    {
+        SpawnPlayer();
+    }
+
+    private void HandleGameContinue(GameContinueEvent e)
+    {
+        SpawnPlayer();
+    }
+
+    private void SpawnPlayer()
     {
         Instantiate(_prefab);
     }

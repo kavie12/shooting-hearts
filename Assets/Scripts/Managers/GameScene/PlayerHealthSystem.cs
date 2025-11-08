@@ -12,28 +12,40 @@ public class PlayerHealthSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<GameStartEvent>(ResetHealth);
+        EventBus.Subscribe<GameStartEvent>(HandleGameStart);
+        EventBus.Subscribe<GameContinueEvent>(HandleLevelReset);
         EventBus.Subscribe<PlayerDamagedEvent>(HandlePlayerDamage);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<GameStartEvent>(ResetHealth);
+        EventBus.Unsubscribe<GameStartEvent>(HandleGameStart);
+        EventBus.Unsubscribe<GameContinueEvent>(HandleLevelReset);
         EventBus.Unsubscribe<PlayerDamagedEvent>(HandlePlayerDamage);
+    }
+
+    private void HandleGameStart(GameStartEvent e)
+    {
+        ResetHealth();
+    }
+
+    private void HandleLevelReset(GameContinueEvent e)
+    {
+        ResetHealth();
     }
 
     private void HandlePlayerDamage(PlayerDamagedEvent e)
     {
-        _currentHealth = Mathf.Min(0, _currentHealth - e.DamageAmount);
+        _currentHealth = Mathf.Max(0, _currentHealth - e.DamageAmount);
         EventBus.Publish(new PlayerHealthUpdatedEvent(_currentHealth));
 
         if (_currentHealth == 0)
         {
-            EventBus.Publish(new PlayerDiedEvent());
+            EventBus.Publish(new PlayerHealthOverEvent());
         }
     }
 
-    private void ResetHealth(GameStartEvent e)
+    private void ResetHealth()
     {
         _currentHealth = _maxHealth;
         EventBus.Publish(new PlayerHealthUpdatedEvent(_currentHealth));

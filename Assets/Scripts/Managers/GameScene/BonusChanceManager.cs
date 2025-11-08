@@ -10,7 +10,7 @@ public class BonusChanceManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<PlayerDiedEvent>(HandleBonusChanceQuestion);
+        EventBus.Subscribe<PlayerDestroyedEvent>(HandleBonusChanceQuestion);
         EventBus.Subscribe<BonusChanceQuestionFetchSuccessEvent>(HandleQuestionFetch);
         EventBus.Subscribe<BonusChanceQuestionAnswerGuessEvent>(HandleAnswerGuess);
         EventBus.Subscribe<BonusChanceQuestionTimeout>(HandleTimeout);
@@ -18,13 +18,13 @@ public class BonusChanceManager : MonoBehaviour
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<PlayerDiedEvent>(HandleBonusChanceQuestion);
+        EventBus.Unsubscribe<PlayerDestroyedEvent>(HandleBonusChanceQuestion);
         EventBus.Unsubscribe<BonusChanceQuestionFetchSuccessEvent>(HandleQuestionFetch);
         EventBus.Unsubscribe<BonusChanceQuestionAnswerGuessEvent>(HandleAnswerGuess);
         EventBus.Unsubscribe<BonusChanceQuestionTimeout>(HandleTimeout);
     }
 
-    private void HandleBonusChanceQuestion(PlayerDiedEvent e)
+    private void HandleBonusChanceQuestion(PlayerDestroyedEvent e)
     {
         if (_isBonusChanceUsed)
         {
@@ -32,6 +32,11 @@ public class BonusChanceManager : MonoBehaviour
             return;
         }
 
+        Invoke(nameof(RequestBonusChanceQuestion), 2f);
+    }
+
+    private void RequestBonusChanceQuestion()
+    {
         _isBonusChanceUsed = true;
         _bonusChancePanel.SetActive(true);
         EventBus.Publish(new FetchBonusChanceQuestionEvent());

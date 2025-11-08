@@ -7,33 +7,35 @@ public class PooledEnemyFactory : MonoBehaviour, IEnemyFactory
 
     private void OnEnable()
     {
-        EventBus.Subscribe<LevelLoadedEvent>(HandleLevelLoaded);
+        EventBus.Subscribe<LevelLoadedEvent>(InitPool);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<LevelLoadedEvent>(HandleLevelLoaded);
+        EventBus.Unsubscribe<LevelLoadedEvent>(InitPool);
     }
 
-    public GameObject CreateEnemy(EnemyType type)
+    public GameObject CreateEnemy(EnemyType enemyType)
     {
-        GameObject enemy = _pools[type].Dequeue();
-
-        if (enemy == null) return null;
-
-        enemy.SetActive(true);
-        return enemy;
+        if (_pools[enemyType].TryDequeue(out var enemy))
+        {
+            enemy.SetActive(true);
+            return enemy;
+        }
+        Debug.LogWarning(enemyType.ToString() + " enemy pool is empty. Please increase the size of the pool");
+        return null;
     }
 
     public void ReleaseEnemy(GameObject enemy)
     {
         enemy.SetActive(false);
-        _pools[enemy.GetComponent<EnemyController>().Type].Enqueue(enemy);
+        _pools[enemy.GetComponent<EnemyController>().EnemyType].Enqueue(enemy);
     }
 
-    private void HandleLevelLoaded(LevelLoadedEvent e)
+    private void InitPool(LevelLoadedEvent e)
     {
-        _pools = new Dictionary<EnemyType, Queue<GameObject>>();
+        _pools ??= new Dictionary<EnemyType, Queue<GameObject>>();
+        _pools.Clear();
 
         foreach (EnemyConfig config in e.LevelConfig.EnemyConfigs)
         {
@@ -41,10 +43,11 @@ public class PooledEnemyFactory : MonoBehaviour, IEnemyFactory
             for (int i = 0; i < config.PoolSize; i++)
             {
                 GameObject enemy = Instantiate(config.Prefab, transform);
+                enemy.GetComponent<IEnemy>().Initialize(config);
                 enemy.SetActive(false);
                 pool.Enqueue(enemy);
             }
-            _pools.Add(config.Type, pool);
+            _pools.Add(config.EnemyType, pool);
         }
     }
 }

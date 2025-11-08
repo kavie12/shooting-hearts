@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private GameConfig _gameConfig;
     private void OnEnable()
     {
-        EventBus.Subscribe<PlayerDiedEvent>(HandlePlayerDied);
+        EventBus.Subscribe<PlayerDestroyedEvent>(HandlePlayerDestroyed);
         EventBus.Subscribe<BonusChanceGrantedEvent>(HandleBonusChanceGranted);
         EventBus.Subscribe<BonusChanceDeniedEvent>(HandleBonusChanceDeniedEvent);
         EventBus.Subscribe<AllLevelsCompletedEvent>(HandleAllLevelsCompleted);
@@ -12,7 +13,7 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<PlayerDiedEvent>(HandlePlayerDied);
+        EventBus.Unsubscribe<PlayerDestroyedEvent>(HandlePlayerDestroyed);
         EventBus.Unsubscribe<BonusChanceGrantedEvent>(HandleBonusChanceGranted);
         EventBus.Unsubscribe<BonusChanceDeniedEvent>(HandleBonusChanceDeniedEvent);
         EventBus.Unsubscribe<AllLevelsCompletedEvent>(HandleAllLevelsCompleted);
@@ -20,25 +21,30 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        EventBus.Publish(new GameStartEvent());
+        EventBus.Publish(new GameStartEvent(_gameConfig));
     }
 
     private void HandleAllLevelsCompleted(AllLevelsCompletedEvent e)
     {
-        EventBus.Publish(new GameOverEvent());
+        Invoke(nameof(InvokeGameOverEvent), 4f);
     }
 
-    private void HandlePlayerDied(PlayerDiedEvent e)
+    private void HandlePlayerDestroyed(PlayerDestroyedEvent e)
     {
         EventBus.Publish(new GameStopEvent());
     }
 
     private void HandleBonusChanceGranted(BonusChanceGrantedEvent e)
     {
-        EventBus.Publish(new GameStartEvent());
+        EventBus.Publish(new GameContinueEvent());
     }
 
     private void HandleBonusChanceDeniedEvent(BonusChanceDeniedEvent e)
+    {
+        Invoke(nameof(InvokeGameOverEvent), 4f);
+    }
+
+    private void InvokeGameOverEvent()
     {
         EventBus.Publish(new GameOverEvent());
     }

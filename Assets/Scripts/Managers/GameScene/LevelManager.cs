@@ -7,27 +7,34 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private float _intervalBetwennLevels = 4f;
 
     private int _currentLevelIndex = 0;
-
     private Coroutine _levelProgressionCoroutine;
 
     private void OnEnable()
     {
         EventBus.Subscribe<GameStartEvent>(StartLevelProgression);
-        EventBus.Subscribe<PlayerDiedEvent>(StopLevelProgression);
+        EventBus.Subscribe<GameContinueEvent>(ContinueLevelProgression);
+        EventBus.Subscribe<PlayerDestroyedEvent>(StopLevelProgression);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<GameStartEvent>(StartLevelProgression);
-        EventBus.Unsubscribe<PlayerDiedEvent>(StopLevelProgression);
+        EventBus.Unsubscribe<GameContinueEvent>(ContinueLevelProgression);
+        EventBus.Unsubscribe<PlayerDestroyedEvent>(StopLevelProgression);
     }
 
     private void StartLevelProgression(GameStartEvent e)
     {
+        _currentLevelIndex = 0;
         _levelProgressionCoroutine = StartCoroutine(LevelProgression());
     }
 
-    private void StopLevelProgression(PlayerDiedEvent e)
+    private void ContinueLevelProgression(GameContinueEvent e)
+    {
+        _levelProgressionCoroutine = StartCoroutine(LevelProgression());
+    }
+
+    private void StopLevelProgression(PlayerDestroyedEvent e)
     {
         StopCoroutine(_levelProgressionCoroutine);
     }
@@ -37,6 +44,7 @@ public class LevelManager : MonoBehaviour
         while (_currentLevelIndex < _levels.Length)
         {
             LoadLevel(_currentLevelIndex);
+            EventBus.Publish(new LevelStartedEvent(_currentLevelIndex, GetCurrentLevel()));
             yield return new WaitForSeconds(GetCurrentLevel().Duration);
             EventBus.Publish(new LevelCompletedEvent());
 
@@ -53,7 +61,8 @@ public class LevelManager : MonoBehaviour
 
     private void LoadLevel(int index)
     {
-        EventBus.Publish(new LevelLoadedEvent(_levels[index]));
+        EventBus.Publish(new LevelLoadedEvent(index, _levels[index]));
+        EventBus.Publish(new ShowAlertEvent(_levels[index].Hint, 4f));
     }
 
     private LevelConfig GetCurrentLevel() => _levels[_currentLevelIndex];

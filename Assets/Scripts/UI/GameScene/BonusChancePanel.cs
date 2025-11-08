@@ -14,6 +14,8 @@ public class BonusChancePanel : MonoBehaviour
     [SerializeField] private Slider _timerSlider;
     [SerializeField] private float _timer = 5f;
 
+    private Coroutine _timerCoroutine;
+
     private void OnEnable()
     {
         EventBus.Subscribe<BonusChanceQuestionFetchSuccessEvent>(DisplayBonusQuestion);
@@ -57,12 +59,13 @@ public class BonusChancePanel : MonoBehaviour
         }
 
         // Start the timer
-        StartCoroutine(RunTimer(_timer));
+        _timerCoroutine = StartCoroutine(RunTimer(_timer));
     }
 
     private void HandleAnswerGuess(BonusChanceQuestionAnswerGuessEvent e)
     {
         DisableAnswerButtons();
+        StopCoroutine(_timerCoroutine);
     }
 
     private void ShuffleAnswers(int[] answerGuesses)

@@ -7,7 +7,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private FloatRange _spawnRangeX = new(-8.5f, 8.5f);
     [SerializeField] private FloatRange _spawnRangeY = new(6f, 10f);
 
-    private EnemyConfig[] _spawnConfigs;
+    private EnemyConfig[] _enemyConfigs;
     private IEnemyFactory _enemyFactory;
 
     private void Awake()
@@ -17,14 +17,16 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<LevelLoadedEvent>(StartSpawning);
+        EventBus.Subscribe<LevelLoadedEvent>(HandleLevelLoaded);
+        EventBus.Subscribe<LevelStartedEvent>(HandleLevelStarted);
         EventBus.Subscribe<LevelCompletedEvent>(HandleLevelCompleted);
         EventBus.Subscribe<GameStopEvent>(HandleGameStop);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<LevelLoadedEvent>(StartSpawning);
+        EventBus.Unsubscribe<LevelLoadedEvent>(HandleLevelLoaded);
+        EventBus.Unsubscribe<LevelStartedEvent>(HandleLevelStarted);
         EventBus.Unsubscribe<LevelCompletedEvent>(HandleLevelCompleted);
         EventBus.Unsubscribe<GameStopEvent>(HandleGameStop);
     }
@@ -39,21 +41,26 @@ public class EnemySpawner : MonoBehaviour
         StopAllCoroutines();
     }
 
-    void StartSpawning(LevelLoadedEvent e)
+    private void HandleLevelLoaded(LevelLoadedEvent e)
     {
-        _spawnConfigs = e.LevelConfig.EnemyConfigs;
+        _enemyConfigs = e.LevelConfig.EnemyConfigs;
+    }
 
-        for (int i = 0; i < _spawnConfigs.Length; i++)
+    void HandleLevelStarted(LevelStartedEvent e)
+    {
+        for (int i = 0; i < _enemyConfigs.Length; i++)
         {
-            StartCoroutine(SpawnEnemies(_spawnConfigs[i]));
+            StartCoroutine(SpawnEnemies(_enemyConfigs[i]));
         }
     }
 
     IEnumerator SpawnEnemies(EnemyConfig config)
     {
+        yield return new WaitForSeconds(config.SpawnDelay);
+
         while (true)
         {
-            GameObject enemy = _enemyFactory.CreateEnemy(config.Type);
+            GameObject enemy = _enemyFactory.CreateEnemy(config.EnemyType);
 
             if (enemy != null)
             {

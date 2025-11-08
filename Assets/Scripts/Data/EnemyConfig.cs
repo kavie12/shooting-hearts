@@ -3,9 +3,11 @@ using UnityEngine;
 [System.Serializable]
 public class EnemyConfig
 {
-    public EnemyType Type;
+    public EnemyType EnemyType;
     public GameObject Prefab;
+    public GameObject DestroyEffectPrefab;
     public float FallSpeed;
     public float SpawnOverTime;
+    public float SpawnDelay;
     public int PoolSize;
 }

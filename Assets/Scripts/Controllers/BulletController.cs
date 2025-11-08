@@ -27,9 +27,8 @@ public class BulletController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<IEnemy>(out var enemy))
+        if (collision.CompareTag("Enemy"))
         {
-            EventBus.Publish(new EnemyDestroyedEvent(enemy.Points));
             DestroyBullet();
         }
     }
