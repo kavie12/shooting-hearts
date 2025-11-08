@@ -4,30 +4,21 @@ using UnityEngine;
 
 public class Alert : MonoBehaviour
 {
-    public static Alert instance;
-
     [SerializeField] private TextMeshProUGUI _alert;
 
-    private void Awake()
+    private void OnEnable()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        EventBus.Subscribe<ShowAlertEvent>(ShowAlert);
     }
 
-    public void ShowAlert(string message, float duration)
+    private void OnDisable()
     {
-        StartCoroutine(SetAlert(message, duration));
+        EventBus.Unsubscribe<ShowAlertEvent>(ShowAlert);
     }
 
-    public void ShowAlert(string message)
+    public void ShowAlert(ShowAlertEvent e)
     {
-        StartCoroutine(SetAlert(message, 2f));
+        StartCoroutine(SetAlert(e.Message, e.Duration));
     }
 
     private IEnumerator SetAlert(string message, float duration)
@@ -36,10 +27,5 @@ public class Alert : MonoBehaviour
         _alert.gameObject.SetActive(true);
         yield return new WaitForSeconds(duration);
         _alert.gameObject.SetActive(false);
-    }
-
-    private void OnDestroy()
-    {
-        StopAllCoroutines();
     }
 }

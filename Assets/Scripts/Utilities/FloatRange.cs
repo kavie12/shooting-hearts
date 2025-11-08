@@ -3,17 +3,17 @@ using UnityEngine;
 [System.Serializable]
 public class FloatRange
 {
-    public float min;
-    public float max;
+    public float Min;
+    public float Max;
 
     public FloatRange(float min, float max)
     {
-        this.min = min;
-        this.max = max;
+        this.Min = min;
+        this.Max = max;
     }
 
     public float RandomValue()
     {
-        return Random.Range(min, max);
+        return Random.Range(Min, Max);
     }
 }

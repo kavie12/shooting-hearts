@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e81920568cab9446aff46b3d5f96c06, type: 3}
   m_Name: Level_1
   m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
-  levelName: Level 1
-  duration: 20
-  enemyObjectSpawnConfig:
-  - Prefab: {fileID: 177678366596337072, guid: 1f46b35f5e917c344a11971e0f08b96b, type: 3}
-    SpawnOverTime: 0.4
+  LevelName: Level 1
+  Duration: 20
+  EnemyConfigs:
+  - Type: 1
+    Prefab: {fileID: 177678366596337072, guid: 1f46b35f5e917c344a11971e0f08b96b, type: 3}
+    FallSpeed: 5
+    SpawnOverTime: 2
+    PoolSize: 10

@@ -1,44 +1,33 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class SpaceshipController : MonoBehaviour
 {
-    public static event Action<int> OnHealthUpdated;
-    public static event Action OnDestroyed;
-
     [SerializeField] private InputActionReference _playerMovement;
     [SerializeField] private InputActionReference _playerFire;
     [SerializeField] private float _moveSpeed = 8f;
 
-    [Header("Effects")]
-    [SerializeField] private GameObject _destroyEffectPrefab;
-    [SerializeField] private GameObject _damageEffectPrefab;
-
-    [Header("Bullet")]
-    [SerializeField] private GameObject _bulletPrefab;
-    [SerializeField] private AudioSource _shootSxf;
-
     private Rigidbody2D _rb;
     private Vector2 _moveDirection;
-    private int _health = 500;
 
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
-        OnHealthUpdated?.Invoke(_health);
     }
 
     void OnEnable()
     {
         _playerFire.action.started += Fire;
-        EnemyObjectController.OnCrashed += TakeDamage;
+
+        EventBus.Subscribe<PlayerDiedEvent>(DestroySpaceship);
+
     }
 
     void OnDisable()
     {
         _playerFire.action.started -= Fire;
-        EnemyObjectController.OnCrashed -= TakeDamage;
+
+        EventBus.Unsubscribe<PlayerDiedEvent>(DestroySpaceship);
     }
 
     void Update()
@@ -53,39 +42,19 @@ public class SpaceshipController : MonoBehaviour
 
     private void Fire(InputAction.CallbackContext context)
     {
-        Instantiate(_bulletPrefab, transform.position, transform.rotation);
-        _shootSxf.Play();
+        EventBus.Publish(new PlayerShootEvent(transform.position));
     }
 
-    private void TakeDamage(int amount)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        _health -= amount;
-        OnHealthUpdated?.Invoke(_health);
-
-        if (_health <= 0)
+        if (collision.TryGetComponent<IEnemy>(out var damageDealer))
         {
-            DestroySpaceship();
-        }
-        else
-        {
-            // Play damage effect
-            GameObject fx = Instantiate(_damageEffectPrefab, transform.position, transform.rotation);
-            Destroy(fx, 5f);
+            EventBus.Publish(new PlayerDamagedEvent(damageDealer.Damage));
         }
     }
 
-    private void DestroySpaceship()
+    private void DestroySpaceship(PlayerDiedEvent e)
     {
-        // Play destroy FX
-        GameObject fx = Instantiate(_destroyEffectPrefab, transform.position, transform.rotation);
-        Destroy(fx, 5f);
-
-        // Destroy the instance
         Destroy(gameObject);
-    }
-
-    private void OnDestroy()
-    {
-        OnDestroyed?.Invoke();
     }
 }

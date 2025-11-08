@@ -12,16 +12,16 @@ public class HealthBar : MonoBehaviour
 
     private void OnEnable()
     {
-        SpaceshipController.OnHealthUpdated += UpdateHealth;
+        EventBus.Subscribe<PlayerHealthUpdatedEvent>(HandlePlayerHealthUpdate);
     }
 
     private void OnDisable()
     {
-        SpaceshipController.OnHealthUpdated -= UpdateHealth;
+        EventBus.Unsubscribe<PlayerHealthUpdatedEvent>(HandlePlayerHealthUpdate);
     }
 
-    void UpdateHealth(int health)
+    void HandlePlayerHealthUpdate(PlayerHealthUpdatedEvent e)
     {
-        _slider.value = health;
+        _slider.value = e.NewHealth;
     }
 }

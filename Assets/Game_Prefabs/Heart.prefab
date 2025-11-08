@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8499720123141329299}
   m_Layer: 0
   m_Name: Heart
-  m_TagString: EnemyObject
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -195,4 +195,3 @@ MonoBehaviour:
   _deadZone: -8
   _points: 500
   _destroyFX: {fileID: 6651409593692128141, guid: f47aa4b6d7bfb534bad00b7a8d690d19, type: 3}
-  _damageFX: {fileID: 0}

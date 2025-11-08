@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef7746ed74a965943b3d8910f3c216c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
-  _levelConfigs:
+  _levels:
   - {fileID: 11400000, guid: 307b056e8f6782149a95573a33bf15df, type: 2}
   - {fileID: 11400000, guid: 165266625713fa042a42981b2d31a5c6, type: 2}
   - {fileID: 11400000, guid: cec1b77d12b211844b02a48f66ea4967, type: 2}
-  _levelIndicator: {fileID: 0}
+  _intervalBetwennLevels: 5

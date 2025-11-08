@@ -13,16 +13,16 @@ public class Score : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnScoreUpdated += HandleScoreUpdate;
+        EventBus.Subscribe<ScoreUpdatedEvent>(HandleScoreUpdate);
     }
 
     private void OnDisable()
     {
-        GameManager.OnScoreUpdated -= HandleScoreUpdate;
+        EventBus.Unsubscribe<ScoreUpdatedEvent>(HandleScoreUpdate);
     }
 
-    private void HandleScoreUpdate(int score)
+    private void HandleScoreUpdate(ScoreUpdatedEvent e)
     {
-        _score.text = score.ToString();
+        _score.text = e.Score.ToString();
     }
 }

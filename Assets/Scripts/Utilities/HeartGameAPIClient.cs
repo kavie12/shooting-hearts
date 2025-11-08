@@ -1,26 +1,22 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class HeartGameAPIClient : MonoBehaviour
 {
-    public static event Action<HeartGameQuestion> OnQuestionFetched;
-    public static event Action<string> OnQuestionFetchFailed;
-
     private string url = "https://marcconrad.com/uob/heart/api.php";
 
     private void OnEnable()
     {
-        BonusChancePanel.OnBonusChanceQuestionRequest += FetchQuestion;
+        EventBus.Subscribe<FetchBonusChanceQuestionEvent>(FetchQuestion);
     }
 
     private void OnDisable()
     {
-        BonusChancePanel.OnBonusChanceQuestionRequest -= FetchQuestion;
+        EventBus.Unsubscribe<FetchBonusChanceQuestionEvent>(FetchQuestion);
     }
 
-    public void FetchQuestion()
+    public void FetchQuestion(FetchBonusChanceQuestionEvent e)
     {
         StartCoroutine(FetchQuestionCoroutine());
     }
@@ -38,7 +34,7 @@ public class HeartGameAPIClient : MonoBehaviour
             }
             else
             {
-                OnQuestionFetchFailed?.Invoke($"Error: {request.error}");
+                EventBus.Publish(new BonusChanceQuestionFetchFailedEvent($"Error: {request.error}"));
             }
         }
     }
@@ -52,20 +48,12 @@ public class HeartGameAPIClient : MonoBehaviour
             if (request.result == UnityWebRequest.Result.Success)
             {
                 Texture2D texture = DownloadHandlerTexture.GetContent(request);
-                OnQuestionFetched?.Invoke(new HeartGameQuestion(texture, apiResponse.solution, apiResponse.carrots));
+                EventBus.Publish(new BonusChanceQuestionFetchSuccessEvent(new BonusChanceQuestion(texture, apiResponse.solution, apiResponse.carrots)));
             }
             else
             {
-                OnQuestionFetchFailed?.Invoke($"Error: {request.error}");
+                EventBus.Publish(new BonusChanceQuestionFetchFailedEvent($"Error: {request.error}"));
             }
         }
     }
-}
-
-[Serializable]
-public class HeartGameAPIResponse
-{
-    public string question;
-    public int solution;
-    public int carrots;
 }

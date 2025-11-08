@@ -5,9 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - Bullet
-  - EnemyObject
   - HealthBar
   - MenuSceneManager
+  - Enemy
   layers:
   - Default
   - TransparentFX

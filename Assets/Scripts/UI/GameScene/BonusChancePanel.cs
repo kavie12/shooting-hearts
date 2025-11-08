@@ -1,80 +1,35 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class BonusChancePanel : MonoBehaviour
 {
-    public static event Action OnBonusChanceQuestionRequest;
-    public static event Action OnAnswerCorrect;
-    public static event Action OnAnswerIncorrect;
-    public static event Action OnTimeout;
-
     [SerializeField] private RawImage _image;
     [SerializeField] private GameObject _imageBackground;
     [SerializeField] private GameObject _loadingSpinner;
     [SerializeField] private GameObject answerGuessButtons;
     [SerializeField] private TextMeshProUGUI _timerText;
     [SerializeField] private Slider _timerSlider;
-
-    private HeartGameQuestion _question;
-    private float _timer = 5f;
-    private bool _isTimeOut = false;
+    [SerializeField] private float _timer = 5f;
 
     private void OnEnable()
     {
-        HeartGameAPIClient.OnQuestionFetched += DisplayBonusQuestion;
-        HeartGameAPIClient.OnQuestionFetchFailed += HandleQuestionFetchError;
-
-        AnswerGuess.OnAnswerGuessed += HandleAnswerGuess;
+        EventBus.Subscribe<BonusChanceQuestionFetchSuccessEvent>(DisplayBonusQuestion);
+        EventBus.Subscribe<BonusChanceQuestionAnswerGuessEvent>(HandleAnswerGuess);
     }
 
     private void OnDisable()
     {
-        HeartGameAPIClient.OnQuestionFetched -= DisplayBonusQuestion;
-        HeartGameAPIClient.OnQuestionFetchFailed += HandleQuestionFetchError;
-
-        AnswerGuess.OnAnswerGuessed -= HandleAnswerGuess;
+        EventBus.Unsubscribe<BonusChanceQuestionFetchSuccessEvent>(DisplayBonusQuestion);
+        EventBus.Unsubscribe<BonusChanceQuestionAnswerGuessEvent>(HandleAnswerGuess);
     }
 
-    private void Start()
+    private void DisplayBonusQuestion(BonusChanceQuestionFetchSuccessEvent e)
     {
-        FetchBonusRoundQuestion();
-
-        // Display alert
-        Alert.instance.ShowAlert("Bonus Chance Challenge");
-    }
-
-    private void Update()
-    {
-        // Update timer
-        if (_question != null && !_isTimeOut)
-        {
-            if (_timer >= 0f)
-            {
-                _timer -= Time.deltaTime;
-                _timerSlider.value = _timer;
-                _timerText.text = Math.Ceiling(_timer).ToString() + "s";
-            }
-            else
-            {
-                OnTimeout?.Invoke();
-                _isTimeOut = true;
-            }
-        }
-    }
-
-    private void FetchBonusRoundQuestion()
-    {
-        OnBonusChanceQuestionRequest?.Invoke();
-    }
-
-    void DisplayBonusQuestion(HeartGameQuestion question)
-    {
-        _question = question;
-
         // Set image
-        _image.texture = question.texture;
+        _image.texture = e.Question.ImageTexture;
 
         // Set image and background active
         _image.gameObject.SetActive(true);
@@ -84,23 +39,33 @@ public class BonusChancePanel : MonoBehaviour
         _loadingSpinner.SetActive(false);
 
         // Init answer guesses
-        int[] answerGuesses = new int[3];
-        answerGuesses[0] = question.heartsCount;
-        answerGuesses[1] = UnityEngine.Random.Range(0, 9);
-        answerGuesses[2] = UnityEngine.Random.Range(0, 9);
+        int[] answerGuesses = new int[answerGuessButtons.transform.childCount];
+        answerGuesses[0] = e.Question.HeartsCount;
+        for (int i = 1; i < answerGuesses.Length; i++)
+        {
+            answerGuesses[i] = UnityEngine.Random.Range(0, 9);
+        }
 
         // Shuffle answer guesses in the array
         ShuffleAnswers(answerGuesses);
 
         // Set the answers in the GUI buttons
-        for (int i = 0; i < answerGuesses.Length; i++)
+        for (int i = 0; i < answerGuessButtons.transform.childCount; i++)
         {
             TextMeshProUGUI textObj = answerGuessButtons.transform.GetChild(i).GetComponentInChildren<TextMeshProUGUI>();
             textObj.text = answerGuesses[i].ToString();
         }
+
+        // Start the timer
+        StartCoroutine(RunTimer(_timer));
     }
 
-    void ShuffleAnswers(int[] answerGuesses)
+    private void HandleAnswerGuess(BonusChanceQuestionAnswerGuessEvent e)
+    {
+        DisableAnswerButtons();
+    }
+
+    private void ShuffleAnswers(int[] answerGuesses)
     {
         // Shuffle answers (Modern Fisher-Yates algorithm)
         int unshuffledLength = answerGuesses.Length - 1;
@@ -115,22 +80,35 @@ public class BonusChancePanel : MonoBehaviour
         }
     }
 
-    void HandleAnswerGuess(int guessedAnswer)
+    private void DisableAnswerButtons()
     {
-        if (guessedAnswer == _question.heartsCount)
+        for (int i = 0; i < answerGuessButtons.transform.childCount; i++)
         {
-            OnAnswerCorrect?.Invoke();
+            Button btn = answerGuessButtons.transform.GetChild(i).GetComponent<Button>();
+            btn.interactable = false;
         }
-        else
-        {
-            OnAnswerIncorrect?.Invoke();
-        }
-        gameObject.SetActive(false);
     }
 
-    void HandleQuestionFetchError(string error)
+    private IEnumerator RunTimer(float duration)
     {
-        Debug.Log(error);
-        Application.Quit();
+        float timeRemaining = duration;
+        _timerSlider.maxValue = duration;
+        _timerSlider.value = duration;
+
+        while (timeRemaining > 0f)
+        {
+            timeRemaining -= Time.deltaTime;
+            _timerSlider.value = timeRemaining;
+            _timerText.text = Mathf.Ceil(timeRemaining) + "s";
+            yield return null;
+        }
+
+        HandleTimeout();
+    }
+
+    private void HandleTimeout()
+    {
+        DisableAnswerButtons();
+        EventBus.Publish(new BonusChanceQuestionTimeout());
     }
 }
