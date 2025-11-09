@@ -38,7 +38,7 @@ public class Leaderboard : MonoBehaviour
         _loadingSpinner.SetActive(false);
 
         // Add fetched records
-        foreach (var r in eventData.records)
+        foreach (var r in eventData.Records)
         {
             GameObject record = Instantiate(_recordPrefab, _recordContainer);
             record.GetComponent<LeaderboardRecord>().InitRecord(r.playerName, r.playerScore);

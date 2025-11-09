@@ -11,15 +11,15 @@ public class SceneFlowManager : MonoBehaviour
     private void OnEnable()
     {
         EventBus.Subscribe<MainMenuPlayButtonClickEvent>(HandleMainMenuPlayButtonClicked);
-        EventBus.Subscribe<OnGameOverPanelPlayAgainButtonClickedEvent>(HandleGameOverPanelPlayAgainButtonClicked);
-        EventBus.Subscribe<OnGameOverPanelMainMenuButtonClickedEvent>(HandleGameOverPanelMainMenuButtonClicked);
+        EventBus.Subscribe<GameOverPanelPlayAgainButtonClickedEvent>(HandleGameOverPanelPlayAgainButtonClicked);
+        EventBus.Subscribe<GameOverPanelMainMenuButtonClickedEvent>(HandleGameOverPanelMainMenuButtonClicked);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<MainMenuPlayButtonClickEvent>(HandleMainMenuPlayButtonClicked);
-        EventBus.Unsubscribe<OnGameOverPanelPlayAgainButtonClickedEvent>(HandleGameOverPanelPlayAgainButtonClicked);
-        EventBus.Unsubscribe<OnGameOverPanelMainMenuButtonClickedEvent>(HandleGameOverPanelMainMenuButtonClicked);
+        EventBus.Unsubscribe<GameOverPanelPlayAgainButtonClickedEvent>(HandleGameOverPanelPlayAgainButtonClicked);
+        EventBus.Unsubscribe<GameOverPanelMainMenuButtonClickedEvent>(HandleGameOverPanelMainMenuButtonClicked);
     }
 
     private void HandleMainMenuPlayButtonClicked(MainMenuPlayButtonClickEvent e)
@@ -27,12 +27,12 @@ public class SceneFlowManager : MonoBehaviour
         SceneManager.LoadScene("GameScene");
     }
 
-    private void HandleGameOverPanelPlayAgainButtonClicked(OnGameOverPanelPlayAgainButtonClickedEvent e)
+    private void HandleGameOverPanelPlayAgainButtonClicked(GameOverPanelPlayAgainButtonClickedEvent e)
     {
         SceneManager.LoadScene("GameScene");
     }
 
-    private void HandleGameOverPanelMainMenuButtonClicked(OnGameOverPanelMainMenuButtonClickedEvent e)
+    private void HandleGameOverPanelMainMenuButtonClicked(GameOverPanelMainMenuButtonClickedEvent e)
     {
         SceneManager.LoadScene("MenuScene");
     }

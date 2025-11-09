@@ -18,17 +18,17 @@ public class BonusChancePanel : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<BonusChanceQuestionFetchSuccessEvent>(DisplayBonusQuestion);
+        EventBus.Subscribe<BonusChanceQuestionDisplayEvent>(DisplayBonusQuestion);
         EventBus.Subscribe<BonusChanceQuestionAnswerGuessEvent>(HandleAnswerGuess);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<BonusChanceQuestionFetchSuccessEvent>(DisplayBonusQuestion);
+        EventBus.Unsubscribe<BonusChanceQuestionDisplayEvent>(DisplayBonusQuestion);
         EventBus.Unsubscribe<BonusChanceQuestionAnswerGuessEvent>(HandleAnswerGuess);
     }
 
-    private void DisplayBonusQuestion(BonusChanceQuestionFetchSuccessEvent e)
+    private void DisplayBonusQuestion(BonusChanceQuestionDisplayEvent e)
     {
         // Set image
         _image.texture = e.Question.ImageTexture;
