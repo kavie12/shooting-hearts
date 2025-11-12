@@ -16,5 +16,13 @@ public class SignUpRequest
 [System.Serializable]
 public class AuthSuccessResponse
 {
-    public string token;
+    public string accessToken;
+    public string refreshToken;
+}
+
+[System.Serializable]
+public class AuthErrorResponse
+{
+    public string code;
+    public string message;
 }

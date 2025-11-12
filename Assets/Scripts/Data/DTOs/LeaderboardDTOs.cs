@@ -24,3 +24,9 @@ public class UpdateHighScoreResponse
 {
     public int highScore;
 }
+
+[System.Serializable]
+public class LeaderboardErrorResponse
+{
+    public string message;
+}

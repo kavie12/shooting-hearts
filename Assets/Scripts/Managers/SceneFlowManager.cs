@@ -3,9 +3,19 @@ using UnityEngine.SceneManagement;
 
 public class SceneFlowManager : MonoBehaviour
 {
+    private static SceneFlowManager instance;
+
     private void Awake()
     {
-        DontDestroyOnLoad(this);
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnEnable()

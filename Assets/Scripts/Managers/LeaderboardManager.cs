@@ -1,16 +1,27 @@
-using System.Collections;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class LeaderboardManager : MonoBehaviour
 {
+    private static LeaderboardManager instance;
+
     private readonly string _baseUrl = "http://localhost:3000/api/player";
     private int _highScore = 0;
+    private IAuthProvider _authProvider;
 
     private void Awake()
     {
-        DontDestroyOnLoad(this);
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        _authProvider = FindFirstObjectByType<AuthManager>();
     }
 
     private void OnEnable()
@@ -25,94 +36,41 @@ public class LeaderboardManager : MonoBehaviour
         EventBus.Unsubscribe<UpdateFinalScoreEvent>(FetchUpdatedHighScore);
     }
 
-    private void FetchUpdatedHighScore(UpdateFinalScoreEvent e)
-    {
-        StartCoroutine(SendPlayerHighScoreUpdateRequest(e.FinalScore));
-    }
-
     private void FetchLeaderboard(MainMenuLeaderboardButtonClickEvent e)
     {
-        StartCoroutine(SendLeaderboardRequest());
+        StartCoroutine(ApiClient.Get<LeaderboardResponse, LeaderboardErrorResponse>($"{_baseUrl}/leaderboard", HandleLeaderboardRequest, _authProvider.AccessToken));
     }
 
-    // Server check if the new score is higher than the current high score, update it on the databse, send the high score back
-    private IEnumerator SendPlayerHighScoreUpdateRequest(int newScore)
+    private void FetchUpdatedHighScore(UpdateFinalScoreEvent e)
     {
-        string token = PlayerPrefs.GetString("auth_token", string.Empty);
+        StartCoroutine(ApiClient.Post<UpdateHighScoreResponse, LeaderboardErrorResponse>($"{_baseUrl}/update-high-score", new UpdateHighScoreRequest { newScore = e.FinalScore }, HandlePlayerHighScoreUpdateRequest, _authProvider.AccessToken));
+    }
 
-        if (token == null || token == string.Empty)
+    private void HandleLeaderboardRequest(LeaderboardResponse res, LeaderboardErrorResponse error)
+    {
+        if (res != null)
         {
-            Debug.Log("Auth token is null.");
-            yield break;
+            var entries = res.leaderboard.Select(r => new LeaderboardEntry(r.playerName, r.playerScore)).ToList();
+            EventBus.Publish(new OnLeaderboardFetchSuccessEvent(entries));
         }
-
-        string jsonData = JsonUtility.ToJson(new UpdateHighScoreRequest { newScore = newScore });
-
-        using UnityWebRequest req = UnityWebRequest.Post($"{_baseUrl}/update-high-score", jsonData, "application/json");
-        req.timeout = 10;
-        req.SetRequestHeader("Authorization", "Bearer " + token);
-        yield return req.SendWebRequest();
-
-        if (req.result == UnityWebRequest.Result.Success)
+        else
         {
-            UpdateHighScoreResponse res = JsonUtility.FromJson<UpdateHighScoreResponse>(req.downloadHandler.text);
+            Debug.Log(error);
+            EventBus.Publish(new OnLeaderboardFetchFailedEvent(error.message));
+        }
+    }
+
+    private void HandlePlayerHighScoreUpdateRequest(UpdateHighScoreResponse res, LeaderboardErrorResponse error)
+    {
+        if (res != null)
+        {
             _highScore = res.highScore;
             EventBus.Publish(new OnHighScoreUpdateSuccessEvent(_highScore));
         }
         else
         {
-            Debug.Log(ParseError(req));
-            EventBus.Publish(new OnHighScoreUpdateFailedEvent(ParseError(req)));
+            Debug.Log(error);
+            EventBus.Publish(new OnHighScoreUpdateFailedEvent(error.message));
         }
-    }
-
-    private IEnumerator SendLeaderboardRequest()
-    {
-        string token = PlayerPrefs.GetString("auth_token", string.Empty);
-
-        if (token == null)
-        {
-            Debug.Log("Auth token is null.");
-            yield break;
-        }
-
-        using UnityWebRequest req = UnityWebRequest.Get($"{_baseUrl}/leaderboard");
-        req.timeout = 10;
-        req.SetRequestHeader("Authorization", "Bearer " + token);
-        yield return req.SendWebRequest();
-
-        if (req.result == UnityWebRequest.Result.Success)
-        {
-            LeaderboardResponse res = JsonUtility.FromJson<LeaderboardResponse>(req.downloadHandler.text);
-
-            var entries = res.leaderboard.Select(r => new LeaderboardEntry(r.playerName, r.playerScore)).ToList();
-
-            EventBus.Publish(new OnLeaderboardFetchSuccessEvent(entries));
-        }
-        else
-        {
-            Debug.Log(ParseError(req));
-            EventBus.Publish(new OnLeaderboardFetchFailedEvent(ParseError(req)));
-        }
-    }
-
-    private string ParseError(UnityWebRequest req)
-    {
-        if (req.result == UnityWebRequest.Result.ConnectionError)
-        {
-            return "Failed connection with server.";
-        }
-        else if (req.responseCode >= 400)
-        {
-            try
-            {
-                return JsonUtility.FromJson<ErrorResponse>(req.downloadHandler.text).message;
-            }
-            catch
-            {
-                return "An unexpected error occurred.";
-            }
-        }
-        return "An unexpected error occurred.";
     }
 }

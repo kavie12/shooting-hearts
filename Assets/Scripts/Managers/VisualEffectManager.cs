@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class VisualEffectManager : MonoBehaviour
 {
+    private static VisualEffectManager instance;
+
     [SerializeField] private GameObject _playerDamageEffectPrefab;
     [SerializeField] private GameObject _playerDestroyEffectPrefab;
 
@@ -10,7 +12,15 @@ public class VisualEffectManager : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnEnable()

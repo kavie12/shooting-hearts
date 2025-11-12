@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[System.Serializable]
-public class EnemyConfig
+[CreateAssetMenu(fileName = "EnemyConfig", menuName = "ScriptableObjects/EnemyConfig")]
+public class EnemyConfig : ScriptableObject
 {
     public EnemyType EnemyType;
     public GameObject Prefab;

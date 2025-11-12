@@ -1,12 +1,9 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class BonusChanceManager : MonoBehaviour
 {
     [SerializeField] private GameObject _bonusChancePanel;
-
-    private readonly string _apiUrl = "https://marcconrad.com/uob/heart/api.php";
 
     private BonusChanceQuestion _question = null;
 
@@ -30,12 +27,24 @@ public class BonusChanceManager : MonoBehaviour
     {
         if (_isBonusChanceUsed)
         {
-            Invoke(nameof(DenyBonusChance), 2f);
+            Invoke(nameof(DenyBonusChance), 3f);
             return;
         }
 
-        StartCoroutine(SendBonusChanceQuestionRequest());
-        StartCoroutine(DisplayPanel(2f));
+        StartCoroutine(HeartGameAPIClient.SendBonusChanceQuestionRequest(HandleBonusChanceQuestionFetched));
+        StartCoroutine(DisplayPanel(3f));
+    }
+
+    private void HandleBonusChanceQuestionFetched(BonusChanceQuestion question, string error)
+    {
+        if (question != null)
+        {
+            _question = question;
+        }
+        else
+        {
+            Debug.Log(error);
+        }
     }
 
     private void HandleAnswerGuess(BonusChanceQuestionAnswerGuessEvent e)
@@ -80,57 +89,12 @@ public class BonusChanceManager : MonoBehaviour
 
     private void DenyBonusChance()
     {
-        ClosePanel();
+        if (_bonusChancePanel.activeSelf) ClosePanel();
         EventBus.Publish(new BonusChanceDeniedEvent());
     }
 
     private void ClosePanel()
     {
         _bonusChancePanel.SetActive(false);
-    }
-
-    private IEnumerator SendBonusChanceQuestionRequest()
-    {
-        using UnityWebRequest req = UnityWebRequest.Get(_apiUrl);
-        req.timeout = 10;
-        yield return req.SendWebRequest();
-
-        if (req.result == UnityWebRequest.Result.Success)
-        {
-            BonusChanceQuestionResponse question = JsonUtility.FromJson<BonusChanceQuestionResponse>(req.downloadHandler.text);
-            StartCoroutine(FetchImageTexture(question));
-        }
-        else
-        {
-            Debug.Log(ParseError(req));
-            Invoke(nameof(DenyBonusChance), 2f);
-        }
-    }
-
-    private IEnumerator FetchImageTexture(BonusChanceQuestionResponse apiResponse)
-    {
-        using UnityWebRequest req = UnityWebRequestTexture.GetTexture(apiResponse.question);
-        req.timeout = 10;
-        yield return req.SendWebRequest();
-
-        if (req.result == UnityWebRequest.Result.Success)
-        {
-            Texture2D texture = DownloadHandlerTexture.GetContent(req);
-            _question = new BonusChanceQuestion(texture, apiResponse.solution, apiResponse.carrots);
-        }
-        else
-        {
-            Debug.Log(ParseError(req));
-            Invoke(nameof(DenyBonusChance), 2f);
-        }
-    }
-
-    private string ParseError(UnityWebRequest req)
-    {
-        if (req.result == UnityWebRequest.Result.ConnectionError)
-        {
-            return "Failed connection with server.";
-        }
-        return "An unexpected error occurred.";
     }
 }

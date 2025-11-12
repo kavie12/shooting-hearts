@@ -44,6 +44,7 @@ public class EnemySpawner : MonoBehaviour
     private void HandleLevelLoaded(LevelLoadedEvent e)
     {
         _enemyConfigs = e.LevelConfig.EnemyConfigs;
+        _enemyFactory.InitFactory(_enemyConfigs);
     }
 
     void HandleLevelStarted(LevelStartedEvent e)

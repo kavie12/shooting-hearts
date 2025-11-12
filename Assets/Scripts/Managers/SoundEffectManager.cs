@@ -2,13 +2,23 @@ using UnityEngine;
 
 public class SoundEffectManager : MonoBehaviour
 {
+    private static SoundEffectManager instance;
+
     [SerializeField] private AudioSource _backgroundAmbientSfx;
     [SerializeField] private AudioSource _bulletSfx;
     [SerializeField] private AudioSource _playerDestroySfx;
 
     private void Awake()
     {
-        DontDestroyOnLoad(this);
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     private void Start()
     {
