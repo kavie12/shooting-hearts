@@ -4,6 +4,22 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameConfig _gameConfig;
 
+    private bool _isPaused = false;
+
+    private void Start()
+    {
+        EventBus.Publish(new GameStartEvent(_gameConfig));
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            _isPaused = !_isPaused;
+            HandlePause();
+        }
+    }
+
     private void OnEnable()
     {
         EventBus.Subscribe<PlayerDestroyedEvent>(HandlePlayerDestroyed);
@@ -20,11 +36,6 @@ public class GameManager : MonoBehaviour
         EventBus.Unsubscribe<AllLevelsCompletedEvent>(HandleAllLevelsCompleted);
     }
 
-    private void Start()
-    {
-        EventBus.Publish(new GameStartEvent(_gameConfig));
-    }
-
     private void HandleAllLevelsCompleted(AllLevelsCompletedEvent e)
     {
         Invoke(nameof(InvokeGameOverEvent), 4f);
@@ -32,17 +43,23 @@ public class GameManager : MonoBehaviour
 
     private void HandlePlayerDestroyed(PlayerDestroyedEvent e)
     {
-        EventBus.Publish(new GameStopEvent());
+        EventBus.Publish(new LevelStopEvent());
     }
 
     private void HandleBonusChanceGranted(BonusChanceGrantedEvent e)
     {
-        EventBus.Publish(new GameContinueEvent());
+        EventBus.Publish(new LevelRestartEvent());
     }
 
     private void HandleBonusChanceDeniedEvent(BonusChanceDeniedEvent e)
     {
         InvokeGameOverEvent();
+    }
+
+    private void HandlePause()
+    {
+        Time.timeScale = _isPaused ? 0f : 1f;
+        EventBus.Publish(new GamePauseEvent(_isPaused));
     }
 
     private void InvokeGameOverEvent()

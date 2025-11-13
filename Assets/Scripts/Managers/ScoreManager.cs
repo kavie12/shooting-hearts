@@ -11,7 +11,7 @@ public class ScoreManager : MonoBehaviour
     {
         EventBus.Subscribe<GameStartEvent>(InitScore);
         EventBus.Subscribe<LevelLoadedEvent>(TrackLevel);
-        EventBus.Subscribe<GameContinueEvent>(HandleLevelRestart);
+        EventBus.Subscribe<LevelRestartEvent>(HandleLevelRestart);
         EventBus.Subscribe<EnemyDestroyedEvent>(IncreaseScore);
         EventBus.Subscribe<GameOverEvent>(HandleFinalScore);
         EventBus.Subscribe<OnHighScoreUpdateSuccessEvent>(HandleHighScoreUpdate);
@@ -21,7 +21,7 @@ public class ScoreManager : MonoBehaviour
     {
         EventBus.Unsubscribe<GameStartEvent>(InitScore);
         EventBus.Unsubscribe<LevelLoadedEvent>(TrackLevel);
-        EventBus.Unsubscribe<GameContinueEvent>(HandleLevelRestart);
+        EventBus.Unsubscribe<LevelRestartEvent>(HandleLevelRestart);
         EventBus.Unsubscribe<EnemyDestroyedEvent>(IncreaseScore);
         EventBus.Unsubscribe<GameOverEvent>(HandleFinalScore);
         EventBus.Unsubscribe<OnHighScoreUpdateSuccessEvent>(HandleHighScoreUpdate);
@@ -32,7 +32,7 @@ public class ScoreManager : MonoBehaviour
         _scoreInEachLevel = new int[e.GameConfig.LevelConfigs.Length];
     }
 
-    private void HandleLevelRestart(GameContinueEvent e)
+    private void HandleLevelRestart(LevelRestartEvent e)
     {
         _finalScore -= _scoreInEachLevel[_currentLevelIndex];
         _scoreInEachLevel[_currentLevelIndex] = 0;

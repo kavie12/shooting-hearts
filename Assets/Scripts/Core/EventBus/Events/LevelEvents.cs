@@ -20,10 +20,10 @@ public sealed class LevelStartedEvent : IEventData
     }
 }
 
-public sealed class LevelCompletedEvent : IEventData
-{
-}
+public sealed class LevelCompletedEvent : IEventData { }
 
-public sealed class AllLevelsCompletedEvent : IEventData
-{
-}
+public sealed class AllLevelsCompletedEvent : IEventData { }
+
+public sealed class LevelStopEvent : IEventData { }
+
+public sealed class LevelRestartEvent : IEventData { }

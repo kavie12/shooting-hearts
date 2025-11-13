@@ -12,19 +12,22 @@ public class AuthMenu : MonoBehaviour
         _btnLogin.onClick.AddListener(() => EventBus.Publish(new AuthMenuLoginButtonClickEvent()));
         _btnSignUp.onClick.AddListener(() => EventBus.Publish(new AuthMenuSignUpButtonClickEvent()));
         _btnExit.onClick.AddListener(() => EventBus.Publish(new MenuSceneExitButtonClickEvent()));
+
+        _btnLogin.interactable = false;
+        _btnSignUp.interactable = false;
     }
 
     private void OnEnable()
     {
-        EventBus.Subscribe<OnAuthMenuVerifyTokenFailedEvent>(EnableMenu);
+        EventBus.Subscribe<OnAuthMenuVerifyTokenFailedEvent>(HandleStartUpAuthFailed);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<OnAuthMenuVerifyTokenFailedEvent>(EnableMenu);
+        EventBus.Unsubscribe<OnAuthMenuVerifyTokenFailedEvent>(HandleStartUpAuthFailed);
     }
 
-    private void EnableMenu(OnAuthMenuVerifyTokenFailedEvent e)
+    private void HandleStartUpAuthFailed(OnAuthMenuVerifyTokenFailedEvent e)
     {
         _btnLogin.interactable = true;
         _btnSignUp.interactable = true;

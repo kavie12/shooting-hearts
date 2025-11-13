@@ -432,8 +432,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _playerMovement: {fileID: 1951585563202047570, guid: fa5ba51b0996f1f4da22744f2d84fecf, type: 3}
-  _playerFire: {fileID: 5700803819597750724, guid: fa5ba51b0996f1f4da22744f2d84fecf, type: 3}
+  _playerShoot: {fileID: 5700803819597750724, guid: fa5ba51b0996f1f4da22744f2d84fecf, type: 3}
   _moveSpeed: 5.6
+  _shootOverTime: 0.15
 --- !u!1 &8598791585837718582
 GameObject:
   m_ObjectHideFlags: 0

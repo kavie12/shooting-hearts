@@ -12,14 +12,14 @@ public class LevelManager : MonoBehaviour
     private void OnEnable()
     {
         EventBus.Subscribe<GameStartEvent>(StartLevelProgression);
-        EventBus.Subscribe<GameContinueEvent>(ContinueLevelProgression);
+        EventBus.Subscribe<LevelRestartEvent>(ContinueLevelProgression);
         EventBus.Subscribe<PlayerDestroyedEvent>(StopLevelProgression);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<GameStartEvent>(StartLevelProgression);
-        EventBus.Unsubscribe<GameContinueEvent>(ContinueLevelProgression);
+        EventBus.Unsubscribe<LevelRestartEvent>(ContinueLevelProgression);
         EventBus.Unsubscribe<PlayerDestroyedEvent>(StopLevelProgression);
     }
 
@@ -31,7 +31,7 @@ public class LevelManager : MonoBehaviour
         _levelProgressionCoroutine = StartCoroutine(LevelProgression());
     }
 
-    private void ContinueLevelProgression(GameContinueEvent e)
+    private void ContinueLevelProgression(LevelRestartEvent e)
     {
         _levelProgressionCoroutine = StartCoroutine(LevelProgression());
     }
@@ -64,7 +64,6 @@ public class LevelManager : MonoBehaviour
     private void LoadLevel(int index)
     {
         EventBus.Publish(new LevelLoadedEvent(index, _levels[index]));
-        EventBus.Publish(new ShowAlertEvent(_levels[index].Hint, 4f));
     }
 
     private LevelConfig GetCurrentLevel() => _levels[_currentLevelIndex];

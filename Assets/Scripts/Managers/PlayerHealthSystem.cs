@@ -13,14 +13,14 @@ public class PlayerHealthSystem : MonoBehaviour
     private void OnEnable()
     {
         EventBus.Subscribe<GameStartEvent>(HandleGameStart);
-        EventBus.Subscribe<GameContinueEvent>(HandleLevelReset);
+        EventBus.Subscribe<LevelRestartEvent>(HandleLevelRestart);
         EventBus.Subscribe<PlayerDamagedEvent>(HandlePlayerDamage);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<GameStartEvent>(HandleGameStart);
-        EventBus.Unsubscribe<GameContinueEvent>(HandleLevelReset);
+        EventBus.Unsubscribe<LevelRestartEvent>(HandleLevelRestart);
         EventBus.Unsubscribe<PlayerDamagedEvent>(HandlePlayerDamage);
     }
 
@@ -29,7 +29,7 @@ public class PlayerHealthSystem : MonoBehaviour
         ResetHealth();
     }
 
-    private void HandleLevelReset(GameContinueEvent e)
+    private void HandleLevelRestart(LevelRestartEvent e)
     {
         ResetHealth();
     }

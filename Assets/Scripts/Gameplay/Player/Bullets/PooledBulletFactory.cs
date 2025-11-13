@@ -4,7 +4,7 @@ using UnityEngine;
 public class PooledBulletFactory : MonoBehaviour, IBulletFactory
 {
     [SerializeField] private GameObject _prefab;
-    [SerializeField] private int _poolSize = 20;
+    [SerializeField] private int _poolSize = 6;
 
     private Queue<GameObject> _pool;
 

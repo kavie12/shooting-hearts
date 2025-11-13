@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public static class HeartGameAPIClient
+public static class HeartGameApiClient
 {
     private static readonly string _apiUrl = "https://marcconrad.com/uob/heart/api.php";
 

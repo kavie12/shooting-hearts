@@ -43,10 +43,6 @@ public sealed class OnLogoutSuccessEvent : IEventData
     }
 }
 
-public class OnAuthMenuVerifyTokenSuccessEvent : IEventData
-{
-}
+public class OnAuthMenuVerifyTokenSuccessEvent : IEventData { }
 
-public class OnAuthMenuVerifyTokenFailedEvent : IEventData
-{
-}
+public class OnAuthMenuVerifyTokenFailedEvent : IEventData { }

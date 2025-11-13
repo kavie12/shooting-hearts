@@ -29,15 +29,6 @@ public sealed class PlayerHealthUpdatedEvent : IEventData
     }
 }
 
-public sealed class PlayerHealthOverEvent : IEventData
-{
-}
+public sealed class PlayerHealthOverEvent : IEventData { }
 
-public sealed class PlayerShootEvent : IEventData
-{
-    public Vector3 Position { get; }
-    public PlayerShootEvent(Vector3 position)
-    {
-        Position = position;
-    }
-}
+public sealed class PlayerShootEvent : IEventData { }

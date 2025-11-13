@@ -7,13 +7,13 @@ public class PlayerSpawner : MonoBehaviour
     private void OnEnable()
     {
         EventBus.Subscribe<GameStartEvent>(HandleGameStart);
-        EventBus.Subscribe<GameContinueEvent>(HandleGameContinue);
+        EventBus.Subscribe<LevelRestartEvent>(HandleLevelRestart);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<GameStartEvent>(HandleGameStart);
-        EventBus.Unsubscribe<GameContinueEvent>(HandleGameContinue);
+        EventBus.Unsubscribe<LevelRestartEvent>(HandleLevelRestart);
     }
 
     private void HandleGameStart(GameStartEvent e)
@@ -21,7 +21,7 @@ public class PlayerSpawner : MonoBehaviour
         SpawnPlayer();
     }
 
-    private void HandleGameContinue(GameContinueEvent e)
+    private void HandleLevelRestart(LevelRestartEvent e)
     {
         SpawnPlayer();
     }

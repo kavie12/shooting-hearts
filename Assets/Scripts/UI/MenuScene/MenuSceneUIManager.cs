@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class MenuSceneUIManager : MonoBehaviour
+public class MenuSceneUiManager : MonoBehaviour
 {
     [SerializeField] private GameObject _title;
 

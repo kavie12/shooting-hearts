@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -20,12 +19,16 @@ public class BonusChancePanel : MonoBehaviour
     {
         EventBus.Subscribe<BonusChanceQuestionDisplayEvent>(DisplayBonusQuestion);
         EventBus.Subscribe<BonusChanceQuestionAnswerGuessEvent>(HandleAnswerGuess);
+        EventBus.Subscribe<BonusChanceGrantedEvent>(HandleBonusChanceGranted);
+        EventBus.Subscribe<BonusChanceDeniedEvent>(HandleBonusChanceDenied);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<BonusChanceQuestionDisplayEvent>(DisplayBonusQuestion);
         EventBus.Unsubscribe<BonusChanceQuestionAnswerGuessEvent>(HandleAnswerGuess);
+        EventBus.Unsubscribe<BonusChanceGrantedEvent>(HandleBonusChanceGranted);
+        EventBus.Unsubscribe<BonusChanceDeniedEvent>(HandleBonusChanceDenied);
     }
 
     private void DisplayBonusQuestion(BonusChanceQuestionDisplayEvent e)
@@ -113,5 +116,15 @@ public class BonusChancePanel : MonoBehaviour
     {
         DisableAnswerButtons();
         EventBus.Publish(new BonusChanceQuestionTimeout());
+    }
+
+    private void HandleBonusChanceGranted(BonusChanceGrantedEvent e)
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void HandleBonusChanceDenied(BonusChanceDeniedEvent e)
+    {
+        gameObject.SetActive(false);
     }
 }

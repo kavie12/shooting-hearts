@@ -20,7 +20,7 @@ public class EnemySpawner : MonoBehaviour
         EventBus.Subscribe<LevelLoadedEvent>(HandleLevelLoaded);
         EventBus.Subscribe<LevelStartedEvent>(HandleLevelStarted);
         EventBus.Subscribe<LevelCompletedEvent>(HandleLevelCompleted);
-        EventBus.Subscribe<GameStopEvent>(HandleGameStop);
+        EventBus.Subscribe<LevelStopEvent>(HandleLevelStop);
     }
 
     private void OnDisable()
@@ -28,7 +28,7 @@ public class EnemySpawner : MonoBehaviour
         EventBus.Unsubscribe<LevelLoadedEvent>(HandleLevelLoaded);
         EventBus.Unsubscribe<LevelStartedEvent>(HandleLevelStarted);
         EventBus.Unsubscribe<LevelCompletedEvent>(HandleLevelCompleted);
-        EventBus.Unsubscribe<GameStopEvent>(HandleGameStop);
+        EventBus.Unsubscribe<LevelStopEvent>(HandleLevelStop);
     }
 
     private void HandleLevelCompleted(LevelCompletedEvent e)
@@ -36,7 +36,7 @@ public class EnemySpawner : MonoBehaviour
         StopAllCoroutines();
     }
 
-    private void HandleGameStop(GameStopEvent e)
+    private void HandleLevelStop(LevelStopEvent e)
     {
         StopAllCoroutines();
     }

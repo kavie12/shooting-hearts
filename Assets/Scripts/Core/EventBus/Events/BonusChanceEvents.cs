@@ -1,10 +1,8 @@
-public sealed class BonusChanceGrantedEvent : IEventData
-{
-}
+public sealed class BonusChanceGrantedEvent : IEventData { }
 
-public sealed class BonusChanceDeniedEvent : IEventData
-{
-}
+public sealed class BonusChanceDeniedEvent : IEventData { }
+
+public sealed class BonusChancePanelActivateEvent : IEventData { }
 
 public sealed class BonusChanceQuestionDisplayEvent : IEventData
 {
@@ -24,6 +22,4 @@ public sealed class BonusChanceQuestionAnswerGuessEvent : IEventData
     }
 }
 
-public sealed class BonusChanceQuestionTimeout : IEventData
-{
-}
+public sealed class BonusChanceQuestionTimeout : IEventData { }

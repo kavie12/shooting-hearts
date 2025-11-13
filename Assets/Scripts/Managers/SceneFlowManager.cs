@@ -23,6 +23,7 @@ public class SceneFlowManager : MonoBehaviour
         EventBus.Subscribe<MainMenuPlayButtonClickEvent>(HandleMainMenuPlayButtonClicked);
         EventBus.Subscribe<GameOverPanelPlayAgainButtonClickedEvent>(HandleGameOverPanelPlayAgainButtonClicked);
         EventBus.Subscribe<GameOverPanelMainMenuButtonClickedEvent>(HandleGameOverPanelMainMenuButtonClicked);
+        EventBus.Subscribe<PauseMenuQuitGameButtonClickEvent>(HandlePauseMenuQuitGameButtonClicked);
     }
 
     private void OnDisable()
@@ -30,6 +31,7 @@ public class SceneFlowManager : MonoBehaviour
         EventBus.Unsubscribe<MainMenuPlayButtonClickEvent>(HandleMainMenuPlayButtonClicked);
         EventBus.Unsubscribe<GameOverPanelPlayAgainButtonClickedEvent>(HandleGameOverPanelPlayAgainButtonClicked);
         EventBus.Unsubscribe<GameOverPanelMainMenuButtonClickedEvent>(HandleGameOverPanelMainMenuButtonClicked);
+        EventBus.Unsubscribe<PauseMenuQuitGameButtonClickEvent>(HandlePauseMenuQuitGameButtonClicked);
     }
 
     private void HandleMainMenuPlayButtonClicked(MainMenuPlayButtonClickEvent e)
@@ -43,6 +45,11 @@ public class SceneFlowManager : MonoBehaviour
     }
 
     private void HandleGameOverPanelMainMenuButtonClicked(GameOverPanelMainMenuButtonClickedEvent e)
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
+
+    private void HandlePauseMenuQuitGameButtonClicked(PauseMenuQuitGameButtonClickEvent e)
     {
         SceneManager.LoadScene("MenuScene");
     }

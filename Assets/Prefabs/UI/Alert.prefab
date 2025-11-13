@@ -145,9 +145,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6522695378643467744}
-  - component: {fileID: 6675589833601718704}
+  - component: {fileID: -2702097364931750567}
   m_Layer: 0
-  m_Name: AlertPanel
+  m_Name: Alert
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -161,7 +161,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7614854094929584030}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -440, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -169,7 +169,7 @@ Transform:
   - {fileID: 7656079960206122823}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6675589833601718704
+--- !u!114 &-2702097364931750567
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -180,5 +180,5 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0b1222b5d6a58c4699f88cfe2d9c24c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
+  m_EditorClassIdentifier: Assembly-CSharp::AlertPanel
   _alert: {fileID: 5534035593965637236}

@@ -3,10 +3,7 @@ using UnityEngine;
 
 public class BonusChanceManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _bonusChancePanel;
-
     private BonusChanceQuestion _question = null;
-
     private bool _isBonusChanceUsed = false;
 
     private void OnEnable()
@@ -31,8 +28,8 @@ public class BonusChanceManager : MonoBehaviour
             return;
         }
 
-        StartCoroutine(HeartGameAPIClient.SendBonusChanceQuestionRequest(HandleBonusChanceQuestionFetched));
-        StartCoroutine(DisplayPanel(3f));
+        StartCoroutine(HeartGameApiClient.SendBonusChanceQuestionRequest(HandleBonusChanceQuestionFetched));
+        StartCoroutine(DisplayQuestion(3f));
     }
 
     private void HandleBonusChanceQuestionFetched(BonusChanceQuestion question, string error)
@@ -61,7 +58,6 @@ public class BonusChanceManager : MonoBehaviour
 
     private void HandleAnswerCorrect()
     {
-        ClosePanel();
         EventBus.Publish(new BonusChanceGrantedEvent());
     }
 
@@ -77,10 +73,10 @@ public class BonusChanceManager : MonoBehaviour
         Invoke(nameof(DenyBonusChance), 2f);
     }
 
-    private IEnumerator DisplayPanel(float delay)
+    private IEnumerator DisplayQuestion(float delay)
     {
         yield return new WaitForSeconds(delay);
-        _bonusChancePanel.SetActive(true);
+        EventBus.Publish(new BonusChancePanelActivateEvent());
 
         yield return new WaitUntil(() => _question != null);
         EventBus.Publish(new BonusChanceQuestionDisplayEvent(_question));
@@ -89,12 +85,6 @@ public class BonusChanceManager : MonoBehaviour
 
     private void DenyBonusChance()
     {
-        if (_bonusChancePanel.activeSelf) ClosePanel();
         EventBus.Publish(new BonusChanceDeniedEvent());
-    }
-
-    private void ClosePanel()
-    {
-        _bonusChancePanel.SetActive(false);
     }
 }

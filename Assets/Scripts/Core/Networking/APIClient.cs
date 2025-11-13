@@ -23,6 +23,11 @@ public static class ApiClient
         }
         else
         {
+            if (req.result == UnityWebRequest.Result.ConnectionError)
+            {
+                Debug.Log("Connection error.");
+                yield break;
+            }
             callback(default, JsonUtility.FromJson<T2>(req.downloadHandler.text));
         }
     }
@@ -44,6 +49,11 @@ public static class ApiClient
         }
         else
         {
+            if (req.result == UnityWebRequest.Result.ConnectionError)
+            {
+                Debug.Log("Connection error.");
+                yield break;
+            }
             callback(default, JsonUtility.FromJson<T2>(req.downloadHandler.text));
         }
     }

@@ -1,18 +1,10 @@
-public sealed class MenuSceneLoaded : IEventData
-{
-}
+public sealed class MenuSceneLoaded : IEventData { }
 
-public sealed class AuthMenuLoginButtonClickEvent : IEventData
-{
-}
+public sealed class AuthMenuLoginButtonClickEvent : IEventData { }
 
-public sealed class AuthMenuSignUpButtonClickEvent : IEventData
-{
-}
+public sealed class AuthMenuSignUpButtonClickEvent : IEventData { }
 
-public sealed class LoginFormBackButtonClickEvent : IEventData
-{
-}
+public sealed class LoginFormBackButtonClickEvent : IEventData { }
 
 public sealed class LoginFormLoginButtonClickEvent : IEventData
 {
@@ -25,9 +17,7 @@ public sealed class LoginFormLoginButtonClickEvent : IEventData
     }
 }
 
-public sealed class SignUpFormBackButtonClickEvent : IEventData
-{
-}
+public sealed class SignUpFormBackButtonClickEvent : IEventData { }
 
 public sealed class SignUpFormSignUpButtonClickEvent : IEventData
 {
@@ -42,22 +32,12 @@ public sealed class SignUpFormSignUpButtonClickEvent : IEventData
     }
 }
 
-public sealed class MainMenuPlayButtonClickEvent : IEventData
-{
-}
+public sealed class MainMenuPlayButtonClickEvent : IEventData { }
 
-public sealed class MainMenuLeaderboardButtonClickEvent : IEventData
-{
-}
+public sealed class MainMenuLeaderboardButtonClickEvent : IEventData { }
 
-public sealed class LeaderboardBackButtonClickEvent : IEventData
-{
-}
+public sealed class LeaderboardBackButtonClickEvent : IEventData { }
 
-public sealed class MainMenuLogoutButtonClickEvent : IEventData
-{
-}
+public sealed class MainMenuLogoutButtonClickEvent : IEventData { }
 
-public sealed class MenuSceneExitButtonClickEvent : IEventData
-{
-}
+public sealed class MenuSceneExitButtonClickEvent : IEventData { }
