@@ -46,14 +46,8 @@ public class BonusChanceManager : MonoBehaviour
 
     private void HandleAnswerGuess(BonusChanceQuestionAnswerGuessEvent e)
     {
-        if (e.GuessedAnswer == _question.HeartsCount)
-        {
-            HandleAnswerCorrect();
-        }
-        else
-        {
-            HandleAnswerIncorrect();
-        }
+        if (e.GuessedAnswer == _question.HeartsCount) HandleAnswerCorrect();
+        else HandleAnswerIncorrect();
     }
 
     private void HandleAnswerCorrect()

@@ -4,7 +4,6 @@ public class SoundEffectManager : MonoBehaviour
 {
     private static SoundEffectManager instance;
 
-    [SerializeField] private AudioSource _backgroundAmbientSfx;
     [SerializeField] private AudioSource _bulletSfx;
     [SerializeField] private AudioSource _playerDestroySfx;
 
@@ -20,10 +19,6 @@ public class SoundEffectManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    private void Start()
-    {
-        PlayBackgroundAmbientSoundEffect();
-    }
 
     private void OnEnable()
     {
@@ -37,12 +32,6 @@ public class SoundEffectManager : MonoBehaviour
         EventBus.Unsubscribe<PlayerShootEvent>(PlayPlayerShootSoundEffect);
         EventBus.Unsubscribe<PlayerDamagedEvent>(PlayPlayerDamageSoundEffect);
         EventBus.Unsubscribe<PlayerDestroyedEvent>(PlayPlayerDestroySoundEffect);
-    }
-
-    private void PlayBackgroundAmbientSoundEffect()
-    {
-        _backgroundAmbientSfx.playOnAwake = true;
-        _backgroundAmbientSfx.loop = true;
     }
 
     private void PlayPlayerShootSoundEffect(PlayerShootEvent e)

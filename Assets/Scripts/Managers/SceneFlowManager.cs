@@ -22,7 +22,9 @@ public class SceneFlowManager : MonoBehaviour
     {
         EventBus.Subscribe<MainMenuPlayButtonClickEvent>(HandleMainMenuPlayButtonClicked);
         EventBus.Subscribe<GameOverPanelPlayAgainButtonClickedEvent>(HandleGameOverPanelPlayAgainButtonClicked);
-        EventBus.Subscribe<GameOverPanelMainMenuButtonClickedEvent>(HandleGameOverPanelMainMenuButtonClicked);
+        EventBus.Subscribe<GameOverPanelQuitGameButtonClickedEvent>(HandleGameOverPanelQuitGameButtonClicked);
+        EventBus.Subscribe<MenuSceneExitButtonClickEvent>(HandleMenuSceneExitButtonClick);
+        EventBus.Subscribe<BackToMainMenuEvent>(HandleBackToMainMenuEvent);
         EventBus.Subscribe<PauseMenuQuitGameButtonClickEvent>(HandlePauseMenuQuitGameButtonClicked);
     }
 
@@ -30,27 +32,54 @@ public class SceneFlowManager : MonoBehaviour
     {
         EventBus.Unsubscribe<MainMenuPlayButtonClickEvent>(HandleMainMenuPlayButtonClicked);
         EventBus.Unsubscribe<GameOverPanelPlayAgainButtonClickedEvent>(HandleGameOverPanelPlayAgainButtonClicked);
-        EventBus.Unsubscribe<GameOverPanelMainMenuButtonClickedEvent>(HandleGameOverPanelMainMenuButtonClicked);
+        EventBus.Unsubscribe<GameOverPanelQuitGameButtonClickedEvent>(HandleGameOverPanelQuitGameButtonClicked);
+        EventBus.Unsubscribe<MenuSceneExitButtonClickEvent>(HandleMenuSceneExitButtonClick);
+        EventBus.Unsubscribe<BackToMainMenuEvent>(HandleBackToMainMenuEvent);
         EventBus.Unsubscribe<PauseMenuQuitGameButtonClickEvent>(HandlePauseMenuQuitGameButtonClicked);
     }
 
     private void HandleMainMenuPlayButtonClicked(MainMenuPlayButtonClickEvent e)
     {
-        SceneManager.LoadScene("GameScene");
+        LoadGameScene();
     }
 
     private void HandleGameOverPanelPlayAgainButtonClicked(GameOverPanelPlayAgainButtonClickedEvent e)
     {
-        SceneManager.LoadScene("GameScene");
+        LoadGameScene();
     }
 
-    private void HandleGameOverPanelMainMenuButtonClicked(GameOverPanelMainMenuButtonClickedEvent e)
+    private void HandleGameOverPanelQuitGameButtonClicked(GameOverPanelQuitGameButtonClickedEvent e)
     {
-        SceneManager.LoadScene("MenuScene");
+        QuitGame();
+    }
+
+    private void HandleMenuSceneExitButtonClick(MenuSceneExitButtonClickEvent e)
+    {
+        QuitGame();
+    }
+
+    private void HandleBackToMainMenuEvent(BackToMainMenuEvent e)
+    {
+        LoadMenuScene();
     }
 
     private void HandlePauseMenuQuitGameButtonClicked(PauseMenuQuitGameButtonClickEvent e)
     {
+        QuitGame();
+    }
+
+    private void LoadGameScene()
+    {
+        SceneManager.LoadScene("GameScene");
+    }
+
+    private void LoadMenuScene()
+    {
         SceneManager.LoadScene("MenuScene");
+    }
+
+    private void QuitGame()
+    {
+        Application.Quit();
     }
 }

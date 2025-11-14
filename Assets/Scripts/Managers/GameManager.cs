@@ -4,20 +4,9 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameConfig _gameConfig;
 
-    private bool _isPaused = false;
-
     private void Start()
     {
         EventBus.Publish(new GameStartEvent(_gameConfig));
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            _isPaused = !_isPaused;
-            HandlePause();
-        }
     }
 
     private void OnEnable()
@@ -54,12 +43,6 @@ public class GameManager : MonoBehaviour
     private void HandleBonusChanceDeniedEvent(BonusChanceDeniedEvent e)
     {
         InvokeGameOverEvent();
-    }
-
-    private void HandlePause()
-    {
-        Time.timeScale = _isPaused ? 0f : 1f;
-        EventBus.Publish(new GamePauseEvent(_isPaused));
     }
 
     private void InvokeGameOverEvent()

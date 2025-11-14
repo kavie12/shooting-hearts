@@ -10,33 +10,16 @@ public class LevelIndicator : MonoBehaviour
     private void Awake()
     {
         _text = GetComponent<TextMeshProUGUI>();
-        Hide();
     }
 
-    private void OnEnable()
+    public void DisplayLevelName(string levelName)
     {
-        EventBus.Subscribe<LevelStartedEvent>(DisplayLevelIndicator);
-    }
-
-    private void OnDisable()
-    {
-        EventBus.Unsubscribe<LevelStartedEvent>(DisplayLevelIndicator);
-    }
-
-    private void DisplayLevelIndicator(LevelStartedEvent e)
-    {
-        _text.text = e.LevelConfig.LevelName;
-        Show();
+        _text.text = levelName;
         Invoke(nameof(Hide), _displayTime);
-    }
-
-    private void Show()
-    {
-        _text.enabled = true;
     }
 
     private void Hide()
     {
-        _text.enabled = false;
+        gameObject.SetActive(false);
     }
 }

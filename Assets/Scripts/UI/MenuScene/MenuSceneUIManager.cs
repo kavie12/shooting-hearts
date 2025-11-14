@@ -30,8 +30,6 @@ public class MenuSceneUiManager : MonoBehaviour
         EventBus.Subscribe<MainMenuLeaderboardButtonClickEvent>(HandleMainMenuLeaderboardButtonClick);
         EventBus.Subscribe<LeaderboardBackButtonClickEvent>(HandleLeaderboardBackButtonClick);
 
-        EventBus.Subscribe<MenuSceneExitButtonClickEvent>(HandleMenuSceneExitButtonClick);
-
         EventBus.Subscribe<OnLoginSuccessEvent>(HandleOnLoginSuccess);
         EventBus.Subscribe<OnSignUpSuccessEvent>(HandleOnSignUpSuccess);
         EventBus.Subscribe<OnLogoutSuccessEvent>(HandleOnLogoutSuccess);
@@ -49,8 +47,6 @@ public class MenuSceneUiManager : MonoBehaviour
 
         EventBus.Unsubscribe<MainMenuLeaderboardButtonClickEvent>(HandleMainMenuLeaderboardButtonClick);
         EventBus.Unsubscribe<LeaderboardBackButtonClickEvent>(HandleLeaderboardBackButtonClick);
-
-        EventBus.Unsubscribe<MenuSceneExitButtonClickEvent>(HandleMenuSceneExitButtonClick);
 
         EventBus.Unsubscribe<OnLoginSuccessEvent>(HandleOnLoginSuccess);
         EventBus.Unsubscribe<OnSignUpSuccessEvent>(HandleOnSignUpSuccess);
@@ -96,11 +92,6 @@ public class MenuSceneUiManager : MonoBehaviour
         _title.SetActive(false);
         _mainMenu.SetActive(false);
         _leaderboard.SetActive(true);
-    }
-
-    private void HandleMenuSceneExitButtonClick(MenuSceneExitButtonClickEvent e)
-    {
-        Application.Quit();
     }
 
     private void HandleLeaderboardBackButtonClick(LeaderboardBackButtonClickEvent e)

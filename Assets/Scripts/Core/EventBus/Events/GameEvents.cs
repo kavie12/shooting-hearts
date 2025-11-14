@@ -7,12 +7,10 @@ public sealed class GameStartEvent : IEventData
     }
 }
 
-public sealed class GamePauseEvent : IEventData
-{
-    public bool IsPaused { get; }
-    public GamePauseEvent(bool isPaused) {
-        this.IsPaused = isPaused;
-    }
-}
+public sealed class GamePauseEvent : IEventData { }
+
+public sealed class GameResumeEvent : IEventData { }
 
 public sealed class GameOverEvent : IEventData { }
+
+public sealed class BackToMainMenuEvent : IEventData { }

@@ -12,11 +12,13 @@ public class GameOverPanel : MonoBehaviour
 
     [SerializeField] private Button _btnPlayAgain;
     [SerializeField] private Button _btnMainMenu;
+    [SerializeField] private Button _btnQuitGame;
 
     private void Start()
     {
         _btnPlayAgain.onClick.AddListener(() => EventBus.Publish(new GameOverPanelPlayAgainButtonClickedEvent()));
         _btnMainMenu.onClick.AddListener(() => EventBus.Publish(new GameOverPanelMainMenuButtonClickedEvent()));
+        _btnQuitGame.onClick.AddListener(() => EventBus.Publish(new GameOverPanelQuitGameButtonClickedEvent()));
     }
 
     private void OnEnable()
