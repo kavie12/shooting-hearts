@@ -14,19 +14,17 @@ public class SignUpForm : MonoBehaviour
     private void Start()
     {
         _btnSignUp.onClick.AddListener(HandleSignUpButtonClick);
-        _btnBack.onClick.AddListener(() => EventBus.Publish(new SignUpFormBackButtonClickEvent()));
+        _btnBack.onClick.AddListener(() => EventBus.Publish(new OnMenuSceneButtonClick(MenuSceneButton.SignUpFormBackButton)));
     }
 
     private void OnEnable()
     {
-        EventBus.Subscribe<OnSignUpSuccessEvent>(HandleSignUpSuccess);
-        EventBus.Subscribe<OnSignUpFailedEvent>(HandleSignUpFailed);
+        EventBus.Subscribe<OnSignUpRequestComplete>(HandleSignUpRequestComplete);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<OnSignUpSuccessEvent>(HandleSignUpSuccess);
-        EventBus.Unsubscribe<OnSignUpFailedEvent>(HandleSignUpFailed);
+        EventBus.Unsubscribe<OnSignUpRequestComplete>(HandleSignUpRequestComplete);
 
         ResetForm();
     }
@@ -34,22 +32,24 @@ public class SignUpForm : MonoBehaviour
     private void HandleSignUpButtonClick()
     {
         _btnSignUp.interactable = false;
-        EventBus.Publish(new SignUpFormSignUpButtonClickEvent(_name.text, _email.text, _password.text));
+        EventBus.Publish(new OnSignUpRequest(_name.text, _email.text, _password.text));
     }
 
-    private void HandleSignUpSuccess(OnSignUpSuccessEvent eventData)
+    private void HandleSignUpRequestComplete(OnSignUpRequestComplete e)
     {
-        _message.text = eventData.Message;
-        _message.color = Color.green;
-        _message.gameObject.SetActive(true);
-    }
+        _message.text = e.Message;
 
-    private void HandleSignUpFailed(OnSignUpFailedEvent eventData)
-    {
-        _message.text = eventData.Message;
-        _message.color = Color.red;
+        if (e.Success)
+        {
+            _message.color = Color.green;
+        }
+        else
+        {
+            _message.color = Color.red;
+            _btnSignUp.interactable = true;
+        }
+
         _message.gameObject.SetActive(true);
-        _btnSignUp.interactable = true;
     }
 
     private void ResetForm()

@@ -12,7 +12,7 @@ public class LevelIndicator : MonoBehaviour
         _text = GetComponent<TextMeshProUGUI>();
     }
 
-    public void DisplayLevelName(string levelName)
+    public void Display(string levelName)
     {
         _text.text = levelName;
         Invoke(nameof(Hide), _displayTime);

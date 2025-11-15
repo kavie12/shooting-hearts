@@ -1,5 +1,18 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public enum MenuSceneButton
+{
+    AuthMenuLoginButton,
+    AuthMenuSignUpButton,
+    AuthMenuExitButton,
+    LoginFormBackButton,
+    SignUpFormBackButton,
+    MainMenuPlayButton,
+    MainMenuLeaderboardButton,
+    MainMenuExitButton,
+    LeaderboardBackButton
+}
 
 public class MenuSceneUiManager : MonoBehaviour
 {
@@ -14,123 +27,161 @@ public class MenuSceneUiManager : MonoBehaviour
 
     private void Start()
     {
-        EventBus.Publish(new MenuSceneLoaded());
+        EventBus.Publish(new OnTokenAuthenticationRequest());
     }
 
     private void OnEnable()
     {
-        EventBus.Subscribe<OnAuthMenuVerifyTokenSuccessEvent>(HandleAuthMenuVerifyTokenSuccess);
+        EventBus.Subscribe<OnMenuSceneButtonClick>(HandleMenuSceneButtonClicked);
 
-        EventBus.Subscribe<AuthMenuLoginButtonClickEvent>(HandleAuthMenuLoginButtonClick);
-        EventBus.Subscribe<AuthMenuSignUpButtonClickEvent>(HandleAuthMenuSignUpButtonClick);
-
-        EventBus.Subscribe<LoginFormBackButtonClickEvent>(HandleLoginFormBackButtonClick);
-        EventBus.Subscribe<SignUpFormBackButtonClickEvent>(HandleSignUpFormBackButtonClick);
-
-        EventBus.Subscribe<MainMenuLeaderboardButtonClickEvent>(HandleMainMenuLeaderboardButtonClick);
-        EventBus.Subscribe<LeaderboardBackButtonClickEvent>(HandleLeaderboardBackButtonClick);
-
-        EventBus.Subscribe<OnLoginSuccessEvent>(HandleOnLoginSuccess);
-        EventBus.Subscribe<OnSignUpSuccessEvent>(HandleOnSignUpSuccess);
-        EventBus.Subscribe<OnLogoutSuccessEvent>(HandleOnLogoutSuccess);
+        EventBus.Subscribe<OnTokenAuthenticationRequestComplete>(HandleTokenAuthentication);
+        EventBus.Subscribe<OnLoginRequestComplete>(HandleLoginRequestComplete);
+        EventBus.Subscribe<OnSignUpRequestComplete>(HandleSignUpRequestComplete);
+        EventBus.Subscribe<OnLogoutRequestComplete>(HandleLogoutRequestComplete);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<OnAuthMenuVerifyTokenSuccessEvent>(HandleAuthMenuVerifyTokenSuccess);
+        EventBus.Unsubscribe<OnMenuSceneButtonClick>(HandleMenuSceneButtonClicked);
 
-        EventBus.Unsubscribe<AuthMenuLoginButtonClickEvent>(HandleAuthMenuLoginButtonClick);
-        EventBus.Unsubscribe<AuthMenuSignUpButtonClickEvent>(HandleAuthMenuSignUpButtonClick);
-
-        EventBus.Unsubscribe<LoginFormBackButtonClickEvent>(HandleLoginFormBackButtonClick);
-        EventBus.Unsubscribe<SignUpFormBackButtonClickEvent>(HandleSignUpFormBackButtonClick);
-
-        EventBus.Unsubscribe<MainMenuLeaderboardButtonClickEvent>(HandleMainMenuLeaderboardButtonClick);
-        EventBus.Unsubscribe<LeaderboardBackButtonClickEvent>(HandleLeaderboardBackButtonClick);
-
-        EventBus.Unsubscribe<OnLoginSuccessEvent>(HandleOnLoginSuccess);
-        EventBus.Unsubscribe<OnSignUpSuccessEvent>(HandleOnSignUpSuccess);
-        EventBus.Unsubscribe<OnLogoutSuccessEvent>(HandleOnLogoutSuccess);
+        EventBus.Unsubscribe<OnTokenAuthenticationRequestComplete>(HandleTokenAuthentication);
+        EventBus.Unsubscribe<OnLoginRequestComplete>(HandleLoginRequestComplete);
+        EventBus.Unsubscribe<OnSignUpRequestComplete>(HandleSignUpRequestComplete);
+        EventBus.Unsubscribe<OnLogoutRequestComplete>(HandleLogoutRequestComplete);
     }
 
-    private void HandleAuthMenuVerifyTokenSuccess(OnAuthMenuVerifyTokenSuccessEvent e)
+    private void HandleMenuSceneButtonClicked(OnMenuSceneButtonClick e)
     {
+        switch (e.ButtonId)
+        {
+            case MenuSceneButton.AuthMenuLoginButton:
+                DisplayLoginForm();
+                break;
+
+            case MenuSceneButton.AuthMenuSignUpButton:
+                DisplaySignUpForm();
+                break;
+
+            case MenuSceneButton.AuthMenuExitButton:
+                break;
+
+            case MenuSceneButton.LoginFormBackButton:
+                DisplayAuthMenu();
+                break;
+
+            case MenuSceneButton.SignUpFormBackButton:
+                DisplaySignUpForm();
+                break;
+
+            case MenuSceneButton.MainMenuPlayButton:
+                SceneManager.LoadScene("GameScene");
+                break;
+
+            case MenuSceneButton.MainMenuLeaderboardButton:
+                DisplayLeaderboard();
+                break;
+
+            case MenuSceneButton.MainMenuExitButton:
+                break;
+
+            case MenuSceneButton.LeaderboardBackButton:
+                DisplayMainMenu();
+                break;
+
+            default:
+                Debug.Log("Not defined in the switch case.");
+                break;
+        }
+    }
+
+    #region Display Component Functions
+
+    private void DisplayAuthMenu()
+    {
+        _title.SetActive(true);
+        _authMenu.SetActive(true);
+        _mainMenu.SetActive(false);
+        _loginForm.SetActive(false);
+        _signUpForm.SetActive(false);
+        _leaderboard.SetActive(false);
+    }
+
+    private void DisplayLoginForm()
+    {
+        _title.SetActive(false);
+        _authMenu.SetActive(false);
+        _mainMenu.SetActive(false);
+        _loginForm.SetActive(true);
+        _signUpForm.SetActive(false);
+        _leaderboard.SetActive(false);
+    }
+
+    private void DisplaySignUpForm()
+    {
+        _title.SetActive(false);
+        _authMenu.SetActive(false);
+        _mainMenu.SetActive(false);
+        _loginForm.SetActive(false);
+        _signUpForm.SetActive(true);
+        _leaderboard.SetActive(false);
+    }
+
+    private void DisplayMainMenu()
+    {
+        _title.SetActive(true);
         _authMenu.SetActive(false);
         _mainMenu.SetActive(true);
-    }
-
-    private void HandleAuthMenuLoginButtonClick(AuthMenuLoginButtonClickEvent e)
-    {
-        _title.SetActive(false);
-        _authMenu.SetActive(false);
-        _loginForm.SetActive(true);
-    }
-
-    private void HandleAuthMenuSignUpButtonClick(AuthMenuSignUpButtonClickEvent e)
-    {
-        _title.SetActive(false);
-        _authMenu.SetActive(false);
-        _signUpForm.SetActive(true);
-    }
-
-    private void HandleLoginFormBackButtonClick(LoginFormBackButtonClickEvent e)
-    {
         _loginForm.SetActive(false);
-        _title.SetActive(true);
-        _authMenu.SetActive(true);
-    }
-
-    private void HandleSignUpFormBackButtonClick(SignUpFormBackButtonClickEvent e)
-    {
         _signUpForm.SetActive(false);
-        _title.SetActive(true);
-        _authMenu.SetActive(true);
+        _leaderboard.SetActive(false);
     }
 
-    private void HandleMainMenuLeaderboardButtonClick(MainMenuLeaderboardButtonClickEvent e)
+    private void DisplayLeaderboard()
     {
         _title.SetActive(false);
+        _authMenu.SetActive(false);
         _mainMenu.SetActive(false);
+        _loginForm.SetActive(false);
+        _signUpForm.SetActive(false);
         _leaderboard.SetActive(true);
     }
 
-    private void HandleLeaderboardBackButtonClick(LeaderboardBackButtonClickEvent e)
+    #endregion
+
+    #region Auth Functions
+
+    private void HandleTokenAuthentication(OnTokenAuthenticationRequestComplete e)
     {
-        _leaderboard.SetActive(false);
-        _title.SetActive(true);
-        _mainMenu.SetActive(true);
+        if (e.Success)
+        {
+            DisplayMainMenu();
+        }
     }
 
-    private void HandleOnLoginSuccess(OnLoginSuccessEvent e)
+    private void HandleLoginRequestComplete(OnLoginRequestComplete e)
     {
-        StartCoroutine(OnFormLoginSuccess());
+        if (e.Success) Invoke(nameof(OnFormLoginSuccess), 1f);
     }
 
-    private IEnumerator OnFormLoginSuccess()
+    private void OnFormLoginSuccess()
     {
-        yield return new WaitForSeconds(1f);
-        _loginForm.SetActive(false);
-        _title.SetActive(true);
-        _mainMenu.SetActive(true);
+        DisplayMainMenu();
     }
 
-    private void HandleOnSignUpSuccess(OnSignUpSuccessEvent e)
+    private void HandleSignUpRequestComplete(OnSignUpRequestComplete e)
     {
-        StartCoroutine(OnFormSignUpSuccess());
+        if (e.Success) Invoke(nameof(OnFormSignUpSuccess), 1f);
     }
 
-    private IEnumerator OnFormSignUpSuccess()
+    private void OnFormSignUpSuccess()
     {
-        yield return new WaitForSeconds(1f);
-        _signUpForm.SetActive(false);
-        _title.SetActive(true);
-        _mainMenu.SetActive(true);
+        DisplayMainMenu();
     }
 
-    private void HandleOnLogoutSuccess(OnLogoutSuccessEvent e)
+    private void HandleLogoutRequestComplete(OnLogoutRequestComplete e)
     {
-        _mainMenu.SetActive(false);
-        _title.SetActive(true);
-        _authMenu.SetActive(true);
+        DisplayAuthMenu();
     }
+
+    #endregion
 }

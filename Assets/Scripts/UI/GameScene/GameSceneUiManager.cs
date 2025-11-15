@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameSceneUiManager : MonoBehaviour
 {
@@ -10,46 +10,51 @@ public class GameSceneUiManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<LevelStartedEvent>(HandleLevelStarted);
-        EventBus.Subscribe<BonusChancePanelActivateEvent>(HandleBonusChancePanelActivate);
-        EventBus.Subscribe<PauseMenuToggleEvent>(HandlePauseMenuToggle);
-        EventBus.Subscribe<GameOverEvent>(HandleGameOver);
-        EventBus.Subscribe<GameOverPanelMainMenuButtonClickedEvent>(HandleGameOverPanelMainMenuButtonClick);
+        EventBus.Subscribe<OnLevelStarted>(HandleOnLevelStarted);
+        EventBus.Subscribe<OnBonusChanceRequested>(HandleBonusChanceRequest);
+        EventBus.Subscribe<OnGameOver>(HandleGameOver);
+        EventBus.Subscribe<OnGameOverPanelButtonClicked>(HandleGameOverPanelButtonClicked);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<LevelStartedEvent>(HandleLevelStarted);
-        EventBus.Unsubscribe<BonusChancePanelActivateEvent>(HandleBonusChancePanelActivate);
-        EventBus.Unsubscribe<PauseMenuToggleEvent>(HandlePauseMenuToggle);
-        EventBus.Unsubscribe<GameOverEvent>(HandleGameOver);
-        EventBus.Unsubscribe<GameOverPanelMainMenuButtonClickedEvent>(HandleGameOverPanelMainMenuButtonClick);
+        EventBus.Unsubscribe<OnLevelStarted>(HandleOnLevelStarted);
+        EventBus.Unsubscribe<OnBonusChanceRequested>(HandleBonusChanceRequest);
+        EventBus.Unsubscribe<OnGameOver>(HandleGameOver);
+        EventBus.Unsubscribe<OnGameOverPanelButtonClicked>(HandleGameOverPanelButtonClicked);
     }
 
-    private void HandleLevelStarted(LevelStartedEvent e)
+    private void HandleOnLevelStarted(OnLevelStarted e)
     {
         _levelIndicator.SetActive(true);
-        _levelIndicator.GetComponent<LevelIndicator>().DisplayLevelName(e.LevelConfig.LevelName);
+        _levelIndicator.GetComponent<LevelIndicator>().Display(e.LevelName);
     }
 
-    private void HandleBonusChancePanelActivate(BonusChancePanelActivateEvent e)
+    private void HandleBonusChanceRequest(OnBonusChanceRequested e)
     {
         _bonusChancePanel.SetActive(true);
     }
 
-    private void HandlePauseMenuToggle(PauseMenuToggleEvent e)
-    {
-        if (e.Paused) _pauseMenu.SetActive(true);
-        else if (_pauseMenu.activeSelf) _pauseMenu.SetActive(false);
-    }
-
-    private void HandleGameOver(GameOverEvent e)
+    private void HandleGameOver(OnGameOver e)
     {
         _gameOverPanel.SetActive(true);
     }
 
-    private void HandleGameOverPanelMainMenuButtonClick(GameOverPanelMainMenuButtonClickedEvent e)
+    private void HandleGameOverPanelButtonClicked(OnGameOverPanelButtonClicked e)
     {
-        EventBus.Publish(new BackToMainMenuEvent());
+        switch (e.ButtonId)
+        {
+            case GameOverPanelButton.PlayAgainButton:
+                SceneManager.LoadScene("GameScene");
+                break;
+
+            case GameOverPanelButton.MainMenuButton:
+                SceneManager.LoadScene("GameScene");
+                break;
+
+            default:
+                Debug.Log("Not defined in the switch case.");
+                break;
+        }
     }
 }

@@ -1,25 +1,30 @@
-public sealed class BonusChanceGrantedEvent : IEventData { }
+public sealed class OnBonusChanceRequested : IEventData { }
 
-public sealed class BonusChanceDeniedEvent : IEventData { }
+public sealed class OnBonusChanceRequestCompleted : IEventData
+{
+    public bool Granted { get; }
+    public OnBonusChanceRequestCompleted(bool granted)
+    {
+        this.Granted = granted;
+    }
+}
 
-public sealed class BonusChancePanelActivateEvent : IEventData { }
-
-public sealed class BonusChanceQuestionDisplayEvent : IEventData
+public sealed class OnBonusChanceQuestionFetched : IEventData
 {
     public BonusChanceQuestion Question { get; }
-    public BonusChanceQuestionDisplayEvent(BonusChanceQuestion question)
+    public OnBonusChanceQuestionFetched(BonusChanceQuestion question)
     {
         this.Question = question;
     }
 }
 
-public sealed class BonusChanceQuestionAnswerGuessEvent : IEventData
+public sealed class OnBonusChanceQuestionAnswerGuessed : IEventData
 {
     public int GuessedAnswer { get; }
-    public BonusChanceQuestionAnswerGuessEvent(int guessedAnswer)
+    public OnBonusChanceQuestionAnswerGuessed(int guessedAnswer)
     {
         GuessedAnswer = guessedAnswer;
     }
 }
 
-public sealed class BonusChanceQuestionTimeout : IEventData { }
+public sealed class OnBonusChanceQuestionTimeout : IEventData { }

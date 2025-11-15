@@ -12,15 +12,15 @@ public class HealthBar : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<PlayerHealthUpdatedEvent>(HandlePlayerHealthUpdate);
+        EventBus.Subscribe<OnPlayerHealthUpdated>(HandlePlayerHealthUpdate);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<PlayerHealthUpdatedEvent>(HandlePlayerHealthUpdate);
+        EventBus.Unsubscribe<OnPlayerHealthUpdated>(HandlePlayerHealthUpdate);
     }
 
-    void HandlePlayerHealthUpdate(PlayerHealthUpdatedEvent e)
+    void HandlePlayerHealthUpdate(OnPlayerHealthUpdated e)
     {
         _slider.value = e.NewHealth;
     }

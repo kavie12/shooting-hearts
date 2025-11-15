@@ -17,21 +17,21 @@ public class BonusChancePanel : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<BonusChanceQuestionDisplayEvent>(DisplayBonusQuestion);
-        EventBus.Subscribe<BonusChanceQuestionAnswerGuessEvent>(HandleAnswerGuess);
-        EventBus.Subscribe<BonusChanceGrantedEvent>(HandleBonusChanceGranted);
-        EventBus.Subscribe<BonusChanceDeniedEvent>(HandleBonusChanceDenied);
+        EventBus.Subscribe<OnBonusChanceQuestionFetched>(HandleQuestionFetched);
+        EventBus.Subscribe<OnBonusChanceQuestionAnswerGuessed>(HandleAnswerGuess);
+        EventBus.Subscribe<OnBonusChanceRequestCompleted>(HandleBonusChanceGranted);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<BonusChanceQuestionDisplayEvent>(DisplayBonusQuestion);
-        EventBus.Unsubscribe<BonusChanceQuestionAnswerGuessEvent>(HandleAnswerGuess);
-        EventBus.Unsubscribe<BonusChanceGrantedEvent>(HandleBonusChanceGranted);
-        EventBus.Unsubscribe<BonusChanceDeniedEvent>(HandleBonusChanceDenied);
+        EventBus.Unsubscribe<OnBonusChanceQuestionFetched>(HandleQuestionFetched);
+        EventBus.Unsubscribe<OnBonusChanceQuestionAnswerGuessed>(HandleAnswerGuess);
+        EventBus.Unsubscribe<OnBonusChanceRequestCompleted>(HandleBonusChanceGranted);
     }
 
-    private void DisplayBonusQuestion(BonusChanceQuestionDisplayEvent e)
+    #region Event Handlers
+
+    private void HandleQuestionFetched(OnBonusChanceQuestionFetched e)
     {
         // Set image
         _image.texture = e.Question.ImageTexture;
@@ -65,11 +65,18 @@ public class BonusChancePanel : MonoBehaviour
         _timerCoroutine = StartCoroutine(RunTimer(_timer));
     }
 
-    private void HandleAnswerGuess(BonusChanceQuestionAnswerGuessEvent e)
+    private void HandleAnswerGuess(OnBonusChanceQuestionAnswerGuessed e)
     {
         DisableAnswerButtons();
         StopCoroutine(_timerCoroutine);
     }
+
+    private void HandleBonusChanceGranted(OnBonusChanceRequestCompleted e)
+    {
+        gameObject.SetActive(false);
+    }
+
+    #endregion
 
     private void ShuffleAnswers(int[] answerGuesses)
     {
@@ -115,16 +122,6 @@ public class BonusChancePanel : MonoBehaviour
     private void HandleTimeout()
     {
         DisableAnswerButtons();
-        EventBus.Publish(new BonusChanceQuestionTimeout());
-    }
-
-    private void HandleBonusChanceGranted(BonusChanceGrantedEvent e)
-    {
-        gameObject.SetActive(false);
-    }
-
-    private void HandleBonusChanceDenied(BonusChanceDeniedEvent e)
-    {
-        gameObject.SetActive(false);
+        EventBus.Publish(new OnBonusChanceQuestionTimeout());
     }
 }

@@ -1,16 +1,14 @@
-public sealed class GameStartEvent : IEventData
+public sealed class OnGameStarted : IEventData
 {
     public GameConfig GameConfig { get; }
-    public GameStartEvent(GameConfig gameConfig)
+    public OnGameStarted(GameConfig gameConfig)
     {
         this.GameConfig = gameConfig;
     }
 }
 
-public sealed class GamePauseEvent : IEventData { }
+public sealed class OnGameStopped : IEventData { }
 
-public sealed class GameResumeEvent : IEventData { }
+public sealed class OnGameContinued : IEventData { }
 
-public sealed class GameOverEvent : IEventData { }
-
-public sealed class BackToMainMenuEvent : IEventData { }
+public sealed class OnGameOver : IEventData { }

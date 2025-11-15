@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class ScoreIndicator : MonoBehaviour
+public class Score : MonoBehaviour
 {
     private TextMeshProUGUI _score;
 
@@ -13,15 +13,15 @@ public class ScoreIndicator : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<ScoreUpdatedEvent>(HandleScoreUpdate);
+        EventBus.Subscribe<OnScoreUpdated>(HandleScoreUpdated);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<ScoreUpdatedEvent>(HandleScoreUpdate);
+        EventBus.Unsubscribe<OnScoreUpdated>(HandleScoreUpdated);
     }
 
-    private void HandleScoreUpdate(ScoreUpdatedEvent e)
+    private void HandleScoreUpdated(OnScoreUpdated e)
     {
         _score.text = e.Score.ToString();
     }

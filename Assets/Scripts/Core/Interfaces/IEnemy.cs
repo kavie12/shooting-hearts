@@ -4,5 +4,5 @@ public interface IEnemy
     int Points { get; }
     int Damage { get; }
 
-    void Initialize(EnemyConfig enemyConfig);
+    void UpdateConfig(EnemyConfig enemyConfig);
 }

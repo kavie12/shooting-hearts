@@ -1,26 +1,37 @@
-public sealed class ScoreUpdatedEvent : IEventData
+public sealed class OnScoreUpdated : IEventData
 {
     public int Score { get; }
-    public ScoreUpdatedEvent(int score)
+    public OnScoreUpdated(int score)
     {
         Score = score;
     }
 }
 
-public sealed class UpdateFinalScoreEvent : IEventData
+public sealed class OnHighScoreUpdateRequested : IEventData
 {
-    public int FinalScore { get; }
-    public UpdateFinalScoreEvent(int finalScore)
+    public int NewScore { get; }
+    public OnHighScoreUpdateRequested(int newScore)
     {
-        this.FinalScore = finalScore;
+        this.NewScore = newScore;
     }
 }
 
-public sealed class OnFinalScoresReadyEvent : IEventData
+public sealed class OnHighScoreUpdateRequestCompleted : IEventData
+{
+    public bool Success { get; }
+    public int HighScore { get; }
+    public OnHighScoreUpdateRequestCompleted(bool success, int highScore)
+    {
+        Success = success;
+        HighScore = highScore;
+    }
+}
+
+public sealed class OnUpdatedHighScoreFetched : IEventData
 {
     public int Score { get; }
     public int HighScore { get; }
-    public OnFinalScoresReadyEvent(int score, int highScore)
+    public OnUpdatedHighScoreFetched(int score, int highScore)
     {
         Score = score;
         HighScore = highScore;

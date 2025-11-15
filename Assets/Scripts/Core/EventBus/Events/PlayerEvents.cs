@@ -1,34 +1,21 @@
-using UnityEngine;
-
-public sealed class PlayerDamagedEvent : IEventData
+public sealed class OnPlayerDamaged : IEventData
 {
-    public Vector3 Position { get; }
     public int DamageAmount { get; }
-    public PlayerDamagedEvent(Vector3 position, int damageAmount)
+    public OnPlayerDamaged(int damageAmount)
     {
-        Position = position;
         DamageAmount = damageAmount;
     }
 }
 
-public sealed class PlayerDestroyedEvent : IEventData
-{
-    public Vector3 Position;
-    public PlayerDestroyedEvent(Vector3 position)
-    {
-        this.Position = position;
-    }
-}
+public sealed class OnPlayerDestroyed : IEventData { }
 
-public sealed class PlayerHealthUpdatedEvent : IEventData
+public sealed class OnPlayerHealthUpdated : IEventData
 {
     public int NewHealth { get; }
-    public PlayerHealthUpdatedEvent(int newHealth)
+    public OnPlayerHealthUpdated(int newHealth)
     {
         NewHealth = newHealth;
     }
 }
 
-public sealed class PlayerHealthOverEvent : IEventData { }
-
-public sealed class PlayerShootEvent : IEventData { }
+public sealed class OnPlayerHealthOver : IEventData { }

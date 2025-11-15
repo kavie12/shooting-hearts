@@ -333,7 +333,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: fe3111e2240710a4c86fa4ccc6e1f7ae, type: 3}
+  m_Resource: {fileID: 8300000, guid: 7886657b6fe1f524c8e06a4426e78aca, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -431,10 +431,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d190ab02eb89f19469d9f8d63cc8883d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _playerMovement: {fileID: 1951585563202047570, guid: fa5ba51b0996f1f4da22744f2d84fecf, type: 3}
-  _playerShoot: {fileID: 5700803819597750724, guid: fa5ba51b0996f1f4da22744f2d84fecf, type: 3}
   _moveSpeed: 5.6
   _shootOverTime: 0.15
+  _damageFx: {fileID: 8392349952044290375, guid: 90f3919bbb236d54d9f192ba7b6142fc, type: 3}
+  _destroyFx: {fileID: 6222580953970544132, guid: 1cfe14da324516245acbf92b2d4947c6, type: 3}
+  _destroySfx: {fileID: 8484037069207875530}
 --- !u!1 &8598791585837718582
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
+    [SerializeField] private AudioSource _shootSfx;
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private float _bulletSpeed = 10f;
     [SerializeField] private float _deadZone = 6;
@@ -23,6 +24,11 @@ public class BulletController : MonoBehaviour
         {
             DestroyBullet();
         }
+    }
+
+    private void OnEnable()
+    {
+        _shootSfx.Play();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

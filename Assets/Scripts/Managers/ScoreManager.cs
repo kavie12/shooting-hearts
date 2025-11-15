@@ -1,63 +1,78 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    private int[] _scoreInEachLevel;
-    private int _currentLevelIndex;
+    private Dictionary<string, int> _scoreInEachLevel;
+    private string _currentLevelName;
 
     private int _finalScore = 0;
 
     private void OnEnable()
     {
-        EventBus.Subscribe<GameStartEvent>(InitScore);
-        EventBus.Subscribe<LevelLoadedEvent>(TrackLevel);
-        EventBus.Subscribe<LevelRestartEvent>(HandleLevelRestart);
-        EventBus.Subscribe<EnemyDestroyedEvent>(IncreaseScore);
-        EventBus.Subscribe<GameOverEvent>(HandleFinalScore);
-        EventBus.Subscribe<OnHighScoreUpdateSuccessEvent>(HandleHighScoreUpdate);
+        EventBus.Subscribe<OnGameStarted>(HandleGameStarted);
+        EventBus.Subscribe<OnLevelLoaded>(HandleLevelLoaded);
+        EventBus.Subscribe<OnEnemyDestroyed>(HandleEnemyDestroyed);
+        EventBus.Subscribe<OnLevelRestarted>(HandleLevelRestarted);
+        EventBus.Subscribe<OnGameOver>(HandleGameOver);
+        EventBus.Subscribe<OnHighScoreUpdateRequestCompleted>(HandleHighScoreUpdateRequestComplete);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<GameStartEvent>(InitScore);
-        EventBus.Unsubscribe<LevelLoadedEvent>(TrackLevel);
-        EventBus.Unsubscribe<LevelRestartEvent>(HandleLevelRestart);
-        EventBus.Unsubscribe<EnemyDestroyedEvent>(IncreaseScore);
-        EventBus.Unsubscribe<GameOverEvent>(HandleFinalScore);
-        EventBus.Unsubscribe<OnHighScoreUpdateSuccessEvent>(HandleHighScoreUpdate);
+        EventBus.Unsubscribe<OnGameStarted>(HandleGameStarted);
+        EventBus.Unsubscribe<OnLevelLoaded>(HandleLevelLoaded);
+        EventBus.Unsubscribe<OnEnemyDestroyed>(HandleEnemyDestroyed);
+        EventBus.Unsubscribe<OnLevelRestarted>(HandleLevelRestarted);
+        EventBus.Unsubscribe<OnGameOver>(HandleGameOver);
+        EventBus.Unsubscribe<OnHighScoreUpdateRequestCompleted>(HandleHighScoreUpdateRequestComplete);
     }
 
-    private void InitScore(GameStartEvent e)
+    private void HandleGameStarted(OnGameStarted e)
     {
-        _scoreInEachLevel = new int[e.GameConfig.LevelConfigs.Length];
+        _scoreInEachLevel = new Dictionary<string, int>();
+
+        foreach (var levelConfig in e.GameConfig.LevelConfigs)
+        {
+            _scoreInEachLevel.Add(levelConfig.LevelName, 0);
+        }
     }
 
-    private void HandleLevelRestart(LevelRestartEvent e)
+    private void HandleLevelLoaded(OnLevelLoaded e)
     {
-        _finalScore -= _scoreInEachLevel[_currentLevelIndex];
-        _scoreInEachLevel[_currentLevelIndex] = 0;
-        EventBus.Publish(new ScoreUpdatedEvent(_finalScore));
+        _currentLevelName = e.LevelConfig.LevelName;
     }
 
-    private void TrackLevel(LevelLoadedEvent e)
+    private void HandleEnemyDestroyed(OnEnemyDestroyed e)
     {
-        _currentLevelIndex = e.LevelIndex;
-    }
-
-    private void IncreaseScore(EnemyDestroyedEvent e)
-    {
-        _scoreInEachLevel[_currentLevelIndex] += e.PointsEarned;
+        _scoreInEachLevel[_currentLevelName] += e.PointsEarned;
         _finalScore += e.PointsEarned;
-        EventBus.Publish(new ScoreUpdatedEvent(_finalScore));
+        EventBus.Publish(new OnScoreUpdated(_finalScore));
     }
 
-    private void HandleFinalScore(GameOverEvent e)
+    private void HandleLevelRestarted(OnLevelRestarted e)
     {
-        EventBus.Publish(new UpdateFinalScoreEvent(_finalScore));
+        _finalScore -= _scoreInEachLevel[_currentLevelName];
+        _scoreInEachLevel[_currentLevelName] = 0;
+
+        EventBus.Publish(new OnScoreUpdated(_finalScore));
     }
 
-    private void HandleHighScoreUpdate(OnHighScoreUpdateSuccessEvent e)
+    private void HandleGameOver(OnGameOver e)
     {
-        EventBus.Publish(new OnFinalScoresReadyEvent(_finalScore, e.HighScore));
+        EventBus.Publish(new OnHighScoreUpdateRequested(_finalScore));
+    }
+
+    private void HandleHighScoreUpdateRequestComplete(OnHighScoreUpdateRequestCompleted e)
+    {
+        if (e.Success)
+        {
+            EventBus.Publish(new OnUpdatedHighScoreFetched(_finalScore, e.HighScore));
+        }
+        else
+        {
+            Debug.Log("OnHighScoreUpdateRequestCompleted.Success=false");
+            EventBus.Publish(new OnUpdatedHighScoreFetched(0, 0));
+        }
     }
 }

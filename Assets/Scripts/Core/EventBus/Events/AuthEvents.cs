@@ -1,48 +1,41 @@
-public sealed class OnLoginSuccessEvent : IEventData
+public sealed class OnLoginRequestComplete : IEventData
 {
+    public bool Success { get; }
     public string Message { get; }
-    public OnLoginSuccessEvent(string message)
+    public OnLoginRequestComplete(bool success, string message)
     {
+        Success = success;
         Message = message;
     }
 }
 
-public sealed class OnLoginFailedEvent : IEventData
+public sealed class OnSignUpRequestComplete : IEventData
 {
+    public bool Success { get; }
     public string Message { get; }
-    public OnLoginFailedEvent(string message)
+    public OnSignUpRequestComplete(bool success, string message)
     {
+        Success = success;
         Message = message;
     }
 }
 
-public sealed class OnSignUpSuccessEvent : IEventData
+public sealed class OnLogoutRequestComplete : IEventData
 {
+    public bool Success { get; }
     public string Message { get; }
-    public OnSignUpSuccessEvent(string message)
+    public OnLogoutRequestComplete(bool success, string message)
     {
+        Success = success;
         Message = message;
     }
 }
 
-public sealed class OnSignUpFailedEvent : IEventData
+public class OnTokenAuthenticationRequestComplete : IEventData
 {
-    public string Message { get; }
-    public OnSignUpFailedEvent(string message)
+    public bool Success { get; }
+    public OnTokenAuthenticationRequestComplete(bool success)
     {
-        Message = message;
+        Success = success;
     }
 }
-
-public sealed class OnLogoutSuccessEvent : IEventData
-{
-    public string Message { get; }
-    public OnLogoutSuccessEvent(string message)
-    {
-        Message = message;
-    }
-}
-
-public class OnAuthMenuVerifyTokenSuccessEvent : IEventData { }
-
-public class OnAuthMenuVerifyTokenFailedEvent : IEventData { }

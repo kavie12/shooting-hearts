@@ -189,7 +189,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _enemyType: 1
-  _fallingSpeed: 4
+  _destroyFx: {fileID: 6651409593692128141, guid: 7ce8152abcf5f7d41b1ce83129a58200, type: 3}
+  _fallSpeed: 5
   _deadZone: -8
   _points: 100
   _damage: 100

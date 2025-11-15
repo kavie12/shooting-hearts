@@ -16,7 +16,7 @@ public class PooledEnemyFactory : MonoBehaviour, IEnemyFactory
             for (int i = 0; i < config.PoolSize; i++)
             {
                 GameObject enemy = Instantiate(config.Prefab, transform);
-                enemy.GetComponent<IEnemy>().Initialize(config);
+                enemy.GetComponent<IEnemy>().UpdateConfig(config);
                 enemy.SetActive(false);
                 pool.Enqueue(enemy);
             }

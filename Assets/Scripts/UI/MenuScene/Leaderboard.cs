@@ -10,23 +10,25 @@ public class Leaderboard : MonoBehaviour
 
     private void Start()
     {
-        _btnBack.onClick.AddListener(() => EventBus.Publish(new LeaderboardBackButtonClickEvent()));
+        _btnBack.onClick.AddListener(() => EventBus.Publish(new OnMenuSceneButtonClick(MenuSceneButton.LeaderboardBackButton)));
 
         // Enable loading spinner
         _loadingSpinner.SetActive(true);
+
+        EventBus.Publish(new OnLeaderboardRequest());
     }
 
     private void OnEnable()
     {
-        EventBus.Subscribe<OnLeaderboardFetchSuccessEvent>(HandleLeaderboardFetchSuccess);
+        EventBus.Subscribe<OnLeaderboardRequestCompleted>(HandleLeaderboardRequestCompleted);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<OnLeaderboardFetchSuccessEvent>(HandleLeaderboardFetchSuccess);
+        EventBus.Unsubscribe<OnLeaderboardRequestCompleted>(HandleLeaderboardRequestCompleted);
     }
 
-    private void HandleLeaderboardFetchSuccess(OnLeaderboardFetchSuccessEvent eventData)
+    private void HandleLeaderboardRequestCompleted(OnLeaderboardRequestCompleted e)
     {
         // Clear leaderbaord
         for (int i = _recordContainer.childCount - 1; i >= 0; i--)
@@ -38,7 +40,7 @@ public class Leaderboard : MonoBehaviour
         _loadingSpinner.SetActive(false);
 
         // Add fetched records
-        foreach (var r in eventData.Records)
+        foreach (var r in e.Records)
         {
             GameObject record = Instantiate(_recordPrefab, _recordContainer);
             record.GetComponent<LeaderboardRecord>().InitRecord(r.playerName, r.playerScore);

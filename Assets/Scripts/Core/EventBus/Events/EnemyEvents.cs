@@ -1,15 +1,9 @@
-using UnityEngine;
-
-public sealed class  EnemyDestroyedEvent : IEventData
+public sealed class  OnEnemyDestroyed : IEventData
 {
-    public EnemyType EnemyType { get; }
-    public Vector3 Position { get; }
     public int PointsEarned { get; }
 
-    public EnemyDestroyedEvent(EnemyType enemyType, Vector3 position, int pointsEarned)
+    public OnEnemyDestroyed(int pointsEarned)
     {
-        EnemyType = enemyType;
-        Position = position;
         PointsEarned = pointsEarned;
     }
 }

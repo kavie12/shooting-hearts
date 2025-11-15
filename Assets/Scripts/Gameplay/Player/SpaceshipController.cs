@@ -2,8 +2,14 @@ using UnityEngine;
 
 public class SpaceshipController : MonoBehaviour
 {
+    [Header("Config")]
     [SerializeField] private float _moveSpeed = 8f;
     [SerializeField] private float _shootOverTime = 0.2f;
+
+    [Header("Effects")]
+    [SerializeField] private GameObject _damageFx;
+    [SerializeField] private GameObject _destroyFx;
+    [SerializeField] private AudioSource _destroySfx;
 
     private Rigidbody2D _rb;
     private IBulletFactory _bulletFactory;
@@ -44,25 +50,20 @@ public class SpaceshipController : MonoBehaviour
 
     void OnEnable()
     {
-        EventBus.Subscribe<PlayerHealthOverEvent>(DestroySpaceship);
-        EventBus.Subscribe<GamePauseEvent>(HandleGamePause);
-        EventBus.Subscribe<GameResumeEvent>(HandleGameResume);
-        EventBus.Subscribe<GameOverEvent>(HandleGameOver);
+        EventBus.Subscribe<OnPlayerHealthOver>(HandleHealthOver);
     }
 
     void OnDisable()
     {
-        EventBus.Unsubscribe<PlayerHealthOverEvent>(DestroySpaceship);
-        EventBus.Unsubscribe<GamePauseEvent>(HandleGamePause);
-        EventBus.Unsubscribe<GameResumeEvent>(HandleGameResume);
-        EventBus.Unsubscribe<GameOverEvent>(HandleGameOver);
+        EventBus.Unsubscribe<OnPlayerHealthOver>(HandleHealthOver);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.TryGetComponent<IEnemy>(out var enemy))
         {
-            EventBus.Publish(new PlayerDamagedEvent(transform.position, enemy.Damage));
+            Instantiate(_damageFx, transform.position, transform.rotation);
+            EventBus.Publish(new OnPlayerDamaged(enemy.Damage));
         }
     }
 
@@ -91,30 +92,13 @@ public class SpaceshipController : MonoBehaviour
     {
         var bullet = _bulletFactory.CreateBullet();
         bullet.transform.position = transform.position;
-        EventBus.Publish(new PlayerShootEvent());
     }
 
-    private void HandleGamePause(GamePauseEvent e)
+    private void HandleHealthOver(OnPlayerHealthOver e)
     {
-        _canFire = false;
-        _canMove = false;
-    }
-
-    private void HandleGameResume(GameResumeEvent e)
-    {
-        _canFire = true;
-        _canMove = true;
-    }
-
-    private void HandleGameOver(GameOverEvent e)
-    {
-        _canFire = false;
-        _canMove = false;
-    }
-
-    private void DestroySpaceship(PlayerHealthOverEvent e)
-    {
-        EventBus.Publish(new PlayerDestroyedEvent(transform.position));
+        Instantiate(_destroyFx, transform.position, transform.rotation);
+        _destroySfx.Play();
+        EventBus.Publish(new OnPlayerDestroyed());
         Destroy(gameObject);
     }
 }

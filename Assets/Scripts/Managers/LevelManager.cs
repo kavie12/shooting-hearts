@@ -5,54 +5,56 @@ public class LevelManager : MonoBehaviour
 {
     [SerializeField] private float _intervalBetwennLevels = 4f;
 
-    private LevelConfig[] _levels;
-    private int _currentLevelIndex = 0;
+    private LevelConfig[] _levelConfigs;
+    private int _currentLevelIndex;
     private Coroutine _levelProgressionCoroutine;
 
     private void OnEnable()
     {
-        EventBus.Subscribe<GameStartEvent>(StartLevelProgression);
-        EventBus.Subscribe<LevelRestartEvent>(ContinueLevelProgression);
-        EventBus.Subscribe<PlayerDestroyedEvent>(StopLevelProgression);
+        EventBus.Subscribe<OnGameStarted>(HandleGameStarted);
+        EventBus.Subscribe<OnGameStopped>(HandleGameStopped);
+        EventBus.Subscribe<OnGameContinued>(HandleGameContinued);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<GameStartEvent>(StartLevelProgression);
-        EventBus.Unsubscribe<LevelRestartEvent>(ContinueLevelProgression);
-        EventBus.Unsubscribe<PlayerDestroyedEvent>(StopLevelProgression);
+        EventBus.Unsubscribe<OnGameStarted>(HandleGameStarted);
+        EventBus.Unsubscribe<OnGameStopped>(HandleGameStopped);
+        EventBus.Unsubscribe<OnGameContinued>(HandleGameContinued);
     }
 
-    private void StartLevelProgression(GameStartEvent e)
+    private void HandleGameStarted(OnGameStarted e)
     {
-        _levels = e.GameConfig.LevelConfigs;
+        _levelConfigs = e.GameConfig.LevelConfigs;
 
         _currentLevelIndex = 0;
         _levelProgressionCoroutine = StartCoroutine(LevelProgression());
     }
 
-    private void ContinueLevelProgression(LevelRestartEvent e)
-    {
-        _levelProgressionCoroutine = StartCoroutine(LevelProgression());
-    }
-
-    private void StopLevelProgression(PlayerDestroyedEvent e)
+    private void HandleGameStopped(OnGameStopped e)
     {
         StopCoroutine(_levelProgressionCoroutine);
+        EventBus.Publish(new OnLevelStopped());
+    }
+
+    private void HandleGameContinued(OnGameContinued e)
+    {
+        _levelProgressionCoroutine = StartCoroutine(LevelProgression());
+        EventBus.Publish(new OnLevelRestarted());
     }
 
     private IEnumerator LevelProgression()
     {
-        while (_currentLevelIndex < _levels.Length)
+        while (_currentLevelIndex < _levelConfigs.Length)
         {
             LoadLevel(_currentLevelIndex);
-            EventBus.Publish(new LevelStartedEvent(_currentLevelIndex, GetCurrentLevel()));
-            yield return new WaitForSeconds(GetCurrentLevel().Duration);
-            EventBus.Publish(new LevelCompletedEvent());
+            EventBus.Publish(new OnLevelStarted(_levelConfigs[_currentLevelIndex].LevelName));
+            yield return new WaitForSeconds(_levelConfigs[_currentLevelIndex].Duration);
+            EventBus.Publish(new OnLevelCompleted());
 
-            if (_currentLevelIndex == _levels.Length - 1)
+            if (_currentLevelIndex == _levelConfigs.Length - 1)
             {
-                EventBus.Publish(new AllLevelsCompletedEvent());
+                EventBus.Publish(new OnAllLevelsCompleted());
                 yield break;
             }
 
@@ -63,8 +65,6 @@ public class LevelManager : MonoBehaviour
 
     private void LoadLevel(int index)
     {
-        EventBus.Publish(new LevelLoadedEvent(index, _levels[index]));
+        EventBus.Publish(new OnLevelLoaded(_levelConfigs[index]));
     }
-
-    private LevelConfig GetCurrentLevel() => _levels[_currentLevelIndex];
 }

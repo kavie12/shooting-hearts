@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerHealthSystem : MonoBehaviour
 {
     [SerializeField] private int _maxHealth = 500;
+
     private int _currentHealth;
 
     private void Awake()
@@ -10,44 +11,37 @@ public class PlayerHealthSystem : MonoBehaviour
         _currentHealth = _maxHealth;
     }
 
+    private void Start()
+    {
+        EventBus.Publish(new OnPlayerHealthUpdated(_currentHealth));
+    }
+
     private void OnEnable()
     {
-        EventBus.Subscribe<GameStartEvent>(HandleGameStart);
-        EventBus.Subscribe<LevelRestartEvent>(HandleLevelRestart);
-        EventBus.Subscribe<PlayerDamagedEvent>(HandlePlayerDamage);
+        EventBus.Subscribe<OnPlayerDamaged>(HandlePlayerDamage);
+        EventBus.Subscribe<OnLevelRestarted>(HandleLevelRestarted);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<GameStartEvent>(HandleGameStart);
-        EventBus.Unsubscribe<LevelRestartEvent>(HandleLevelRestart);
-        EventBus.Unsubscribe<PlayerDamagedEvent>(HandlePlayerDamage);
+        EventBus.Unsubscribe<OnPlayerDamaged>(HandlePlayerDamage);
+        EventBus.Unsubscribe<OnLevelRestarted>(HandleLevelRestarted);
     }
 
-    private void HandleGameStart(GameStartEvent e)
-    {
-        ResetHealth();
-    }
-
-    private void HandleLevelRestart(LevelRestartEvent e)
-    {
-        ResetHealth();
-    }
-
-    private void HandlePlayerDamage(PlayerDamagedEvent e)
+    private void HandlePlayerDamage(OnPlayerDamaged e)
     {
         _currentHealth = Mathf.Max(0, _currentHealth - e.DamageAmount);
-        EventBus.Publish(new PlayerHealthUpdatedEvent(_currentHealth));
+        EventBus.Publish(new OnPlayerHealthUpdated(_currentHealth));
 
         if (_currentHealth == 0)
         {
-            EventBus.Publish(new PlayerHealthOverEvent());
+            EventBus.Publish(new OnPlayerHealthOver());
         }
     }
 
-    private void ResetHealth()
+    private void HandleLevelRestarted(OnLevelRestarted e)
     {
         _currentHealth = _maxHealth;
-        EventBus.Publish(new PlayerHealthUpdatedEvent(_currentHealth));
+        EventBus.Publish(new OnPlayerHealthUpdated(_currentHealth));
     }
 }

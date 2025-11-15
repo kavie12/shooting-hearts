@@ -2,6 +2,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum GameOverPanelButton
+{
+    PlayAgainButton,
+    MainMenuButton
+}
+
 public class GameOverPanel : MonoBehaviour
 {
     [SerializeField] public TextMeshProUGUI _gameOverText;
@@ -12,18 +18,16 @@ public class GameOverPanel : MonoBehaviour
 
     [SerializeField] private Button _btnPlayAgain;
     [SerializeField] private Button _btnMainMenu;
-    [SerializeField] private Button _btnQuitGame;
 
     private void Start()
     {
-        _btnPlayAgain.onClick.AddListener(() => EventBus.Publish(new GameOverPanelPlayAgainButtonClickedEvent()));
-        _btnMainMenu.onClick.AddListener(() => EventBus.Publish(new GameOverPanelMainMenuButtonClickedEvent()));
-        _btnQuitGame.onClick.AddListener(() => EventBus.Publish(new GameOverPanelQuitGameButtonClickedEvent()));
+        _btnPlayAgain.onClick.AddListener(() => EventBus.Publish(new OnGameOverPanelButtonClicked(GameOverPanelButton.PlayAgainButton)));
+        _btnMainMenu.onClick.AddListener(() => EventBus.Publish(new OnGameOverPanelButtonClicked(GameOverPanelButton.MainMenuButton)));
     }
 
     private void OnEnable()
     {
-        EventBus.Subscribe<OnFinalScoresReadyEvent>(DisplayScores);
+        EventBus.Subscribe<OnUpdatedHighScoreFetched>(HandleUpdatedHighScoreFetched);
 
         _scoreSection.SetActive(false);
         _loadingSpinner.SetActive(true);
@@ -31,10 +35,10 @@ public class GameOverPanel : MonoBehaviour
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<OnFinalScoresReadyEvent>(DisplayScores);
+        EventBus.Unsubscribe<OnUpdatedHighScoreFetched>(HandleUpdatedHighScoreFetched);
     }
 
-    private void DisplayScores(OnFinalScoresReadyEvent e)
+    private void HandleUpdatedHighScoreFetched(OnUpdatedHighScoreFetched e)
     {
         _score.text = e.Score.ToString();
         _highScore.text = e.HighScore.ToString();

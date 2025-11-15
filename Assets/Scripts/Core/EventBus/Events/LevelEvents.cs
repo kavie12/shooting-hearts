@@ -1,29 +1,25 @@
-public sealed class LevelLoadedEvent : IEventData
+public sealed class OnLevelLoaded : IEventData
 {
-    public int LevelIndex { get; }
     public LevelConfig LevelConfig { get; }
-    public LevelLoadedEvent(int levelIndex, LevelConfig levelConfig)
+    public OnLevelLoaded(LevelConfig levelConfig)
     {
-        LevelIndex = levelIndex;
-        LevelConfig = levelConfig;
+        this.LevelConfig = levelConfig;
     }
 }
 
-public sealed class LevelStartedEvent : IEventData
+public sealed class OnLevelStarted : IEventData
 {
-    public int LevelIndex { get; }
-    public LevelConfig LevelConfig { get; }
-    public LevelStartedEvent(int levelIndex, LevelConfig levelConfig)
+    public string LevelName { get; }
+    public OnLevelStarted(string levelName)
     {
-        LevelIndex = levelIndex;
-        LevelConfig = levelConfig;
+        this.LevelName = levelName;
     }
 }
 
-public sealed class LevelCompletedEvent : IEventData { }
+public sealed class OnLevelStopped : IEventData { }
 
-public sealed class AllLevelsCompletedEvent : IEventData { }
+public sealed class OnLevelRestarted : IEventData { }
 
-public sealed class LevelStopEvent : IEventData { }
+public sealed class OnLevelCompleted : IEventData { }
 
-public sealed class LevelRestartEvent : IEventData { }
+public sealed class OnAllLevelsCompleted : IEventData { }

@@ -13,6 +13,6 @@ public class AnswerGuess : MonoBehaviour
 
     private void Start()
     {
-        _button.onClick.AddListener(() => EventBus.Publish(new BonusChanceQuestionAnswerGuessEvent(int.Parse(_button.GetComponentInChildren<TextMeshProUGUI>().text))));
+        _button.onClick.AddListener(() => EventBus.Publish(new OnBonusChanceQuestionAnswerGuessed(int.Parse(_button.GetComponentInChildren<TextMeshProUGUI>().text))));
     }
 }

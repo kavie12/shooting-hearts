@@ -6,47 +6,47 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        EventBus.Publish(new GameStartEvent(_gameConfig));
+        EventBus.Publish(new OnGameStarted(_gameConfig));
     }
 
     private void OnEnable()
     {
-        EventBus.Subscribe<PlayerDestroyedEvent>(HandlePlayerDestroyed);
-        EventBus.Subscribe<BonusChanceGrantedEvent>(HandleBonusChanceGranted);
-        EventBus.Subscribe<BonusChanceDeniedEvent>(HandleBonusChanceDeniedEvent);
-        EventBus.Subscribe<AllLevelsCompletedEvent>(HandleAllLevelsCompleted);
+        EventBus.Subscribe<OnPlayerDestroyed>(HandlePlayerDestroyed);
+        EventBus.Subscribe<OnBonusChanceRequestCompleted>(HandleBonusChanceRequestCompleted);
+        EventBus.Subscribe<OnAllLevelsCompleted>(HandleAllLevelsCompleted);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<PlayerDestroyedEvent>(HandlePlayerDestroyed);
-        EventBus.Unsubscribe<BonusChanceGrantedEvent>(HandleBonusChanceGranted);
-        EventBus.Unsubscribe<BonusChanceDeniedEvent>(HandleBonusChanceDeniedEvent);
-        EventBus.Unsubscribe<AllLevelsCompletedEvent>(HandleAllLevelsCompleted);
+        EventBus.Unsubscribe<OnPlayerDestroyed>(HandlePlayerDestroyed);
+        EventBus.Unsubscribe<OnBonusChanceRequestCompleted>(HandleBonusChanceRequestCompleted);
+        EventBus.Unsubscribe<OnAllLevelsCompleted>(HandleAllLevelsCompleted);
     }
 
-    private void HandleAllLevelsCompleted(AllLevelsCompletedEvent e)
+    private void HandlePlayerDestroyed(OnPlayerDestroyed e)
     {
-        Invoke(nameof(InvokeGameOverEvent), 4f);
+        EventBus.Publish(new OnGameStopped());
+        Invoke(nameof(RequestBonusChance), 3f);
     }
 
-    private void HandlePlayerDestroyed(PlayerDestroyedEvent e)
+    private void RequestBonusChance()
     {
-        EventBus.Publish(new LevelStopEvent());
+        EventBus.Publish(new OnBonusChanceRequested());
     }
 
-    private void HandleBonusChanceGranted(BonusChanceGrantedEvent e)
+    private void HandleBonusChanceRequestCompleted(OnBonusChanceRequestCompleted e)
     {
-        EventBus.Publish(new LevelRestartEvent());
+        if (e.Granted) EventBus.Publish(new OnGameContinued());
+        else GameOver();
     }
 
-    private void HandleBonusChanceDeniedEvent(BonusChanceDeniedEvent e)
+    private void HandleAllLevelsCompleted(OnAllLevelsCompleted e)
     {
-        InvokeGameOverEvent();
+        GameOver();
     }
 
-    private void InvokeGameOverEvent()
+    private void GameOver()
     {
-        EventBus.Publish(new GameOverEvent());
+        EventBus.Publish(new OnGameOver());
     }
 }

@@ -17,37 +17,27 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<LevelLoadedEvent>(HandleLevelLoaded);
-        EventBus.Subscribe<LevelStartedEvent>(HandleLevelStarted);
-        EventBus.Subscribe<LevelCompletedEvent>(HandleLevelCompleted);
-        EventBus.Subscribe<LevelStopEvent>(HandleLevelStop);
+        EventBus.Subscribe<OnLevelLoaded>(HandleLevelLoaded);
+        EventBus.Subscribe<OnLevelStarted>(HandleLevelStarted);
+        EventBus.Subscribe<OnLevelStopped>(HandleLevelStopped);
+        EventBus.Subscribe<OnLevelCompleted>(HandleLevelEnded);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<LevelLoadedEvent>(HandleLevelLoaded);
-        EventBus.Unsubscribe<LevelStartedEvent>(HandleLevelStarted);
-        EventBus.Unsubscribe<LevelCompletedEvent>(HandleLevelCompleted);
-        EventBus.Unsubscribe<LevelStopEvent>(HandleLevelStop);
+        EventBus.Unsubscribe<OnLevelLoaded>(HandleLevelLoaded);
+        EventBus.Unsubscribe<OnLevelStarted>(HandleLevelStarted);
+        EventBus.Unsubscribe<OnLevelStopped>(HandleLevelStopped);
+        EventBus.Unsubscribe<OnLevelCompleted>(HandleLevelEnded);
     }
 
-    private void HandleLevelCompleted(LevelCompletedEvent e)
-    {
-        StopAllCoroutines();
-    }
-
-    private void HandleLevelStop(LevelStopEvent e)
-    {
-        StopAllCoroutines();
-    }
-
-    private void HandleLevelLoaded(LevelLoadedEvent e)
+    private void HandleLevelLoaded(OnLevelLoaded e)
     {
         _enemyConfigs = e.LevelConfig.EnemyConfigs;
         _enemyFactory.InitFactory(_enemyConfigs);
     }
 
-    void HandleLevelStarted(LevelStartedEvent e)
+    private void HandleLevelStarted(OnLevelStarted e)
     {
         for (int i = 0; i < _enemyConfigs.Length; i++)
         {
@@ -55,7 +45,17 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnEnemies(EnemyConfig config)
+    private void HandleLevelEnded(OnLevelCompleted e)
+    {
+        StopAllCoroutines();
+    }
+
+    private void HandleLevelStopped(OnLevelStopped e)
+    {
+        StopAllCoroutines();
+    }
+
+    private IEnumerator SpawnEnemies(EnemyConfig config)
     {
         yield return new WaitForSeconds(config.SpawnDelay);
 

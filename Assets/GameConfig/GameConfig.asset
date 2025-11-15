@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b3a7ef96fb3f394492c6a519c6f7404, type: 3}
+  m_Script: {fileID: 11500000, guid: 7953dbf47e432d04a95c65a9d1f410fd, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: Assembly-CSharp::GameConfig
   LevelConfigs:
-  - {fileID: 11400000, guid: 307b056e8f6782149a95573a33bf15df, type: 2}
-  - {fileID: 11400000, guid: 165266625713fa042a42981b2d31a5c6, type: 2}
-  - {fileID: 11400000, guid: cec1b77d12b211844b02a48f66ea4967, type: 2}
+  - {fileID: 11400000, guid: 3b46592b266a4954d880605c519d90a0, type: 2}
+  - {fileID: 11400000, guid: 81dd249af4901ad4bb3a96913802fa71, type: 2}
+  - {fileID: 11400000, guid: 2e1ad12c6c5403a41a7507055d31abad, type: 2}

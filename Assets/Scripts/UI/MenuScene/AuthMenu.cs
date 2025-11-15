@@ -9,25 +9,30 @@ public class AuthMenu : MonoBehaviour
 
     private void Start()
     {
-        _btnLogin.onClick.AddListener(() => EventBus.Publish(new AuthMenuLoginButtonClickEvent()));
-        _btnSignUp.onClick.AddListener(() => EventBus.Publish(new AuthMenuSignUpButtonClickEvent()));
-        _btnExit.onClick.AddListener(() => EventBus.Publish(new MenuSceneExitButtonClickEvent()));
-
-        _btnLogin.interactable = false;
-        _btnSignUp.interactable = false;
+        _btnLogin.onClick.AddListener(() => EventBus.Publish(new OnMenuSceneButtonClick(MenuSceneButton.AuthMenuLoginButton)));
+        _btnSignUp.onClick.AddListener(() => EventBus.Publish(new OnMenuSceneButtonClick(MenuSceneButton.AuthMenuSignUpButton)));
+        _btnExit.onClick.AddListener(() => EventBus.Publish(new OnMenuSceneButtonClick(MenuSceneButton.AuthMenuExitButton)));
     }
 
     private void OnEnable()
     {
-        EventBus.Subscribe<OnAuthMenuVerifyTokenFailedEvent>(HandleStartUpAuthFailed);
+        EventBus.Subscribe<OnTokenAuthenticationRequest>(HandleTokenAuthenticationRequest);
+        EventBus.Subscribe<OnTokenAuthenticationRequestComplete>(HandleTokenAuthenticationRequestComplete);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<OnAuthMenuVerifyTokenFailedEvent>(HandleStartUpAuthFailed);
+        EventBus.Unsubscribe<OnTokenAuthenticationRequest>(HandleTokenAuthenticationRequest);
+        EventBus.Unsubscribe<OnTokenAuthenticationRequestComplete>(HandleTokenAuthenticationRequestComplete);
     }
 
-    private void HandleStartUpAuthFailed(OnAuthMenuVerifyTokenFailedEvent e)
+    private void HandleTokenAuthenticationRequest(OnTokenAuthenticationRequest e)
+    {
+        _btnLogin.interactable = false;
+        _btnSignUp.interactable = false;
+    }
+
+    private void HandleTokenAuthenticationRequestComplete(OnTokenAuthenticationRequestComplete e)
     {
         _btnLogin.interactable = true;
         _btnSignUp.interactable = true;

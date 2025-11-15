@@ -28,90 +28,58 @@ public class AuthManager : MonoBehaviour, IAuthProvider
 
     private void OnEnable()
     {
-        EventBus.Subscribe<MenuSceneLoaded>(SendVerifyTokenRequest);
-        EventBus.Subscribe<LoginFormLoginButtonClickEvent>(SendLoginRequest);
-        EventBus.Subscribe<SignUpFormSignUpButtonClickEvent>(SendSignUpRequest);
-        EventBus.Subscribe<MainMenuLogoutButtonClickEvent>(HandleLogoutRequest);
+        EventBus.Subscribe<OnTokenAuthenticationRequest>(SendTokenAuthRequest);
+        EventBus.Subscribe<OnLoginRequest>(SendLoginRequest);
+        EventBus.Subscribe<OnSignUpRequest>(SendSignUpRequest);
+        EventBus.Subscribe<OnLogoutRequest>(HandleLogoutRequest);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<MenuSceneLoaded>(SendVerifyTokenRequest);
-        EventBus.Unsubscribe<LoginFormLoginButtonClickEvent>(SendLoginRequest);
-        EventBus.Unsubscribe<SignUpFormSignUpButtonClickEvent>(SendSignUpRequest);
-        EventBus.Unsubscribe<MainMenuLogoutButtonClickEvent>(HandleLogoutRequest);
+        EventBus.Unsubscribe<OnTokenAuthenticationRequest>(SendTokenAuthRequest);
+        EventBus.Unsubscribe<OnLoginRequest>(SendLoginRequest);
+        EventBus.Unsubscribe<OnSignUpRequest>(SendSignUpRequest);
+        EventBus.Unsubscribe<OnLogoutRequest>(HandleLogoutRequest);
     }
 
-    private void SendVerifyTokenRequest(MenuSceneLoaded e)
+    #region Send Requests
+
+    private void SendTokenAuthRequest(OnTokenAuthenticationRequest e)
     {
         if (_accessToken == null || _accessToken == string.Empty)
         {
-            EventBus.Publish(new OnAuthMenuVerifyTokenFailedEvent());
+            EventBus.Publish(new OnTokenAuthenticationRequestComplete(false));
             return;
         }
-        StartCoroutine(ApiClient.Post<string, AuthErrorResponse>($"{_baseUrl}/verify", string.Empty, HandleVerifyToken, _accessToken));
+        StartCoroutine(ApiClient.Post<string, AuthErrorResponse>($"{_baseUrl}/verify", string.Empty, HandleTokenAuthRequestComplete, _accessToken));
     }
 
-    private void SendLoginRequest(LoginFormLoginButtonClickEvent e)
+    private void SendRefreshTokenRequest()
+    {
+        StartCoroutine(ApiClient.Post<AuthSuccessResponse, AuthErrorResponse>($"{_baseUrl}/refresh", string.Empty, HandleRefreshTokenRequestComplete, _refreshToken));
+    }
+
+    private void SendLoginRequest(OnLoginRequest e)
     {
         var loginReq = new LoginRequest { email = e.Email, password = e.Password };
         StartCoroutine(ApiClient.Post<AuthSuccessResponse, AuthErrorResponse>($"{_baseUrl}/login", loginReq, HandleLoginRequest));
     }
 
-    private void SendSignUpRequest(SignUpFormSignUpButtonClickEvent e)
+    private void SendSignUpRequest(OnSignUpRequest e)
     {
         var signUpReq = new SignUpRequest { name = e.Name, email = e.Email, password = e.Password };
         StartCoroutine(ApiClient.Post<AuthSuccessResponse, AuthErrorResponse>($"{_baseUrl}/signup", signUpReq, HandleSignUpRequest));
     }
 
-    private void SendRefreshTokenRequest()
-    {
-        StartCoroutine(ApiClient.Post<AuthSuccessResponse, AuthErrorResponse>($"{_baseUrl}/refresh", string.Empty, HandleRefreshToken, _refreshToken));
-    }
+    #endregion
 
-    private void HandleLogoutRequest(MainMenuLogoutButtonClickEvent e)
-    {
-        _accessToken = null;
-        _refreshToken = null;
+    #region Handle Request Completions
 
-        PlayerPrefs.DeleteKey(Constants.ACCESS_TOKEN);
-        PlayerPrefs.DeleteKey(Constants.REFRESH_TOKEN);
-        PlayerPrefs.Save();
-
-        EventBus.Publish(new OnLogoutSuccessEvent("Logout Successful."));
-    }
-
-    private void HandleLoginRequest(AuthSuccessResponse res, AuthErrorResponse error)
-    {
-        if (res != null)
-        {
-            UpdateTokens(res.accessToken, res.refreshToken);
-            EventBus.Publish(new OnLoginSuccessEvent("Login Successful."));
-        }
-        else
-        {
-            EventBus.Publish(new OnLoginFailedEvent(error.message));
-        }
-    }
-
-    private void HandleSignUpRequest(AuthSuccessResponse res, AuthErrorResponse error)
-    {
-        if (res != null)
-        {
-            UpdateTokens(res.accessToken, res.refreshToken);
-            EventBus.Publish(new OnSignUpSuccessEvent("Sign Up Successful."));
-        }
-        else
-        {
-            EventBus.Publish(new OnSignUpFailedEvent(error.message));
-        }
-    }
-
-    private void HandleVerifyToken(string success, AuthErrorResponse error)
+    private void HandleTokenAuthRequestComplete(string success, AuthErrorResponse error)
     {
         if (error == null)
         {
-            EventBus.Publish(new OnAuthMenuVerifyTokenSuccessEvent());
+            EventBus.Publish(new OnTokenAuthenticationRequestComplete(true));
         }
         else
         {
@@ -121,25 +89,65 @@ public class AuthManager : MonoBehaviour, IAuthProvider
             }
             else
             {
-                EventBus.Publish(new OnAuthMenuVerifyTokenFailedEvent());
+                EventBus.Publish(new OnTokenAuthenticationRequestComplete(false));
             }
         }
     }
 
-    private void HandleRefreshToken(AuthSuccessResponse authResponse, AuthErrorResponse error)
+    private void HandleRefreshTokenRequestComplete(AuthSuccessResponse authResponse, AuthErrorResponse error)
     {
         if (authResponse != null)
         {
-            UpdateTokens(authResponse.accessToken, authResponse.refreshToken);
-            EventBus.Publish(new OnAuthMenuVerifyTokenSuccessEvent());
+            SaveAuthTokens(authResponse.accessToken, authResponse.refreshToken);
+            EventBus.Publish(new OnTokenAuthenticationRequestComplete(true));
         }
         else
         {
-            EventBus.Publish(new OnAuthMenuVerifyTokenFailedEvent());
+            EventBus.Publish(new OnTokenAuthenticationRequestComplete(false));
         }
     }
 
-    private void UpdateTokens(string accessToken, string refreshToken)
+    private void HandleLoginRequest(AuthSuccessResponse res, AuthErrorResponse error)
+    {
+        if (res != null)
+        {
+            SaveAuthTokens(res.accessToken, res.refreshToken);
+            EventBus.Publish(new OnLoginRequestComplete(true, "Login Successful."));
+        }
+        else
+        {
+            EventBus.Publish(new OnLoginRequestComplete(false, error.message));
+        }
+    }
+
+    private void HandleSignUpRequest(AuthSuccessResponse res, AuthErrorResponse error)
+    {
+        if (res != null)
+        {
+            SaveAuthTokens(res.accessToken, res.refreshToken);
+            EventBus.Publish(new OnSignUpRequestComplete(true, "Sign Up Successful."));
+        }
+        else
+        {
+            EventBus.Publish(new OnSignUpRequestComplete(false, error.message));
+        }
+    }
+
+    private void HandleLogoutRequest(OnLogoutRequest e)
+    {
+        _accessToken = null;
+        _refreshToken = null;
+
+        PlayerPrefs.DeleteKey(Constants.ACCESS_TOKEN);
+        PlayerPrefs.DeleteKey(Constants.REFRESH_TOKEN);
+        PlayerPrefs.Save();
+
+        EventBus.Publish(new OnLogoutRequestComplete(true, "Logout Successful."));
+    }
+
+    #endregion
+
+    private void SaveAuthTokens(string accessToken, string refreshToken)
     {
         _accessToken = accessToken;
         _refreshToken = refreshToken;
@@ -149,4 +157,3 @@ public class AuthManager : MonoBehaviour, IAuthProvider
         PlayerPrefs.Save();
     }
 }
-

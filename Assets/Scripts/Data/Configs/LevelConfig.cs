@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "LevelConfig" ,menuName = "ScriptableObjects/LevelConfig")]
+[CreateAssetMenu(fileName = "LevelConfig", menuName = "ScriptableObjects/LevelConfig")]
 public class LevelConfig : ScriptableObject
 {
     public string LevelName;

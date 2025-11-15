@@ -1,37 +1,14 @@
 using System.Collections.Generic;
 
-public sealed class OnLeaderboardFetchSuccessEvent : IEventData
+public sealed class OnLeaderboardRequest : IEventData { }
+
+public sealed class OnLeaderboardRequestCompleted : IEventData
 {
+    public bool Success { get; }
     public List<LeaderboardEntry> Records { get; }
-    public OnLeaderboardFetchSuccessEvent(List<LeaderboardEntry> records)
+    public OnLeaderboardRequestCompleted(bool success, List<LeaderboardEntry> records)
     {
+        this.Success = success;
         this.Records = records;
-    }
-}
-
-public sealed class OnLeaderboardFetchFailedEvent : IEventData
-{
-    public string Message { get; }
-    public OnLeaderboardFetchFailedEvent(string message)
-    {
-        Message = message;
-    }
-}
-
-public sealed class OnHighScoreUpdateSuccessEvent : IEventData
-{
-    public int HighScore { get; }
-    public OnHighScoreUpdateSuccessEvent(int highScore)
-    {
-        HighScore = highScore;
-    }
-}
-
-public sealed class OnHighScoreUpdateFailedEvent : IEventData
-{
-    public string Message { get; }
-    public OnHighScoreUpdateFailedEvent(string message)
-    {
-        Message = message;
     }
 }

@@ -7,6 +7,12 @@ public class LeaderboardResponse
 }
 
 [System.Serializable]
+public class LeaderboardErrorResponse
+{
+    public string message;
+}
+
+[System.Serializable]
 public class LeaderboardResponseRecord
 {
     public string playerName;
@@ -14,19 +20,13 @@ public class LeaderboardResponseRecord
 }
 
 [System.Serializable]
-public class UpdateHighScoreRequest
+public class HighScoreUpdateRequest
 {
     public int newScore;
 }
 
 [System.Serializable]
-public class UpdateHighScoreResponse
+public class HighScoreUpdateResponse
 {
     public int highScore;
-}
-
-[System.Serializable]
-public class LeaderboardErrorResponse
-{
-    public string message;
 }

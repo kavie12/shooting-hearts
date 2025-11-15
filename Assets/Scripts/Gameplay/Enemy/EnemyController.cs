@@ -3,6 +3,7 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour, IEnemy
 {
     [SerializeField] private EnemyType _enemyType;
+    [SerializeField] private GameObject _destroyFx;
     [SerializeField] private float _fallSpeed = 5f;
     [SerializeField] private float _deadZone = -8;
     [SerializeField] private int _points = 100;
@@ -37,22 +38,25 @@ public class EnemyController : MonoBehaviour, IEnemy
     {
         if (collision.CompareTag("Bullet"))
         {
-            EventBus.Publish(new EnemyDestroyedEvent(_enemyType, transform.position, _points));
+            EventBus.Publish(new OnEnemyDestroyed(_points));
+
+            Instantiate(_destroyFx, transform.position, transform.rotation);
             DestroyEnemy();
         }
 
         if (collision.CompareTag("Player"))
         {
+            Instantiate(_destroyFx, transform.position, transform.rotation);
             DestroyEnemy();
         }
     }
 
-    public void Initialize(EnemyConfig enemyConfig)
+    public void UpdateConfig(EnemyConfig enemyConfig)
     {
         _fallSpeed = enemyConfig.FallSpeed;
     }
 
-    void DestroyEnemy()
+    private void DestroyEnemy()
     {
         _enemyFactory.ReleaseEnemy(gameObject);
     }

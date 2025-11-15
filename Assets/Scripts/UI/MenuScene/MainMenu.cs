@@ -10,9 +10,9 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        _btnPlay.onClick.AddListener(() => EventBus.Publish(new MainMenuPlayButtonClickEvent()));
-        _btnLeaderboard.onClick.AddListener(() => EventBus.Publish(new MainMenuLeaderboardButtonClickEvent()));
-        _btnLogout.onClick.AddListener(() => EventBus.Publish(new MainMenuLogoutButtonClickEvent()));
-        _btnExit.onClick.AddListener(() => EventBus.Publish(new MenuSceneExitButtonClickEvent()));
+        _btnPlay.onClick.AddListener(() => EventBus.Publish(new OnMenuSceneButtonClick(MenuSceneButton.MainMenuPlayButton)));
+        _btnLeaderboard.onClick.AddListener(() => EventBus.Publish(new OnMenuSceneButtonClick(MenuSceneButton.MainMenuLeaderboardButton)));
+        _btnLogout.onClick.AddListener(() => EventBus.Publish(new OnLogoutRequest()));
+        _btnExit.onClick.AddListener(() => EventBus.Publish(new OnMenuSceneButtonClick(MenuSceneButton.MainMenuExitButton)));
     }
 }

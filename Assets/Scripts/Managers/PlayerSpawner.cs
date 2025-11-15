@@ -2,32 +2,33 @@ using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _prefab;
+    [SerializeField] private GameObject _playerPrefab;
+    [SerializeField] private Vector2 _spawnPosition;
 
     private void OnEnable()
     {
-        EventBus.Subscribe<GameStartEvent>(HandleGameStart);
-        EventBus.Subscribe<LevelRestartEvent>(HandleLevelRestart);
+        EventBus.Subscribe<OnGameStarted>(HandleGameStarted);
+        EventBus.Subscribe<OnLevelRestarted>(HandleLevelRestarted);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<GameStartEvent>(HandleGameStart);
-        EventBus.Unsubscribe<LevelRestartEvent>(HandleLevelRestart);
+        EventBus.Unsubscribe<OnGameStarted>(HandleGameStarted);
+        EventBus.Unsubscribe<OnLevelRestarted>(HandleLevelRestarted);
     }
 
-    private void HandleGameStart(GameStartEvent e)
+    private void HandleGameStarted(OnGameStarted e)
     {
-        SpawnPlayer();
+        SpawnSpaceship();
     }
 
-    private void HandleLevelRestart(LevelRestartEvent e)
+    private void HandleLevelRestarted(OnLevelRestarted e)
     {
-        SpawnPlayer();
+        SpawnSpaceship();
     }
 
-    private void SpawnPlayer()
+    private void SpawnSpaceship()
     {
-        Instantiate(_prefab);
+        Instantiate(_playerPrefab, new Vector3(_spawnPosition.x, _spawnPosition.y, 0), transform.rotation);
     }
 }

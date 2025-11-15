@@ -26,51 +26,51 @@ public class LeaderboardManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<MainMenuLeaderboardButtonClickEvent>(FetchLeaderboard);
-        EventBus.Subscribe<UpdateFinalScoreEvent>(FetchUpdatedHighScore);
+        EventBus.Subscribe<OnLeaderboardRequest>(HandleLeaderboardRequest);
+        EventBus.Subscribe<OnHighScoreUpdateRequested>(HandleHighScoreUpdateRequest);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<MainMenuLeaderboardButtonClickEvent>(FetchLeaderboard);
-        EventBus.Unsubscribe<UpdateFinalScoreEvent>(FetchUpdatedHighScore);
+        EventBus.Unsubscribe<OnLeaderboardRequest>(HandleLeaderboardRequest);
+        EventBus.Unsubscribe<OnHighScoreUpdateRequested>(HandleHighScoreUpdateRequest);
     }
 
-    private void FetchLeaderboard(MainMenuLeaderboardButtonClickEvent e)
+    private void HandleLeaderboardRequest(OnLeaderboardRequest e)
     {
-        StartCoroutine(ApiClient.Get<LeaderboardResponse, LeaderboardErrorResponse>($"{_baseUrl}/leaderboard", HandleLeaderboardRequest, _authProvider.AccessToken));
+        StartCoroutine(ApiClient.Get<LeaderboardResponse, LeaderboardErrorResponse>($"{_baseUrl}/leaderboard", HandleLeaderboardRequestComplete, _authProvider.AccessToken));
     }
 
-    private void FetchUpdatedHighScore(UpdateFinalScoreEvent e)
+    private void HandleHighScoreUpdateRequest(OnHighScoreUpdateRequested e)
     {
-        StartCoroutine(ApiClient.Post<UpdateHighScoreResponse, LeaderboardErrorResponse>($"{_baseUrl}/update-high-score", new UpdateHighScoreRequest { newScore = e.FinalScore }, HandlePlayerHighScoreUpdateRequest, _authProvider.AccessToken));
+        StartCoroutine(ApiClient.Post<HighScoreUpdateResponse, LeaderboardErrorResponse>($"{_baseUrl}/update-high-score", new HighScoreUpdateRequest { newScore = e.NewScore }, HandleHighScoreUpdateRequestCompleted, _authProvider.AccessToken));
     }
 
-    private void HandleLeaderboardRequest(LeaderboardResponse res, LeaderboardErrorResponse error)
+    private void HandleLeaderboardRequestComplete(LeaderboardResponse res, LeaderboardErrorResponse error)
     {
         if (res != null)
         {
             var entries = res.leaderboard.Select(r => new LeaderboardEntry(r.playerName, r.playerScore)).ToList();
-            EventBus.Publish(new OnLeaderboardFetchSuccessEvent(entries));
+            EventBus.Publish(new OnLeaderboardRequestCompleted(true, entries));
         }
         else
         {
-            Debug.Log(error);
-            EventBus.Publish(new OnLeaderboardFetchFailedEvent(error.message));
+            Debug.Log(error.message);
+            EventBus.Publish(new OnLeaderboardRequestCompleted(false, null));
         }
     }
 
-    private void HandlePlayerHighScoreUpdateRequest(UpdateHighScoreResponse res, LeaderboardErrorResponse error)
+    private void HandleHighScoreUpdateRequestCompleted(HighScoreUpdateResponse res, LeaderboardErrorResponse error)
     {
         if (res != null)
         {
             _highScore = res.highScore;
-            EventBus.Publish(new OnHighScoreUpdateSuccessEvent(_highScore));
+            EventBus.Publish(new OnHighScoreUpdateRequestCompleted(true, _highScore));
         }
         else
         {
-            Debug.Log(error);
-            EventBus.Publish(new OnHighScoreUpdateFailedEvent(error.message));
+            Debug.Log(error.message);
+            EventBus.Publish(new OnHighScoreUpdateRequestCompleted(false, 0));
         }
     }
 }
