@@ -27,4 +27,13 @@ public sealed class OnBonusChanceQuestionAnswerGuessed : IEventData
     }
 }
 
+public sealed class OnBonusChanceQuestionAnswerChecked : IEventData
+{
+    public bool Correct { get; }
+    public OnBonusChanceQuestionAnswerChecked(bool correct)
+    {
+        Correct = correct;
+    }
+}
+
 public sealed class OnBonusChanceQuestionTimeout : IEventData { }

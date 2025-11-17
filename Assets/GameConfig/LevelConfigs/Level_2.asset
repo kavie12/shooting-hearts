@@ -17,7 +17,7 @@ MonoBehaviour:
   EnemyConfigs:
   - EnemyType: 0
     Prefab: {fileID: 2618928919507613750, guid: e3e96d6091b08fb47b15b2dc3d190df5, type: 3}
-    DestroyEffectPrefab: {fileID: 6651409593692128141, guid: f47aa4b6d7bfb534bad00b7a8d690d19, type: 3}
+    FxDestroy: {fileID: 6651409593692128141, guid: f47aa4b6d7bfb534bad00b7a8d690d19, type: 3}
     FallSpeed: 5
     SpawnOverTime: 0.6
     SpawnDelay: 4

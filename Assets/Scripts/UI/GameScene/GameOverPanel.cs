@@ -46,4 +46,10 @@ public class GameOverPanel : MonoBehaviour
         _scoreSection.SetActive(true);
         _loadingSpinner.SetActive(false);
     }
+
+    public void InitGameOverPanelText(bool win)
+    {
+        if (win) _gameOverText.text = "You Win!";
+        else _gameOverText.text = "You Lose!";
+    }
 }

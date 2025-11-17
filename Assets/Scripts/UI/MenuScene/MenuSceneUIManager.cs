@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum MenuSceneButton
 {
@@ -11,12 +12,15 @@ public enum MenuSceneButton
     MainMenuPlayButton,
     MainMenuLeaderboardButton,
     MainMenuExitButton,
-    LeaderboardBackButton
+    LeaderboardBackButton,
+    InfoPanelCloseButton
 }
 
 public class MenuSceneUiManager : MonoBehaviour
 {
     [SerializeField] private GameObject _title;
+    [SerializeField] private GameObject _loadingSpinner;
+    [SerializeField] private GameObject _btnInfo;
 
     [Header("UI Components")]
     [SerializeField] private GameObject _authMenu;
@@ -24,10 +28,16 @@ public class MenuSceneUiManager : MonoBehaviour
     [SerializeField] private GameObject _loginForm;
     [SerializeField] private GameObject _signUpForm;
     [SerializeField] private GameObject _leaderboard;
+    [SerializeField] private GameObject _infoPanel;
+    [SerializeField] private GameObject _playerCard;
 
     private void Start()
     {
+        DisplayLoading();
+
         EventBus.Publish(new OnTokenAuthenticationRequest());
+
+        _btnInfo.GetComponent<Button>().onClick.AddListener(DisplayInfoPanel);
     }
 
     private void OnEnable()
@@ -63,6 +73,7 @@ public class MenuSceneUiManager : MonoBehaviour
                 break;
 
             case MenuSceneButton.AuthMenuExitButton:
+                QuitGame();
                 break;
 
             case MenuSceneButton.LoginFormBackButton:
@@ -70,7 +81,7 @@ public class MenuSceneUiManager : MonoBehaviour
                 break;
 
             case MenuSceneButton.SignUpFormBackButton:
-                DisplaySignUpForm();
+                DisplayAuthMenu();
                 break;
 
             case MenuSceneButton.MainMenuPlayButton:
@@ -82,9 +93,14 @@ public class MenuSceneUiManager : MonoBehaviour
                 break;
 
             case MenuSceneButton.MainMenuExitButton:
+                QuitGame();
                 break;
 
             case MenuSceneButton.LeaderboardBackButton:
+                DisplayMainMenu();
+                break;
+
+            case MenuSceneButton.InfoPanelCloseButton:
                 DisplayMainMenu();
                 break;
 
@@ -96,54 +112,102 @@ public class MenuSceneUiManager : MonoBehaviour
 
     #region Display Component Functions
 
+    private void DisplayLoading()
+    {
+        _title.SetActive(true);
+        _loadingSpinner.SetActive(true);
+        _btnInfo.SetActive(false);
+        _authMenu.SetActive(false);
+        _mainMenu.SetActive(false);
+        _loginForm.SetActive(false);
+        _signUpForm.SetActive(false);
+        _leaderboard.SetActive(false);
+        _infoPanel.SetActive(false);
+        _playerCard.SetActive(false);
+    }
+
     private void DisplayAuthMenu()
     {
         _title.SetActive(true);
+        _loadingSpinner.SetActive(false);
+        _btnInfo.SetActive(false);
         _authMenu.SetActive(true);
         _mainMenu.SetActive(false);
         _loginForm.SetActive(false);
         _signUpForm.SetActive(false);
         _leaderboard.SetActive(false);
+        _infoPanel.SetActive(false);
+        _playerCard.SetActive(false);
     }
 
     private void DisplayLoginForm()
     {
         _title.SetActive(false);
+        _loadingSpinner.SetActive(false);
+        _btnInfo.SetActive(false);
         _authMenu.SetActive(false);
         _mainMenu.SetActive(false);
         _loginForm.SetActive(true);
         _signUpForm.SetActive(false);
         _leaderboard.SetActive(false);
+        _infoPanel.SetActive(false);
+        _playerCard.SetActive(false);
     }
 
     private void DisplaySignUpForm()
     {
         _title.SetActive(false);
+        _loadingSpinner.SetActive(false);
+        _btnInfo.SetActive(false);
         _authMenu.SetActive(false);
         _mainMenu.SetActive(false);
         _loginForm.SetActive(false);
         _signUpForm.SetActive(true);
         _leaderboard.SetActive(false);
+        _infoPanel.SetActive(false);
+        _playerCard.SetActive(false);
     }
 
     private void DisplayMainMenu()
     {
         _title.SetActive(true);
+        _loadingSpinner.SetActive(false);
+        _btnInfo.SetActive(true);
         _authMenu.SetActive(false);
         _mainMenu.SetActive(true);
         _loginForm.SetActive(false);
         _signUpForm.SetActive(false);
         _leaderboard.SetActive(false);
+        _infoPanel.SetActive(false);
+        _playerCard.SetActive(true);
     }
 
     private void DisplayLeaderboard()
     {
         _title.SetActive(false);
+        _loadingSpinner.SetActive(false);
+        _btnInfo.SetActive(false);
         _authMenu.SetActive(false);
         _mainMenu.SetActive(false);
         _loginForm.SetActive(false);
         _signUpForm.SetActive(false);
         _leaderboard.SetActive(true);
+        _infoPanel.SetActive(false);
+        _playerCard.SetActive(true);
+    }
+
+    private void DisplayInfoPanel()
+    {
+        _title.SetActive(true);
+        _loadingSpinner.SetActive(false);
+        _btnInfo.SetActive(false);
+        _authMenu.SetActive(false);
+        _mainMenu.SetActive(false);
+        _loginForm.SetActive(false);
+        _signUpForm.SetActive(false);
+        _leaderboard.SetActive(false);
+        _infoPanel.SetActive(true);
+        _playerCard.SetActive(true);
     }
 
     #endregion
@@ -155,6 +219,10 @@ public class MenuSceneUiManager : MonoBehaviour
         if (e.Success)
         {
             DisplayMainMenu();
+        }
+        else
+        {
+            DisplayAuthMenu();
         }
     }
 
@@ -184,4 +252,9 @@ public class MenuSceneUiManager : MonoBehaviour
     }
 
     #endregion
+
+    private void QuitGame()
+    {
+        Application.Quit();
+    }
 }

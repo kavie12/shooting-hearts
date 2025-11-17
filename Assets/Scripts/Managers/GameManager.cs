@@ -4,6 +4,8 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameConfig _gameConfig;
 
+    private bool _win = false;
+
     private void Start()
     {
         EventBus.Publish(new OnGameStarted(_gameConfig));
@@ -42,11 +44,12 @@ public class GameManager : MonoBehaviour
 
     private void HandleAllLevelsCompleted(OnAllLevelsCompleted e)
     {
-        GameOver();
+        _win = true;
+        Invoke(nameof(GameOver), 4f);
     }
 
     private void GameOver()
     {
-        EventBus.Publish(new OnGameOver());
+        EventBus.Publish(new OnGameOver(_win));
     }
 }

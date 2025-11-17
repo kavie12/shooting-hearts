@@ -15,7 +15,7 @@ public class BonusChanceManager : MonoBehaviour
 
     private void OnDisable()
     {
-        EventBus.Subscribe<OnBonusChanceRequested>(HandleBonusChanceRequest);
+        EventBus.Unsubscribe<OnBonusChanceRequested>(HandleBonusChanceRequest);
         EventBus.Unsubscribe<OnBonusChanceQuestionAnswerGuessed>(HandleAnswerGuess);
         EventBus.Unsubscribe<OnBonusChanceQuestionTimeout>(HandleTimeout);
     }
@@ -55,18 +55,18 @@ public class BonusChanceManager : MonoBehaviour
 
     private void HandleAnswerCorrect()
     {
+        EventBus.Publish(new OnBonusChanceQuestionAnswerChecked(true));
         EventBus.Publish(new OnBonusChanceRequestCompleted(true));
     }
 
     private void HandleAnswerIncorrect()
     {
-        EventBus.Publish(new ShowAlertEvent("Incorrect answer.", 2f));
+        EventBus.Publish(new OnBonusChanceQuestionAnswerChecked(false));
         Invoke(nameof(DenyBonusChance), 2f);
     }
 
     private void HandleTimeout(OnBonusChanceQuestionTimeout e)
     {
-        EventBus.Publish(new ShowAlertEvent("Time is over.", 2f));
         Invoke(nameof(DenyBonusChance), 2f);
     }
 

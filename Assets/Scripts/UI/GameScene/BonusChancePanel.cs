@@ -11,6 +11,7 @@ public class BonusChancePanel : MonoBehaviour
     [SerializeField] private GameObject answerGuessButtons;
     [SerializeField] private TextMeshProUGUI _timerText;
     [SerializeField] private Slider _timerSlider;
+    [SerializeField] private TextMeshProUGUI _message;
     [SerializeField] private float _timer = 5f;
 
     private Coroutine _timerCoroutine;
@@ -19,14 +20,16 @@ public class BonusChancePanel : MonoBehaviour
     {
         EventBus.Subscribe<OnBonusChanceQuestionFetched>(HandleQuestionFetched);
         EventBus.Subscribe<OnBonusChanceQuestionAnswerGuessed>(HandleAnswerGuess);
-        EventBus.Subscribe<OnBonusChanceRequestCompleted>(HandleBonusChanceGranted);
+        EventBus.Subscribe<OnBonusChanceQuestionAnswerChecked>(HandleBonusChanceQuestionAnswerChecked);
+        EventBus.Subscribe<OnBonusChanceRequestCompleted>(HandleBonusChanceRequestComplete);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<OnBonusChanceQuestionFetched>(HandleQuestionFetched);
         EventBus.Unsubscribe<OnBonusChanceQuestionAnswerGuessed>(HandleAnswerGuess);
-        EventBus.Unsubscribe<OnBonusChanceRequestCompleted>(HandleBonusChanceGranted);
+        EventBus.Unsubscribe<OnBonusChanceQuestionAnswerChecked>(HandleBonusChanceQuestionAnswerChecked);
+        EventBus.Unsubscribe<OnBonusChanceRequestCompleted>(HandleBonusChanceRequestComplete);
     }
 
     #region Event Handlers
@@ -71,9 +74,18 @@ public class BonusChancePanel : MonoBehaviour
         StopCoroutine(_timerCoroutine);
     }
 
-    private void HandleBonusChanceGranted(OnBonusChanceRequestCompleted e)
+    private void HandleBonusChanceRequestComplete(OnBonusChanceRequestCompleted e)
     {
         gameObject.SetActive(false);
+    }
+
+    private void HandleBonusChanceQuestionAnswerChecked(OnBonusChanceQuestionAnswerChecked e)
+    {
+        if (!e.Correct)
+        {
+            _message.text = "Incorrect Answer.";
+            _message.gameObject.SetActive(true);
+        }
     }
 
     #endregion
@@ -122,6 +134,10 @@ public class BonusChancePanel : MonoBehaviour
     private void HandleTimeout()
     {
         DisableAnswerButtons();
+
+        _message.text = "Time is over.";
+        _message.gameObject.SetActive(true);
+
         EventBus.Publish(new OnBonusChanceQuestionTimeout());
     }
 }

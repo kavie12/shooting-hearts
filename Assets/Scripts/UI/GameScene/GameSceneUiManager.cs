@@ -14,6 +14,8 @@ public class GameSceneUiManager : MonoBehaviour
         EventBus.Subscribe<OnBonusChanceRequested>(HandleBonusChanceRequest);
         EventBus.Subscribe<OnGameOver>(HandleGameOver);
         EventBus.Subscribe<OnGameOverPanelButtonClicked>(HandleGameOverPanelButtonClicked);
+        EventBus.Subscribe<OnGamePaused>(HandleGamePaused);
+        EventBus.Subscribe<OnPauseMenuButtonClicked>(HandlePauseMenuButtonClicked);
     }
 
     private void OnDisable()
@@ -22,6 +24,8 @@ public class GameSceneUiManager : MonoBehaviour
         EventBus.Unsubscribe<OnBonusChanceRequested>(HandleBonusChanceRequest);
         EventBus.Unsubscribe<OnGameOver>(HandleGameOver);
         EventBus.Unsubscribe<OnGameOverPanelButtonClicked>(HandleGameOverPanelButtonClicked);
+        EventBus.Unsubscribe<OnGamePaused>(HandleGamePaused);
+        EventBus.Unsubscribe<OnPauseMenuButtonClicked>(HandlePauseMenuButtonClicked);
     }
 
     private void HandleOnLevelStarted(OnLevelStarted e)
@@ -38,6 +42,7 @@ public class GameSceneUiManager : MonoBehaviour
     private void HandleGameOver(OnGameOver e)
     {
         _gameOverPanel.SetActive(true);
+        _gameOverPanel.GetComponent<GameOverPanel>().InitGameOverPanelText(e.Win);
     }
 
     private void HandleGameOverPanelButtonClicked(OnGameOverPanelButtonClicked e)
@@ -49,7 +54,32 @@ public class GameSceneUiManager : MonoBehaviour
                 break;
 
             case GameOverPanelButton.MainMenuButton:
-                SceneManager.LoadScene("GameScene");
+                SceneManager.LoadScene("MenuScene");
+                break;
+
+            default:
+                Debug.Log("Not defined in the switch case.");
+                break;
+        }
+    }
+
+    private void HandleGamePaused(OnGamePaused e)
+    {
+        if (e.Paused) _pauseMenu.SetActive(true);
+        else _pauseMenu.SetActive(false);
+    }
+
+    private void HandlePauseMenuButtonClicked(OnPauseMenuButtonClicked e)
+    {
+        switch (e.ButtonId)
+        {
+            case PauseMenuButton.ResumeButton:
+                EventBus.Publish(new OnGamePaused(false));
+                break;
+
+            case PauseMenuButton.MainMenuButton:
+                EventBus.Publish(new OnGamePaused(false));
+                SceneManager.LoadScene("MenuScene");
                 break;
 
             default:

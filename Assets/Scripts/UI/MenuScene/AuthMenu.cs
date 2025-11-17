@@ -13,28 +13,4 @@ public class AuthMenu : MonoBehaviour
         _btnSignUp.onClick.AddListener(() => EventBus.Publish(new OnMenuSceneButtonClick(MenuSceneButton.AuthMenuSignUpButton)));
         _btnExit.onClick.AddListener(() => EventBus.Publish(new OnMenuSceneButtonClick(MenuSceneButton.AuthMenuExitButton)));
     }
-
-    private void OnEnable()
-    {
-        EventBus.Subscribe<OnTokenAuthenticationRequest>(HandleTokenAuthenticationRequest);
-        EventBus.Subscribe<OnTokenAuthenticationRequestComplete>(HandleTokenAuthenticationRequestComplete);
-    }
-
-    private void OnDisable()
-    {
-        EventBus.Unsubscribe<OnTokenAuthenticationRequest>(HandleTokenAuthenticationRequest);
-        EventBus.Unsubscribe<OnTokenAuthenticationRequestComplete>(HandleTokenAuthenticationRequestComplete);
-    }
-
-    private void HandleTokenAuthenticationRequest(OnTokenAuthenticationRequest e)
-    {
-        _btnLogin.interactable = false;
-        _btnSignUp.interactable = false;
-    }
-
-    private void HandleTokenAuthenticationRequestComplete(OnTokenAuthenticationRequestComplete e)
-    {
-        _btnLogin.interactable = true;
-        _btnSignUp.interactable = true;
-    }
 }

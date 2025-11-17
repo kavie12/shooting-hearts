@@ -1,12 +1,11 @@
-using System;
 using UnityEngine;
 
-[Serializable]
+[System.Serializable]
 public class EnemyConfig
 {
     public EnemyType EnemyType;
     public GameObject Prefab;
-    public GameObject DestroyEffectPrefab;
+    public GameObject FxDestroy;
     public float FallSpeed;
     public float SpawnOverTime;
     public float SpawnDelay;

@@ -1,6 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum PauseMenuButton
+{
+    ResumeButton,
+    MainMenuButton
+}
+
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private Button _btnResume;
@@ -8,7 +14,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Start()
     {
-        _btnResume.onClick.AddListener(() => { });
-        _btnMainMenu.onClick.AddListener(() => { });
+        _btnResume.onClick.AddListener(() => EventBus.Publish(new OnPauseMenuButtonClicked(PauseMenuButton.ResumeButton)));
+        _btnMainMenu.onClick.AddListener(() => EventBus.Publish(new OnPauseMenuButtonClicked(PauseMenuButton.MainMenuButton)));
     }
 }

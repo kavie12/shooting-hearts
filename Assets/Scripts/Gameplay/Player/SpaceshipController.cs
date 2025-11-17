@@ -2,14 +2,8 @@ using UnityEngine;
 
 public class SpaceshipController : MonoBehaviour
 {
-    [Header("Config")]
     [SerializeField] private float _moveSpeed = 8f;
     [SerializeField] private float _shootOverTime = 0.2f;
-
-    [Header("Effects")]
-    [SerializeField] private GameObject _damageFx;
-    [SerializeField] private GameObject _destroyFx;
-    [SerializeField] private AudioSource _destroySfx;
 
     private Rigidbody2D _rb;
     private IBulletFactory _bulletFactory;
@@ -51,19 +45,22 @@ public class SpaceshipController : MonoBehaviour
     void OnEnable()
     {
         EventBus.Subscribe<OnPlayerHealthOver>(HandleHealthOver);
+        EventBus.Subscribe<OnGameOver>(HandleGameOver);
+        EventBus.Subscribe<OnGamePaused>(HandleGamePause);
     }
 
     void OnDisable()
     {
         EventBus.Unsubscribe<OnPlayerHealthOver>(HandleHealthOver);
+        EventBus.Unsubscribe<OnGameOver>(HandleGameOver);
+        EventBus.Unsubscribe<OnGamePaused>(HandleGamePause);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.TryGetComponent<IEnemy>(out var enemy))
         {
-            Instantiate(_damageFx, transform.position, transform.rotation);
-            EventBus.Publish(new OnPlayerDamaged(enemy.Damage));
+            EventBus.Publish(new OnPlayerDamaged(transform.position, enemy.Damage));
         }
     }
 
@@ -92,13 +89,33 @@ public class SpaceshipController : MonoBehaviour
     {
         var bullet = _bulletFactory.CreateBullet();
         bullet.transform.position = transform.position;
+
+        EventBus.Publish(new OnPlayerShoot());
     }
 
     private void HandleHealthOver(OnPlayerHealthOver e)
     {
-        Instantiate(_destroyFx, transform.position, transform.rotation);
-        _destroySfx.Play();
-        EventBus.Publish(new OnPlayerDestroyed());
+        EventBus.Publish(new OnPlayerDestroyed(transform.position));
         Destroy(gameObject);
+    }
+
+    private void HandleGameOver(OnGameOver e)
+    {
+        _canFire = false;
+        _canMove = false;
+    }
+
+    private void HandleGamePause(OnGamePaused e)
+    {
+        if (e.Paused)
+        {
+            _canFire = false;
+            _canMove = false;
+        }
+        else
+        {
+            _canFire = true;
+            _canMove = true;
+        }
     }
 }

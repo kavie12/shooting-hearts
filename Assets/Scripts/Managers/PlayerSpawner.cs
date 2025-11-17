@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _playerPrefab;
-    [SerializeField] private Vector2 _spawnPosition;
+    private GameObject _playerPrefab;
 
     private void OnEnable()
     {
@@ -19,6 +18,7 @@ public class PlayerSpawner : MonoBehaviour
 
     private void HandleGameStarted(OnGameStarted e)
     {
+        _playerPrefab = e.GameConfig.PlayerConfig.Prefab;
         SpawnSpaceship();
     }
 
@@ -29,6 +29,6 @@ public class PlayerSpawner : MonoBehaviour
 
     private void SpawnSpaceship()
     {
-        Instantiate(_playerPrefab, new Vector3(_spawnPosition.x, _spawnPosition.y, 0), transform.rotation);
+        Instantiate(_playerPrefab, new Vector3(0f, -2.8f, 0f), transform.rotation);
     }
 }

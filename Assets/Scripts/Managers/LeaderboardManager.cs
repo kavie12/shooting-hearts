@@ -26,6 +26,7 @@ public class LeaderboardManager : MonoBehaviour
 
     private void OnEnable()
     {
+        EventBus.Subscribe<OnHighScoreRequest>(HandleHighScoreRequest);
         EventBus.Subscribe<OnLeaderboardRequest>(HandleLeaderboardRequest);
         EventBus.Subscribe<OnHighScoreUpdateRequested>(HandleHighScoreUpdateRequest);
     }
@@ -36,6 +37,13 @@ public class LeaderboardManager : MonoBehaviour
         EventBus.Unsubscribe<OnHighScoreUpdateRequested>(HandleHighScoreUpdateRequest);
     }
 
+    #region Request Handlers
+
+    private void HandleHighScoreRequest(OnHighScoreRequest e)
+    {
+        StartCoroutine(ApiClient.Get<PlayerHighScoreResponse, LeaderboardErrorResponse>($"{_baseUrl}/get-high-score", HandleHighScoreRequestComplete, _authProvider.AccessToken));
+    }
+
     private void HandleLeaderboardRequest(OnLeaderboardRequest e)
     {
         StartCoroutine(ApiClient.Get<LeaderboardResponse, LeaderboardErrorResponse>($"{_baseUrl}/leaderboard", HandleLeaderboardRequestComplete, _authProvider.AccessToken));
@@ -44,6 +52,23 @@ public class LeaderboardManager : MonoBehaviour
     private void HandleHighScoreUpdateRequest(OnHighScoreUpdateRequested e)
     {
         StartCoroutine(ApiClient.Post<HighScoreUpdateResponse, LeaderboardErrorResponse>($"{_baseUrl}/update-high-score", new HighScoreUpdateRequest { newScore = e.NewScore }, HandleHighScoreUpdateRequestCompleted, _authProvider.AccessToken));
+    }
+
+    #endregion
+
+    #region Request Complete Handlers
+
+    private void HandleHighScoreRequestComplete(PlayerHighScoreResponse res, LeaderboardErrorResponse error)
+    {
+        if (res != null)
+        {
+            EventBus.Publish(new OnHighScoreRequestCompleted(true, res.playerName, res.highScore));
+        }
+        else
+        {
+            Debug.Log(error.message);
+            EventBus.Publish(new OnHighScoreRequestCompleted(false, null, 0));
+        }
     }
 
     private void HandleLeaderboardRequestComplete(LeaderboardResponse res, LeaderboardErrorResponse error)
@@ -73,4 +98,6 @@ public class LeaderboardManager : MonoBehaviour
             EventBus.Publish(new OnHighScoreUpdateRequestCompleted(false, 0));
         }
     }
+
+    #endregion
 }
