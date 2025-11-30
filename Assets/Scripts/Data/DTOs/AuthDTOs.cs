@@ -26,3 +26,28 @@ public class AuthErrorResponse
     public string code;
     public string message;
 }
+
+[System.Serializable]
+public class ResetPasswordEmailRequest
+{
+    public string email;
+}
+
+[System.Serializable]
+public class ResetPasswordEmailResponse
+{
+    public string message;
+}
+
+[System.Serializable]
+public class ConfirmResetPasswordRequest
+{
+    public string code;
+    public string newPassword;
+}
+
+[System.Serializable]
+public class ConfirmResetPasswordResponse
+{
+    public string message;
+}

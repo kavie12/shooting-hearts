@@ -39,3 +39,23 @@ public class OnTokenAuthenticationRequestComplete : IEventData
         Success = success;
     }
 }
+
+public class OnResetPasswordEmailRequest : IEventData
+{
+    public string Email { get; }
+    public OnResetPasswordEmailRequest(string email)
+    {
+        Email = email;
+    }
+}
+
+public class OnResetPasswordEmailRequestComplete : IEventData
+{
+    public bool Success { get; }
+    public string Message { get; }
+    public OnResetPasswordEmailRequestComplete(bool success, string message)
+    {
+        Success = success;
+        Message = message;
+    }
+}

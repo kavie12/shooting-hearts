@@ -9,11 +9,13 @@ public class LoginForm : MonoBehaviour
     [SerializeField] private Button _btnLogin;
     [SerializeField] private Button _btnBack;
     [SerializeField] private TextMeshProUGUI _message;
+    [SerializeField] private Button _btnResetPassword;
 
     private void Start()
     {
         _btnLogin.onClick.AddListener(HandleLoginButtonClick);
         _btnBack.onClick.AddListener(() => EventBus.Publish(new OnMenuSceneButtonClick(MenuSceneButton.LoginFormBackButton)));
+        _btnResetPassword.onClick.AddListener(() => EventBus.Publish(new OnMenuSceneButtonClick(MenuSceneButton.LoginFormResetPasswordButton)));
     }
 
     private void OnEnable()

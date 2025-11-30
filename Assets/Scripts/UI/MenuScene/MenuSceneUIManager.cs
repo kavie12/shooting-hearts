@@ -7,13 +7,17 @@ public enum MenuSceneButton
     AuthMenuLoginButton,
     AuthMenuSignUpButton,
     AuthMenuExitButton,
+
     LoginFormBackButton,
     SignUpFormBackButton,
+    LeaderboardBackButton,
+    InfoPanelCloseButton,
+    LoginFormResetPasswordButton,
+    ResetPasswordFormBackButton,
+    
     MainMenuPlayButton,
     MainMenuLeaderboardButton,
-    MainMenuExitButton,
-    LeaderboardBackButton,
-    InfoPanelCloseButton
+    MainMenuExitButton
 }
 
 public class MenuSceneUiManager : MonoBehaviour
@@ -30,6 +34,7 @@ public class MenuSceneUiManager : MonoBehaviour
     [SerializeField] private GameObject _leaderboard;
     [SerializeField] private GameObject _infoPanel;
     [SerializeField] private GameObject _playerCard;
+    [SerializeField] private GameObject _resetPasswordForm;
 
     private void Start()
     {
@@ -104,6 +109,14 @@ public class MenuSceneUiManager : MonoBehaviour
                 DisplayMainMenu();
                 break;
 
+            case MenuSceneButton.LoginFormResetPasswordButton:
+                DisplayResetPasswordForm();
+                break;
+
+            case MenuSceneButton.ResetPasswordFormBackButton:
+                DisplayLoginForm();
+                break;
+
             default:
                 Debug.Log("Not defined in the switch case.");
                 break;
@@ -124,6 +137,7 @@ public class MenuSceneUiManager : MonoBehaviour
         _leaderboard.SetActive(false);
         _infoPanel.SetActive(false);
         _playerCard.SetActive(false);
+        _resetPasswordForm.SetActive(false);
     }
 
     private void DisplayAuthMenu()
@@ -138,6 +152,7 @@ public class MenuSceneUiManager : MonoBehaviour
         _leaderboard.SetActive(false);
         _infoPanel.SetActive(false);
         _playerCard.SetActive(false);
+        _resetPasswordForm.SetActive(false);
     }
 
     private void DisplayLoginForm()
@@ -152,6 +167,7 @@ public class MenuSceneUiManager : MonoBehaviour
         _leaderboard.SetActive(false);
         _infoPanel.SetActive(false);
         _playerCard.SetActive(false);
+        _resetPasswordForm.SetActive(false);
     }
 
     private void DisplaySignUpForm()
@@ -166,6 +182,7 @@ public class MenuSceneUiManager : MonoBehaviour
         _leaderboard.SetActive(false);
         _infoPanel.SetActive(false);
         _playerCard.SetActive(false);
+        _resetPasswordForm.SetActive(false);
     }
 
     private void DisplayMainMenu()
@@ -180,6 +197,7 @@ public class MenuSceneUiManager : MonoBehaviour
         _leaderboard.SetActive(false);
         _infoPanel.SetActive(false);
         _playerCard.SetActive(true);
+        _resetPasswordForm.SetActive(false);
     }
 
     private void DisplayLeaderboard()
@@ -194,6 +212,7 @@ public class MenuSceneUiManager : MonoBehaviour
         _leaderboard.SetActive(true);
         _infoPanel.SetActive(false);
         _playerCard.SetActive(true);
+        _resetPasswordForm.SetActive(false);
     }
 
     private void DisplayInfoPanel()
@@ -208,6 +227,22 @@ public class MenuSceneUiManager : MonoBehaviour
         _leaderboard.SetActive(false);
         _infoPanel.SetActive(true);
         _playerCard.SetActive(true);
+        _resetPasswordForm.SetActive(false);
+    }
+
+    private void DisplayResetPasswordForm()
+    {
+        _title.SetActive(false);
+        _loadingSpinner.SetActive(false);
+        _btnInfo.SetActive(false);
+        _authMenu.SetActive(false);
+        _mainMenu.SetActive(false);
+        _loginForm.SetActive(false);
+        _signUpForm.SetActive(false);
+        _leaderboard.SetActive(false);
+        _infoPanel.SetActive(false);
+        _playerCard.SetActive(false);
+        _resetPasswordForm.SetActive(true);
     }
 
     #endregion

@@ -32,6 +32,7 @@ public class AuthManager : MonoBehaviour, IAuthProvider
         EventBus.Subscribe<OnLoginRequest>(SendLoginRequest);
         EventBus.Subscribe<OnSignUpRequest>(SendSignUpRequest);
         EventBus.Subscribe<OnLogoutRequest>(HandleLogoutRequest);
+        EventBus.Subscribe<OnResetPasswordEmailRequest>(SendResetPasswordEmailRequest);
     }
 
     private void OnDisable()
@@ -40,6 +41,7 @@ public class AuthManager : MonoBehaviour, IAuthProvider
         EventBus.Unsubscribe<OnLoginRequest>(SendLoginRequest);
         EventBus.Unsubscribe<OnSignUpRequest>(SendSignUpRequest);
         EventBus.Unsubscribe<OnLogoutRequest>(HandleLogoutRequest);
+        EventBus.Unsubscribe<OnResetPasswordEmailRequest>(SendResetPasswordEmailRequest);
     }
 
     #region Send Requests
@@ -61,14 +63,20 @@ public class AuthManager : MonoBehaviour, IAuthProvider
 
     private void SendLoginRequest(OnLoginRequest e)
     {
-        var loginReq = new LoginRequest { email = e.Email, password = e.Password };
-        StartCoroutine(ApiClient.Post<AuthSuccessResponse, AuthErrorResponse>($"{_baseUrl}/login", loginReq, HandleLoginRequest));
+        var reqBody = new LoginRequest { email = e.Email, password = e.Password };
+        StartCoroutine(ApiClient.Post<AuthSuccessResponse, AuthErrorResponse>($"{_baseUrl}/login", reqBody, HandleLoginRequest));
     }
 
     private void SendSignUpRequest(OnSignUpRequest e)
     {
-        var signUpReq = new SignUpRequest { name = e.Name, email = e.Email, password = e.Password };
-        StartCoroutine(ApiClient.Post<AuthSuccessResponse, AuthErrorResponse>($"{_baseUrl}/signup", signUpReq, HandleSignUpRequest));
+        var reqBody = new SignUpRequest { name = e.Name, email = e.Email, password = e.Password };
+        StartCoroutine(ApiClient.Post<AuthSuccessResponse, AuthErrorResponse>($"{_baseUrl}/signup", reqBody, HandleSignUpRequest));
+    }
+
+    private void SendResetPasswordEmailRequest(OnResetPasswordEmailRequest e)
+    {
+        var reqBody = new ResetPasswordEmailRequest { email = e.Email };
+        StartCoroutine(ApiClient.Post<ResetPasswordEmailResponse, AuthErrorResponse>($"{_baseUrl}/reset-password-email", reqBody, HandleResetPasswordEmailRequest));
     }
 
     #endregion
@@ -143,6 +151,18 @@ public class AuthManager : MonoBehaviour, IAuthProvider
         PlayerPrefs.Save();
 
         EventBus.Publish(new OnLogoutRequestComplete(true, "Logout Successful."));
+    }
+
+    private void HandleResetPasswordEmailRequest(ResetPasswordEmailResponse res, AuthErrorResponse error)
+    {
+        if (res != null)
+        {
+            EventBus.Publish(new OnResetPasswordEmailRequestComplete(true, "Password reset email sent."));
+        }
+        else
+        {
+            EventBus.Publish(new OnResetPasswordEmailRequestComplete(false, error.message));
+        }
     }
 
     #endregion
