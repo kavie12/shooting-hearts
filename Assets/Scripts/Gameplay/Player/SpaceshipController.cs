@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Control the player's spaceship, handling movement, shooting, and interactions with game events.
 public class SpaceshipController : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 8f;
@@ -16,13 +17,13 @@ public class SpaceshipController : MonoBehaviour
     private int _horizontalMoveValue;
     private int _verticalMoveValue;
 
-    void Awake()
+    private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _bulletFactory = FindAnyObjectByType<PooledBulletFactory>();
     }
 
-    void Update()
+    private void Update()
     {
         HandleMovementInputs();
         HandleShootingInputs();
@@ -42,14 +43,14 @@ public class SpaceshipController : MonoBehaviour
         }
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         EventBus.Subscribe<OnPlayerHealthOver>(HandleHealthOver);
         EventBus.Subscribe<OnGameOver>(HandleGameOver);
         EventBus.Subscribe<OnGamePaused>(HandleGamePause);
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         EventBus.Unsubscribe<OnPlayerHealthOver>(HandleHealthOver);
         EventBus.Unsubscribe<OnGameOver>(HandleGameOver);

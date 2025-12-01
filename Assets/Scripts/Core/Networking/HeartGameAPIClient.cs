@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
+// Handle API request for the Heart Game bonus chance question using UnityWebRequest
 public static class HeartGameApiClient
 {
     private static readonly string _apiUrl = "https://marcconrad.com/uob/heart/api.php";

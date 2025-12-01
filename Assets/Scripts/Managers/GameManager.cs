@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Manage game logic, including game start, game over, and bonus chance requests.
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameConfig _gameConfig;

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Manages the UI elements in the game scene, responding to various game events
 public class GameSceneUiManager : MonoBehaviour
 {
     [SerializeField] private GameObject _levelIndicator;

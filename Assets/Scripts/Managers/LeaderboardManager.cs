@@ -1,9 +1,11 @@
 using System.Linq;
 using UnityEngine;
 
+// Manage leaderboard requests, including fetching high scores, updating scores, and retrieving the leaderboard.
 public class LeaderboardManager : MonoBehaviour
 {
-    private static LeaderboardManager instance;
+    // Singleton for DontDestroyOnLoad (Persistance across the scenes)
+    private static LeaderboardManager Instance;
 
     private readonly string _baseUrl = "http://localhost:3000/api/player";
     private int _highScore = 0;
@@ -11,9 +13,9 @@ public class LeaderboardManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(this);
         }
         else

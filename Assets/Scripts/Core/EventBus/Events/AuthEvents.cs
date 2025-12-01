@@ -1,59 +1,65 @@
-public sealed class OnLoginRequestComplete : IEventData
+// Used when a login request is completed.
+public sealed class OnLoginRequestCompleted : IEventData
 {
     public bool Success { get; }
     public string Message { get; }
-    public OnLoginRequestComplete(bool success, string message)
+    public OnLoginRequestCompleted(bool success, string message)
     {
         Success = success;
         Message = message;
     }
 }
 
-public sealed class OnSignUpRequestComplete : IEventData
+// Used when a signup request is completed.
+public sealed class OnSignUpRequestCompleted : IEventData
 {
     public bool Success { get; }
     public string Message { get; }
-    public OnSignUpRequestComplete(bool success, string message)
+    public OnSignUpRequestCompleted(bool success, string message)
     {
         Success = success;
         Message = message;
     }
 }
 
-public sealed class OnLogoutRequestComplete : IEventData
+// Used when a logout request is completed.
+public sealed class OnLogoutRequestCompleted : IEventData
 {
     public bool Success { get; }
     public string Message { get; }
-    public OnLogoutRequestComplete(bool success, string message)
+    public OnLogoutRequestCompleted(bool success, string message)
     {
         Success = success;
         Message = message;
     }
 }
 
-public class OnTokenAuthenticationRequestComplete : IEventData
+// Used when a token authentication request is completed.
+public class OnTokenAuthenticationRequestCompleted : IEventData
 {
     public bool Success { get; }
-    public OnTokenAuthenticationRequestComplete(bool success)
+    public OnTokenAuthenticationRequestCompleted(bool success)
     {
         Success = success;
     }
 }
 
-public class OnResetPasswordEmailRequest : IEventData
+// Used to request a reset password email.
+public class OnResetPasswordEmailRequested : IEventData
 {
     public string Email { get; }
-    public OnResetPasswordEmailRequest(string email)
+    public OnResetPasswordEmailRequested(string email)
     {
         Email = email;
     }
 }
 
-public class OnResetPasswordEmailRequestComplete : IEventData
+// Used when a reset password email request is completed.
+public class OnResetPasswordEmailRequestCompleted : IEventData
 {
     public bool Success { get; }
     public string Message { get; }
-    public OnResetPasswordEmailRequestComplete(bool success, string message)
+    public OnResetPasswordEmailRequestCompleted(bool success, string message)
     {
         Success = success;
         Message = message;

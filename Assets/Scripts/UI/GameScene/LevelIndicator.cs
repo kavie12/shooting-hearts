@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 
+// Displays the current level name for a brief period
 public class LevelIndicator : MonoBehaviour
 {
     [SerializeField] private float _displayTime = 2f;

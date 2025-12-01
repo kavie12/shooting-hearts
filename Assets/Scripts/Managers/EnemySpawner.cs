@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+// Manage enemy spawning based on level configurations, including spawn timing and positioning.
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Spawn Ranges")]

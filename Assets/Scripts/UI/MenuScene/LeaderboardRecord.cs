@@ -1,14 +1,15 @@
 using TMPro;
 using UnityEngine;
 
+// LeaderboardRecord is responsible for displaying a player's name and score in the leaderboard UI.
 public class LeaderboardRecord : MonoBehaviour
 {
-    public TextMeshProUGUI playerName;
-    public TextMeshProUGUI playerScore;
+    [SerializeField] private TextMeshProUGUI _playerName;
+    [SerializeField] private TextMeshProUGUI _playerScore;
 
     public void InitRecord(string name, int score)
     {
-        playerName.text = name;
-        playerScore.text = score.ToString();
+        _playerName.text = name;
+        _playerScore.text = score.ToString();
     }
 }

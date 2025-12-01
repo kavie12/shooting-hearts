@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Login form UI component
 public class LoginForm : MonoBehaviour
 {
     [SerializeField] private TMP_InputField _email;
@@ -20,12 +21,12 @@ public class LoginForm : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<OnLoginRequestComplete>(HandleLoginRequestComplete);
+        EventBus.Subscribe<OnLoginRequestCompleted>(HandleLoginRequestComplete);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<OnLoginRequestComplete>(HandleLoginRequestComplete);
+        EventBus.Unsubscribe<OnLoginRequestCompleted>(HandleLoginRequestComplete);
         
         ResetForm();
     }
@@ -36,7 +37,7 @@ public class LoginForm : MonoBehaviour
         EventBus.Publish(new OnLoginRequest(_email.text, _password.text));
     }
 
-    private void HandleLoginRequestComplete(OnLoginRequestComplete e)
+    private void HandleLoginRequestComplete(OnLoginRequestCompleted e)
     {
         _message.text = e.Message;
 

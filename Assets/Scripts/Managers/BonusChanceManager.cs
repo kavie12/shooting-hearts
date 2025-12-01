@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+// Manage bonus chance requests, including fetching questions, handling answers, and granting or denying bonus chances.
 public class BonusChanceManager : MonoBehaviour
 {
     private bool _isBonusChanceUsed = false;

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+// Leaderboard UI component
 public class Leaderboard : MonoBehaviour
 {
     [SerializeField] private Transform _recordContainer;
@@ -43,7 +44,7 @@ public class Leaderboard : MonoBehaviour
         foreach (var r in e.Records)
         {
             GameObject record = Instantiate(_recordPrefab, _recordContainer);
-            record.GetComponent<LeaderboardRecord>().InitRecord(r.playerName, r.playerScore);
+            record.GetComponent<LeaderboardRecord>().InitRecord(r.PlayerName, r.PlayerScore);
         }
     }
 }

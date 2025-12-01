@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+// Main menu UI component
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private Button _btnPlay;

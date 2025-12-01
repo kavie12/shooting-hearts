@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+// Manage level progression, including loading levels, handling level completion, and managing intervals between levels.
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] private float _intervalBetwennLevels = 4f;

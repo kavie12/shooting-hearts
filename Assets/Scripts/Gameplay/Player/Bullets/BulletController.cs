@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Control the behavior of bullets fired by the player, including movement and collision handling.
 public class BulletController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D _rb;

@@ -1,3 +1,4 @@
+// This interface defines the structure for enemy entities in the game.
 public interface IEnemy
 {
     EnemyType EnemyType { get; }

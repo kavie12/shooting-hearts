@@ -1,11 +1,12 @@
 [System.Serializable]
+// Data model representing an entry in the leaderboard
 public class LeaderboardEntry
 {
-    public string playerName { get; }
-    public int playerScore { get; }
+    public string PlayerName { get; }
+    public int PlayerScore { get; }
     public LeaderboardEntry(string name, int score)
     {
-        playerName = name;
-        playerScore = score;
+        PlayerName = name;
+        PlayerScore = score;
     }
 }

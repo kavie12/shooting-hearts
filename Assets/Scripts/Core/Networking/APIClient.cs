@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
+// Simple API client for making HTTP requests using UnityWebRequest
 public static class ApiClient
 {
     public static IEnumerator Post<T1, T2>(string url, object body, Action<T1, T2> callback, string token = null)

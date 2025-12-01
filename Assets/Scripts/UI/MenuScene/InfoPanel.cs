@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+// Info panel UI component in the menu scene.
 public class InfoPanel : MonoBehaviour
 {
     [SerializeField] private Button _btnClose;

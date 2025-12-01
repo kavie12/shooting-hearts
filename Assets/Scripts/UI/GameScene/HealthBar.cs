@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+// Displays and updates the player's health bar in the game scene
 public class HealthBar : MonoBehaviour
 {
     private Slider _slider;

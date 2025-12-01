@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Panel that displays the bonus chance question with image and answer guesses
 public class BonusChancePanel : MonoBehaviour
 {
     [SerializeField] private RawImage _image;
@@ -47,15 +50,7 @@ public class BonusChancePanel : MonoBehaviour
         _loadingSpinner.SetActive(false);
 
         // Init answer guesses
-        int[] answerGuesses = new int[answerGuessButtons.transform.childCount];
-        answerGuesses[0] = e.Question.HeartsCount;
-        for (int i = 1; i < answerGuesses.Length; i++)
-        {
-            answerGuesses[i] = UnityEngine.Random.Range(0, 9);
-        }
-
-        // Shuffle answer guesses in the array
-        ShuffleAnswers(answerGuesses);
+        int[] answerGuesses = CreateAnswerGuesses(answerGuessButtons.transform.childCount, e.Question.HeartsCount);
 
         // Set the answers in the GUI buttons
         for (int i = 0; i < answerGuessButtons.transform.childCount; i++)
@@ -90,19 +85,26 @@ public class BonusChancePanel : MonoBehaviour
 
     #endregion
 
-    private void ShuffleAnswers(int[] answerGuesses)
+    private int[] CreateAnswerGuesses(int numberOfAnswers, int correctAnswer)
     {
-        // Shuffle answers (Modern Fisher-Yates algorithm)
-        int unshuffledLength = answerGuesses.Length - 1;
-        int temp;
-        for (int i = unshuffledLength; i >= 1; i--)
+        int correctAnswerIndex = UnityEngine.Random.Range(0, numberOfAnswers - 1);
+
+        int[] answerGuesses = new int[numberOfAnswers];
+        answerGuesses[correctAnswerIndex] = correctAnswer;
+
+        for (int i = 0; i < numberOfAnswers; i++)
         {
-            int random = UnityEngine.Random.Range(0, unshuffledLength);
-            temp = answerGuesses[random];
-            answerGuesses[random] = answerGuesses[i];
-            answerGuesses[i] = temp;
-            unshuffledLength--;
+            if (i == correctAnswerIndex) continue;
+
+            int rand = UnityEngine.Random.Range(0, 9);
+            while (answerGuesses.Contains(rand))
+            {
+                rand = UnityEngine.Random.Range(0, 9);
+            }
+            answerGuesses[i] = rand;
         }
+
+        return answerGuesses;
     }
 
     private void DisableAnswerButtons()

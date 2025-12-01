@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 
+// Used to request high score of the player.
 public sealed class OnHighScoreRequest : IEventData { }
 
+// Used when a player high score request is completed.
 public sealed class OnHighScoreRequestCompleted : IEventData
 {
     public bool Success { get; }
@@ -15,8 +17,10 @@ public sealed class OnHighScoreRequestCompleted : IEventData
     }
 }
 
+// Used to request leaderboard records.
 public sealed class OnLeaderboardRequest : IEventData { }
 
+// Used when a leaderboard request is completed.
 public sealed class OnLeaderboardRequestCompleted : IEventData
 {
     public bool Success { get; }

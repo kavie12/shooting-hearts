@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+// Auth menu UI component
 public class AuthMenu : MonoBehaviour
 {
     [SerializeField] private Button _btnLogin;

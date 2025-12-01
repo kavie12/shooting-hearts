@@ -1,14 +1,16 @@
 using UnityEngine;
 
+// Singleton class to manage the background object across different scenes
 public class Background : MonoBehaviour
 {
-    private static Background instance;
+    // Singleton for DontDestroyOnLoad (Persistance across the scenes)
+    private static Background Instance;
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(this);
         }
         else

@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Manages the reset password form UI in the menu scene
 public class ResetPasswordForm : MonoBehaviour
 {
     [SerializeField] private TMP_InputField _email;
@@ -17,12 +18,12 @@ public class ResetPasswordForm : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<OnResetPasswordEmailRequestComplete>(HandleResetPasswordEmailRequestComplete);
+        EventBus.Subscribe<OnResetPasswordEmailRequestCompleted>(HandleResetPasswordEmailRequestComplete);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<OnResetPasswordEmailRequestComplete>(HandleResetPasswordEmailRequestComplete);
+        EventBus.Unsubscribe<OnResetPasswordEmailRequestCompleted>(HandleResetPasswordEmailRequestComplete);
 
         ResetForm();
     }
@@ -30,10 +31,10 @@ public class ResetPasswordForm : MonoBehaviour
     private void HandleResetButtonClick()
     {
         _btnReset.interactable = false;
-        EventBus.Publish(new OnResetPasswordEmailRequest(_email.text));
+        EventBus.Publish(new OnResetPasswordEmailRequested(_email.text));
     }
 
-    private void HandleResetPasswordEmailRequestComplete(OnResetPasswordEmailRequestComplete e)
+    private void HandleResetPasswordEmailRequestComplete(OnResetPasswordEmailRequestCompleted e)
     {
         _message.text = e.Message;
 

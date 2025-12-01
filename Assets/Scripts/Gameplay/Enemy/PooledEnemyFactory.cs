@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Factory that creates enemies using object pooling for better performance
 public class PooledEnemyFactory : MonoBehaviour, IEnemyFactory
 {
     private Dictionary<EnemyType, Queue<GameObject>> _pools = new();

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Manage the player's health, including damage handling and health updates.
 public class PlayerHealthSystem : MonoBehaviour
 {
     [SerializeField] private int _maxHealth = 500;

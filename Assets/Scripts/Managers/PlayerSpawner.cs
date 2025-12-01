@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Manage player spaceship spawning based on game events, such as game start and level restart.
 public class PlayerSpawner : MonoBehaviour
 {
     private GameObject _playerPrefab;

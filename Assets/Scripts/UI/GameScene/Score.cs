@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 
+// Displays and updates the player's score in the game scene
 public class Score : MonoBehaviour
 {
     private TextMeshProUGUI _score;

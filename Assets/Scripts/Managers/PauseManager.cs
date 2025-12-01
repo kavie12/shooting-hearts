@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Manage game pause functionality, including pausing and resuming the game based on user input.
 public class PauseManager : MonoBehaviour
 {
     private bool _paused = false;

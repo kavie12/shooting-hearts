@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Controls enemy behavior such as falling, collision detection, and destruction.
 public class EnemyController : MonoBehaviour, IEnemy
 {
     [SerializeField] private EnemyType _enemyType;

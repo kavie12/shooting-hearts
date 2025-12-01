@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
 
+// Simple event bus implementation for publishing and subscribing to events
+// Reference: https://www.youtube.com/watch?v=oJtIIDcImhU
 public static class EventBus
 {
-    private static Dictionary<Type, Delegate> assignedActions = new();
+    private static readonly Dictionary<Type, Delegate> _assignedActions = new();
 
     public static void Publish(IEventData data)
     {
         Type type = data.GetType();
-        if (assignedActions.TryGetValue(type, out Delegate existingAction))
+        if (_assignedActions.TryGetValue(type, out Delegate existingAction))
         {
             existingAction?.DynamicInvoke(data);
         }
@@ -18,13 +20,13 @@ public static class EventBus
     {
         Type type = typeof(T);
 
-        if (assignedActions.ContainsKey(type))
+        if (_assignedActions.ContainsKey(type))
         {
-            assignedActions[type] = Delegate.Combine(assignedActions[type], action);
+            _assignedActions[type] = Delegate.Combine(_assignedActions[type], action);
         }
         else
         {
-            assignedActions[type] = action;
+            _assignedActions[type] = action;
         }
     }
 
@@ -32,9 +34,9 @@ public static class EventBus
     {
         Type type = typeof(T);
 
-        if (assignedActions.ContainsKey(type))
+        if (_assignedActions.ContainsKey(type))
         {
-            assignedActions[type] = Delegate.Remove(assignedActions[type], action);
+            _assignedActions[type] = Delegate.Remove(_assignedActions[type], action);
         }
     }
 }

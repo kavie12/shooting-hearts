@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Manage player score across levels, including score updates, level restarts, and high score submissions.
 public class ScoreManager : MonoBehaviour
 {
     private Dictionary<string, int> _scoreInEachLevel;

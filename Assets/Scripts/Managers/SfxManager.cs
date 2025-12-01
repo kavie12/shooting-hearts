@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// All the soundeffects in the game
 public enum Sfx
 {
     BackgroundAmbient,
@@ -13,9 +14,11 @@ public enum Sfx
     PlayerScore
 }
 
+// Manage sound effects in the game, including playing appropriate sounds in response to game events.
 public class SfxManager : MonoBehaviour
 {
-    private static SfxManager instance;
+    // Singleton for DontDestroyOnLoad (Persistance across the scenes)
+    private static SfxManager Instance;
 
     [SerializeField] private SfxAudioResource[] _audioResources;
 
@@ -23,9 +26,9 @@ public class SfxManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else

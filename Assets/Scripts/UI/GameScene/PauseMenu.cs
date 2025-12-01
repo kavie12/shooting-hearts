@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+// Buttons in the pause menu
 public enum PauseMenuButton
 {
     ResumeButton,
     MainMenuButton
 }
 
+// Pause menu UI component handling button clicks
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private Button _btnResume;

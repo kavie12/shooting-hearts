@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Factory for creating pooled bullet GameObjects
 public class PooledBulletFactory : MonoBehaviour, IBulletFactory
 {
     [SerializeField] private GameObject _prefab;

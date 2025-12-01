@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Data model representing a bonus chance question with an image, hearts count, and carrots count.
 public class BonusChanceQuestion
 {
     public Texture2D ImageTexture { get; }

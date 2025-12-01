@@ -433,7 +433,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _moveSpeed: 5
-  _shootOverTime: 0.1
+  _shootOverTime: 0.15
 --- !u!1 &5135492641451132396
 GameObject:
   m_ObjectHideFlags: 0

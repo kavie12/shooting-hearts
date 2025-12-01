@@ -2,12 +2,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Buttons in the game over panel
 public enum GameOverPanelButton
 {
     PlayAgainButton,
     MainMenuButton
 }
 
+// Manage the game over panel UI, including displaying scores and handling button interactions.
 public class GameOverPanel : MonoBehaviour
 {
     [SerializeField] public TextMeshProUGUI _gameOverText;

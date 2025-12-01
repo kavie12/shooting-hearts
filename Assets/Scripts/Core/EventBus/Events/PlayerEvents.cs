@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Event data for when the player takes damage.
 public sealed class OnPlayerDamaged : IEventData
 {
     public Vector2 Position { get; }
@@ -11,6 +12,7 @@ public sealed class OnPlayerDamaged : IEventData
     }
 }
 
+// Event data for when the player gets destroyed.
 public sealed class OnPlayerDestroyed : IEventData
 {
     public Vector2 Position { get; }
@@ -20,6 +22,7 @@ public sealed class OnPlayerDestroyed : IEventData
     }
 }
 
+// Event data for when the player health is changed.
 public sealed class OnPlayerHealthUpdated : IEventData
 {
     public int NewHealth { get; }
@@ -29,6 +32,8 @@ public sealed class OnPlayerHealthUpdated : IEventData
     }
 }
 
+// Event data for when the player health is over.
 public sealed class OnPlayerHealthOver : IEventData { }
 
+// Event data for when the player shoots a bullet.
 public sealed class OnPlayerShoot : IEventData { }

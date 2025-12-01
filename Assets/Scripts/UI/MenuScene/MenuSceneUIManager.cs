@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+// All the UI interaction buttons in the menu scene
 public enum MenuSceneButton
 {
     AuthMenuLoginButton,
@@ -20,6 +21,7 @@ public enum MenuSceneButton
     MainMenuExitButton
 }
 
+// Manage the UI components in the menu scene
 public class MenuSceneUiManager : MonoBehaviour
 {
     [SerializeField] private GameObject _title;
@@ -49,20 +51,20 @@ public class MenuSceneUiManager : MonoBehaviour
     {
         EventBus.Subscribe<OnMenuSceneButtonClick>(HandleMenuSceneButtonClicked);
 
-        EventBus.Subscribe<OnTokenAuthenticationRequestComplete>(HandleTokenAuthentication);
-        EventBus.Subscribe<OnLoginRequestComplete>(HandleLoginRequestComplete);
-        EventBus.Subscribe<OnSignUpRequestComplete>(HandleSignUpRequestComplete);
-        EventBus.Subscribe<OnLogoutRequestComplete>(HandleLogoutRequestComplete);
+        EventBus.Subscribe<OnTokenAuthenticationRequestCompleted>(HandleTokenAuthentication);
+        EventBus.Subscribe<OnLoginRequestCompleted>(HandleLoginRequestComplete);
+        EventBus.Subscribe<OnSignUpRequestCompleted>(HandleSignUpRequestComplete);
+        EventBus.Subscribe<OnLogoutRequestCompleted>(HandleLogoutRequestComplete);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<OnMenuSceneButtonClick>(HandleMenuSceneButtonClicked);
 
-        EventBus.Unsubscribe<OnTokenAuthenticationRequestComplete>(HandleTokenAuthentication);
-        EventBus.Unsubscribe<OnLoginRequestComplete>(HandleLoginRequestComplete);
-        EventBus.Unsubscribe<OnSignUpRequestComplete>(HandleSignUpRequestComplete);
-        EventBus.Unsubscribe<OnLogoutRequestComplete>(HandleLogoutRequestComplete);
+        EventBus.Unsubscribe<OnTokenAuthenticationRequestCompleted>(HandleTokenAuthentication);
+        EventBus.Unsubscribe<OnLoginRequestCompleted>(HandleLoginRequestComplete);
+        EventBus.Unsubscribe<OnSignUpRequestCompleted>(HandleSignUpRequestComplete);
+        EventBus.Unsubscribe<OnLogoutRequestCompleted>(HandleLogoutRequestComplete);
     }
 
     private void HandleMenuSceneButtonClicked(OnMenuSceneButtonClick e)
@@ -249,7 +251,7 @@ public class MenuSceneUiManager : MonoBehaviour
 
     #region Auth Functions
 
-    private void HandleTokenAuthentication(OnTokenAuthenticationRequestComplete e)
+    private void HandleTokenAuthentication(OnTokenAuthenticationRequestCompleted e)
     {
         if (e.Success)
         {
@@ -261,7 +263,7 @@ public class MenuSceneUiManager : MonoBehaviour
         }
     }
 
-    private void HandleLoginRequestComplete(OnLoginRequestComplete e)
+    private void HandleLoginRequestComplete(OnLoginRequestCompleted e)
     {
         if (e.Success) Invoke(nameof(OnFormLoginSuccess), 1f);
     }
@@ -271,7 +273,7 @@ public class MenuSceneUiManager : MonoBehaviour
         DisplayMainMenu();
     }
 
-    private void HandleSignUpRequestComplete(OnSignUpRequestComplete e)
+    private void HandleSignUpRequestComplete(OnSignUpRequestCompleted e)
     {
         if (e.Success) Invoke(nameof(OnFormSignUpSuccess), 1f);
     }
@@ -281,7 +283,7 @@ public class MenuSceneUiManager : MonoBehaviour
         DisplayMainMenu();
     }
 
-    private void HandleLogoutRequestComplete(OnLogoutRequestComplete e)
+    private void HandleLogoutRequestComplete(OnLogoutRequestCompleted e)
     {
         DisplayAuthMenu();
     }

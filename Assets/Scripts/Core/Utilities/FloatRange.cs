@@ -1,6 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
+// Represents a range of float values with minimum and maximum bounds
 public class FloatRange
 {
     public float Min;

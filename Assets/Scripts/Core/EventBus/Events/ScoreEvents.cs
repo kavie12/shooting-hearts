@@ -1,3 +1,4 @@
+// Used when the player scores.
 public sealed class OnScoreUpdated : IEventData
 {
     public int Score { get; }
@@ -7,6 +8,7 @@ public sealed class OnScoreUpdated : IEventData
     }
 }
 
+// Used to request to check and update the highscore after the game is over.
 public sealed class OnHighScoreUpdateRequested : IEventData
 {
     public int NewScore { get; }
@@ -16,6 +18,7 @@ public sealed class OnHighScoreUpdateRequested : IEventData
     }
 }
 
+// Used when the highscore update request is completed.
 public sealed class OnHighScoreUpdateRequestCompleted : IEventData
 {
     public bool Success { get; }
@@ -27,6 +30,7 @@ public sealed class OnHighScoreUpdateRequestCompleted : IEventData
     }
 }
 
+// Used when the both the score and the highscore are ready to display on the game over panel after high score update request.
 public sealed class OnUpdatedHighScoreFetched : IEventData
 {
     public int Score { get; }

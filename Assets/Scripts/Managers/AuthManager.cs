@@ -1,8 +1,10 @@
 using UnityEngine;
 
+// Manage user authentication, including login, sign-up, token verification, and password reset.
 public class AuthManager : MonoBehaviour, IAuthProvider
 {
-    private static AuthManager instance;
+    // Singleton for DontDestroyOnLoad (Persistance across the scenes)
+    private static AuthManager Instance;
 
     private readonly string _baseUrl = "http://localhost:3000/api/auth";
     private string _accessToken;
@@ -12,9 +14,9 @@ public class AuthManager : MonoBehaviour, IAuthProvider
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(this);
         }
         else
@@ -32,7 +34,7 @@ public class AuthManager : MonoBehaviour, IAuthProvider
         EventBus.Subscribe<OnLoginRequest>(SendLoginRequest);
         EventBus.Subscribe<OnSignUpRequest>(SendSignUpRequest);
         EventBus.Subscribe<OnLogoutRequest>(HandleLogoutRequest);
-        EventBus.Subscribe<OnResetPasswordEmailRequest>(SendResetPasswordEmailRequest);
+        EventBus.Subscribe<OnResetPasswordEmailRequested>(SendResetPasswordEmailRequest);
     }
 
     private void OnDisable()
@@ -41,7 +43,7 @@ public class AuthManager : MonoBehaviour, IAuthProvider
         EventBus.Unsubscribe<OnLoginRequest>(SendLoginRequest);
         EventBus.Unsubscribe<OnSignUpRequest>(SendSignUpRequest);
         EventBus.Unsubscribe<OnLogoutRequest>(HandleLogoutRequest);
-        EventBus.Unsubscribe<OnResetPasswordEmailRequest>(SendResetPasswordEmailRequest);
+        EventBus.Unsubscribe<OnResetPasswordEmailRequested>(SendResetPasswordEmailRequest);
     }
 
     #region Send Requests
@@ -50,7 +52,7 @@ public class AuthManager : MonoBehaviour, IAuthProvider
     {
         if (_accessToken == null || _accessToken == string.Empty)
         {
-            EventBus.Publish(new OnTokenAuthenticationRequestComplete(false));
+            EventBus.Publish(new OnTokenAuthenticationRequestCompleted(false));
             return;
         }
         StartCoroutine(ApiClient.Post<string, AuthErrorResponse>($"{_baseUrl}/verify", string.Empty, HandleTokenAuthRequestComplete, _accessToken));
@@ -73,7 +75,7 @@ public class AuthManager : MonoBehaviour, IAuthProvider
         StartCoroutine(ApiClient.Post<AuthSuccessResponse, AuthErrorResponse>($"{_baseUrl}/signup", reqBody, HandleSignUpRequest));
     }
 
-    private void SendResetPasswordEmailRequest(OnResetPasswordEmailRequest e)
+    private void SendResetPasswordEmailRequest(OnResetPasswordEmailRequested e)
     {
         var reqBody = new ResetPasswordEmailRequest { email = e.Email };
         StartCoroutine(ApiClient.Post<ResetPasswordEmailResponse, AuthErrorResponse>($"{_baseUrl}/reset-password-email", reqBody, HandleResetPasswordEmailRequest));
@@ -87,7 +89,7 @@ public class AuthManager : MonoBehaviour, IAuthProvider
     {
         if (error == null)
         {
-            EventBus.Publish(new OnTokenAuthenticationRequestComplete(true));
+            EventBus.Publish(new OnTokenAuthenticationRequestCompleted(true));
         }
         else
         {
@@ -97,7 +99,7 @@ public class AuthManager : MonoBehaviour, IAuthProvider
             }
             else
             {
-                EventBus.Publish(new OnTokenAuthenticationRequestComplete(false));
+                EventBus.Publish(new OnTokenAuthenticationRequestCompleted(false));
             }
         }
     }
@@ -107,11 +109,11 @@ public class AuthManager : MonoBehaviour, IAuthProvider
         if (authResponse != null)
         {
             SaveAuthTokens(authResponse.accessToken, authResponse.refreshToken);
-            EventBus.Publish(new OnTokenAuthenticationRequestComplete(true));
+            EventBus.Publish(new OnTokenAuthenticationRequestCompleted(true));
         }
         else
         {
-            EventBus.Publish(new OnTokenAuthenticationRequestComplete(false));
+            EventBus.Publish(new OnTokenAuthenticationRequestCompleted(false));
         }
     }
 
@@ -120,11 +122,11 @@ public class AuthManager : MonoBehaviour, IAuthProvider
         if (res != null)
         {
             SaveAuthTokens(res.accessToken, res.refreshToken);
-            EventBus.Publish(new OnLoginRequestComplete(true, "Login Successful."));
+            EventBus.Publish(new OnLoginRequestCompleted(true, "Login Successful."));
         }
         else
         {
-            EventBus.Publish(new OnLoginRequestComplete(false, error.message));
+            EventBus.Publish(new OnLoginRequestCompleted(false, error.message));
         }
     }
 
@@ -133,11 +135,11 @@ public class AuthManager : MonoBehaviour, IAuthProvider
         if (res != null)
         {
             SaveAuthTokens(res.accessToken, res.refreshToken);
-            EventBus.Publish(new OnSignUpRequestComplete(true, "Sign Up Successful."));
+            EventBus.Publish(new OnSignUpRequestCompleted(true, "Sign Up Successful."));
         }
         else
         {
-            EventBus.Publish(new OnSignUpRequestComplete(false, error.message));
+            EventBus.Publish(new OnSignUpRequestCompleted(false, error.message));
         }
     }
 
@@ -150,18 +152,18 @@ public class AuthManager : MonoBehaviour, IAuthProvider
         PlayerPrefs.DeleteKey(Constants.REFRESH_TOKEN);
         PlayerPrefs.Save();
 
-        EventBus.Publish(new OnLogoutRequestComplete(true, "Logout Successful."));
+        EventBus.Publish(new OnLogoutRequestCompleted(true, "Logout Successful."));
     }
 
     private void HandleResetPasswordEmailRequest(ResetPasswordEmailResponse res, AuthErrorResponse error)
     {
         if (res != null)
         {
-            EventBus.Publish(new OnResetPasswordEmailRequestComplete(true, "Password reset email sent."));
+            EventBus.Publish(new OnResetPasswordEmailRequestCompleted(true, "Password reset email sent."));
         }
         else
         {
-            EventBus.Publish(new OnResetPasswordEmailRequestComplete(false, error.message));
+            EventBus.Publish(new OnResetPasswordEmailRequestCompleted(false, error.message));
         }
     }
 

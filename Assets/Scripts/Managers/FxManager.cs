@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Manage all visual effects in the game
 public class FxManager : MonoBehaviour
 {
-    private static FxManager instance;
+    // Singleton for DontDestroyOnLoad (Persistance across the scenes)
+    private static FxManager Instance;
 
     private GameObject _fxPlayerDamage;
     private GameObject _fxPlayerDestroy;
@@ -12,9 +14,9 @@ public class FxManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else

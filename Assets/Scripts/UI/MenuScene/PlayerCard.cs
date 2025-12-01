@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Displays player information such as name and high score, and handles logout
 public class PlayerCard : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _playerName;

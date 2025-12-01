@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Handles the player's answer selection in a bonus chance question UI
 public class AnswerGuess : MonoBehaviour
 {
     private Button _button;
